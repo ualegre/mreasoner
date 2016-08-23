@@ -79,7 +79,7 @@ public class InputData {
 		for(int i=0;i<systemStatus.getSystemStatus().size();i++)
 		{
 			if(systemStatus.getSystemStatus().get(i).getStatus()) negation = "";
-			else negation = "¬";
+			else negation = "!";
 			System.out.println(i+") "+negation+systemStatus.getSystemStatus().get(i).getName() );
 		}
 		System.out.println("********************************\n");
@@ -87,7 +87,7 @@ public class InputData {
 		for(int i=0;i<independentStates.size();i++)
 		{
 			if(independentStates.get(i).getStatus()) negation = "";
-			else negation = "¬";
+			else negation = "!";
 			System.out.println(i+") "+negation+independentStates.get(i).getName() );
 		}
 		System.out.println("********************************\n");

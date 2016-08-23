@@ -43,7 +43,7 @@ public class SystemStatus {
 			if( systemStatus.get(i).getName().equalsIgnoreCase(state) ){
 				if(systemStatus.get(i).getStatus()!=status){
 					systemStatus.get(i).setStatus(status);
-					if(!status) negation = "¬";
+					if(!status) negation = "!";
 					if(!external) System.out.println("\t Occurs( "+negation+state+" ),"+time.getIteration()+")");
 					else System.out.println("\t Occurs( ingr( "+negation+state+" ) ),"+time.getIteration()+")\n");
 				}

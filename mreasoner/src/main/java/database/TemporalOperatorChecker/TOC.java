@@ -193,7 +193,7 @@ public class TOC {
 	
 	public void printTemporalOperator(TemporalOperator TOp){
 	//	String negative = "";
-	//	if(!TOp.getStatus()) negative = "¬";
+
 		
 	//	TOp.print();
 //		switch(TOp.getType()){

@@ -126,7 +126,6 @@ public class TimeOfDay {
 	}
 
 	public Calendar setValuesIntoCalendar(Calendar calendar){
-		System.out.println("　　　　　");
 		System.out.println(calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR)+
 				" - "+calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND));
 		if(!this.emptyHour){
@@ -143,7 +142,6 @@ public class TimeOfDay {
 		if(!this.emptySecond) 	    calendar.set(Calendar.SECOND, second );
 		System.out.println(calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR)+
 				" - "+calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND));
-		System.out.println("　　　　　");
 		return calendar;
 	}
 	

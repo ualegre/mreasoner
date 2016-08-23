@@ -77,7 +77,7 @@ public class Event {
 
 	public void print() {
 		String sign ="";
-		if(!status)sign ="¬";
+		if(!status)sign ="!";
 		if((timeOfDay == null) && (date ==null))
 			System.out.println("EVENT: ("+sign+""+name+","+time+")");
 		else{

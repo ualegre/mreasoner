@@ -41,7 +41,7 @@ public class NextTimeRule extends SameTimeRule{
 	 ********************************************************************************************************************************************/	
 	private void printRuleChange(){
 		String negation = "";
-		if(!consequence.getStatus())negation = "¬";
+		if(!consequence.getStatus())negation = "!";
 		System.out.println("\t NEXT TIME RULE: "+negation+this.consequence.getName()+" WILL BE TRIGGERED ON THE NEXT STEP");
 	}
 	

@@ -19,7 +19,7 @@ public  class State extends DefaultState{
 	@Override
 	public void print() {
 		String sign = "";
-		if(!status) sign = "¬";
+		if(!status) sign = "!";
 		System.out.print(sign+name);
 		
 	}

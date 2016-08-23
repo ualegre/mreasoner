@@ -155,7 +155,7 @@ public class SameTimeRule {
 	private void printRuleChange() {
 		String negation = "";
 		
-		if(!this.consequence.getStatus()) negation = "¬";
+		if(!this.consequence.getStatus()) negation = "!";
 		System.out.print("\t "+negation+this.consequence.getName()+" TRIGGERED BY ( ");
 		negation = "";
 		for(int i=0;i<antecedents.size();i++){ 
