@@ -1,25 +1,29 @@
-package edu.casetools.mreasoner.database.TemporalOperatorChecker;
+package edu.casetools.mreasoner.database.temporalOperatorChecker;
 
 
 import java.sql.SQLException;
 
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
-import edu.casetools.mreasoner.core.elements.time.Time;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator.TOP_TYPE;
+import edu.casetools.mreasoner.core.elements.time.Time;
+import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
+
+
 
 public class TOC {
 	
-
-//	private DatabaseOperations  databaseOperations;
+	//private DBConnection   		connection;
+	//private Operation    		operation;
+	private DatabaseOperations  databaseOperations;
 	private long since,until;
 	private boolean simulatedTime;
 	
-	public TOC(){//DatabaseOperations databaseOperations,boolean simulatedTime){
+	public TOC(DatabaseOperations databaseOperations,boolean simulatedTime){
 	//	operation = Operation_Factory.getOperation( databaseOperations.getDBConnection().getDBConfigs().getTable(), type);
 		this.simulatedTime = simulatedTime;
 		if(simulatedTime) System.out.println(" - - - THE TIME IS GIVEN IN ITERATIONS - - -");
 		else  			  System.out.println(" - - - THE TIME IS GIVEN IN REAL TIME - - -");
-		//this.databaseOperations = databaseOperations;
+		this.databaseOperations = databaseOperations;
 	}
 	
 	public void adjustToPresent(TemporalOperator TOp, Time time){
@@ -27,14 +31,19 @@ public class TOC {
 		if(!simulatedTime){
 			long realTime 	   = time.getSystemRealTimeLastUnit() - TOp.getSinceValue().getSimulation_value();
 			long  realTimeComp = realTime - time.getBaseTimeMillis();
-			//since = databaseOperations.getIterationFromRealTime(""+realTime);
+			since = databaseOperations.getIterationFromRealTime(""+realTime);
+//			System.out.println("REAL TIME: "+time.getSystemRealTimeLastUnit());
+//			System.out.println("VALUE: "+TOp.getSinceValue().getSimulation_value());
+//			System.out.println(time.getSystemRealTimeLastUnit() +">="+ time.getBaseTimeMillis());
+//			System.out.println("REAL TIME COMP:"+realTimeComp);
 			
 			if(realTimeComp >= 0 )  {	
 				until = time.getIteration();
 			}else{
 				since = -1;
 			}
-
+//			System.out.println("DBG - SINCE: "+since);
+//			System.out.println("DBG - UNTIL: "+until);
 		}else{
 			since =  time.getIteration() - TOp.getSinceValue().getSimulation_value() ;
 			if( (since >= 0) && (time.getIteration() >= 0) ) 
@@ -63,10 +72,10 @@ public class TOC {
 			if(TOp.getUntilValue().isNotFuture(time)){
 				
 				realTime = TOp.getSinceValue().getTimeMillis(time);
-			//	since = databaseOperations.getIterationFromRealTime(""+realTime);
+				since = databaseOperations.getIterationFromRealTime(""+realTime);
 				
 				realTime = TOp.getUntilValue().getTimeMillis(time);
-			//	until = databaseOperations.getIterationFromRealTime(""+realTime);
+				until = databaseOperations.getIterationFromRealTime(""+realTime);
 				
 			}else{
 				until = -1;
@@ -152,24 +161,24 @@ public class TOC {
 	
 	private boolean isAtLeastOneValueDuringInterval(TemporalOperator TOp){
 
-		boolean result = true;
+		boolean result;
 		
 			if(TOp.getType() == TOP_TYPE.STRONG_RELATIVE || TOp.getType() == TOP_TYPE.WEAK_RELATIVE ){
 		//	System.out.println("SINCE"+since+" UNTIL: "+until);
-				//result = databaseOperations.getAtLeastOneValueQueryPresent( ""+since, ""+until, TOp.getName(), ""+TOp.getStatus());
+				result = databaseOperations.getAtLeastOneValueQueryPresent( ""+since, ""+until, TOp.getName(), ""+TOp.getStatus());
 			}else{
-				//result = databaseOperations.getAtLeastOneValueQueryAbsolute( ""+since, ""+until, TOp.getName(), ""+TOp.getStatus());
+				result = databaseOperations.getAtLeastOneValueQueryAbsolute( ""+since, ""+until, TOp.getName(), ""+TOp.getStatus());
 			}
 		
 		return result;
 	}
 	
 	private boolean isSameValueDuringWholeInterval(TemporalOperator TOp){
-	    boolean result = true ;
+	    boolean result;
 		if(TOp.getType() == TOP_TYPE.STRONG_RELATIVE || TOp.getType() == TOP_TYPE.WEAK_RELATIVE){
-			//result = databaseOperations.getSameValueQueryPresent(""+since,""+until,TOp.getName(),""+TOp.getStatus());
+			result = databaseOperations.getSameValueQueryPresent(""+since,""+until,TOp.getName(),""+TOp.getStatus());
 		}else{
-			//result = databaseOperations.getSameValueQueryAbsolute(""+since,""+until,TOp.getName(),""+TOp.getStatus());
+			result = databaseOperations.getSameValueQueryAbsolute(""+since,""+until,TOp.getName(),""+TOp.getStatus());
 		}
 		
 		//System.out.println("SAME VALUE DURING WHOLE INTERVAL "+result);
@@ -179,11 +188,11 @@ public class TOC {
 	}
 	
 	private boolean isEqualToFirstIntervalElement(TemporalOperator TOp) throws SQLException{
-		boolean result = true;
+		boolean result ;
 		if(TOp.getType() == TOP_TYPE.STRONG_RELATIVE || TOp.getType() == TOP_TYPE.WEAK_RELATIVE ){
-			//result = databaseOperations.getEqualToFirstQueryPresent(""+since,TOp.getName(),""+TOp.getStatus());
+			result = databaseOperations.getEqualToFirstQueryPresent(""+since,TOp.getName(),""+TOp.getStatus());
 		}else{
-			//result = databaseOperations.getEqualToFirstQueryAbsolute(""+since,TOp.getName(),""+TOp.getStatus());
+			result = databaseOperations.getEqualToFirstQueryAbsolute(""+since,TOp.getName(),""+TOp.getStatus());
 		}
 		//System.out.println("IS EQUAL TO FIRST INTERVAL ELEMENT "+result+"SINCE "+since);
 		return result;
@@ -193,7 +202,7 @@ public class TOC {
 	
 	public void printTemporalOperator(TemporalOperator TOp){
 	//	String negative = "";
-
+	//	if(!TOp.getStatus()) negative = "�";
 		
 	//	TOp.print();
 //		switch(TOp.getType()){

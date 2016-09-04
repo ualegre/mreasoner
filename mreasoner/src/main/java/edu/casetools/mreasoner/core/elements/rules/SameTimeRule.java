@@ -6,7 +6,7 @@ import edu.casetools.mreasoner.core.SystemStatus;
 import edu.casetools.mreasoner.core.elements.states.DefaultState;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
-import edu.casetools.mreasoner.database.Database;
+import edu.casetools.mreasoner.database.MDatabase;
 
 public class SameTimeRule {
 
@@ -69,7 +69,7 @@ public class SameTimeRule {
 	}
 		
 
-	public SystemStatus assertRule(SystemStatus systemStatus, Database database){
+	public SystemStatus assertRule(SystemStatus systemStatus, MDatabase database){
 		boolean result = true;
 
 		result = checkAntecedents(systemStatus);
@@ -114,7 +114,7 @@ public class SameTimeRule {
 		return false; //Warning: This can cause future errors.
 	}
 	
-	protected boolean checkPastBoundedAntecedents(SystemStatus systemStatus, Database database){
+	protected boolean checkPastBoundedAntecedents(SystemStatus systemStatus, MDatabase database){
 		boolean result = true;
 		boolean systemStatusValue;
 		

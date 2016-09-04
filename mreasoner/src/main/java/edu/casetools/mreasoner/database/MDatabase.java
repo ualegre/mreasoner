@@ -1,19 +1,24 @@
 package edu.casetools.mreasoner.database;
 
+
 import edu.casetools.mreasoner.core.SystemStatus;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
 import edu.casetools.mreasoner.core.elements.time.Time;
-import edu.casetools.mreasoner.database.Tables.EventsTable;
-import edu.casetools.mreasoner.database.Tables.InternalEventsTable;
-import edu.casetools.mreasoner.database.Tables.ResultsTable;
-import edu.casetools.mreasoner.database.TemporalOperatorChecker.TOC;
+import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
+import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactory;
+import edu.casetools.mreasoner.database.tables.EventsTable;
+import edu.casetools.mreasoner.database.tables.InternalEventsTable;
+import edu.casetools.mreasoner.database.tables.ResultsTable;
+import edu.casetools.mreasoner.database.temporalOperatorChecker.TOC;
 import edu.casetools.mreasoner.input.configurations.Configurations;
+import edu.casetools.mreasoner.input.configurations.databases.DBTypes;
 
-public class Database {
+
+public class MDatabase {
 
 	
-	//DatabaseOperations      databaseOperations;
+	DatabaseOperations      databaseOperations;
 	
 	EventsTable				eventsTable;
 	InternalEventsTable     internalEventsTable;
@@ -22,16 +27,16 @@ public class Database {
 	TOC             		temporalOperatorChecker;
 
 	
-	public Database( Configurations systemConfigs, SystemStatus systemStatus ){
+	public MDatabase( Configurations systemConfigs, SystemStatus systemStatus ){
 	
-//		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations(
-//				DBTypes.DB_IMPLEMENTATION.POSTGRESQL,
-//				systemConfigs.getDBConfigs());
-//		
-//		eventsTable 			  = new EventsTable			( databaseOperations );
-//		internalEventsTable 	  = new InternalEventsTable ( databaseOperations );
-//		resultsTable			  = new ResultsTable		( databaseOperations, systemStatus );
-//		temporalOperatorChecker   = new TOC					( databaseOperations, systemConfigs.getTimeIsGivenInIterations() );
+		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
+				DBTypes.DB_IMPLEMENTATION.POSTGRESQL,
+				systemConfigs.getDBConfigs());
+		
+		eventsTable 			  = new EventsTable			( databaseOperations );
+		internalEventsTable 	  = new InternalEventsTable ( databaseOperations );
+		resultsTable			  = new ResultsTable		( databaseOperations, systemStatus );
+		temporalOperatorChecker   = new TOC					( databaseOperations, systemConfigs.getTimeIsGivenInIterations() );
 
 		
 	}
@@ -57,7 +62,7 @@ public class Database {
 	}
 	
 	public void disconnect(){
-		//	databaseOperations.disconnect();
+			databaseOperations.disconnect();
 
 	}
 	

@@ -6,7 +6,7 @@ import edu.casetools.mreasoner.core.control.ReasonerSemaphore;
 import edu.casetools.mreasoner.core.elements.time.Time;
 import edu.casetools.mreasoner.core.rules.RuleStratificator;
 import edu.casetools.mreasoner.core.rules.SystemRules;
-import edu.casetools.mreasoner.database.Database;
+import edu.casetools.mreasoner.database.MDatabase;
 import edu.casetools.mreasoner.input.InputData;
 import edu.casetools.mreasoner.input.configurations.Configurations;
 
@@ -17,7 +17,7 @@ public class MReasoner extends Thread{
 	
 	private InputData			  	   	   systemInput;
 	private SystemRules			 	   	   systemRules;		
-	private Database				       database;
+	private MDatabase				       database;
 	
 	private boolean running;
 	private boolean simulateEvents;
