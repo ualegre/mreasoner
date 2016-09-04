@@ -4,7 +4,7 @@ package edu.casetools.mreasoner.core.elements.time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import edu.casetools.mreasoner.input.configurations.MConfigurations;
+import edu.casetools.mreasoner.configurations.data.MConfigurations;
 
 
 public class Time {

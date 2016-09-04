@@ -1,4 +1,4 @@
-package edu.casetools.mreasoner.input.configurations;
+package edu.casetools.mreasoner.configurations.data;
 
 import java.io.File;
 
@@ -6,8 +6,8 @@ public class MConfigurations {
 
 	public enum EXECUTION_MODE {SIMULATION_ITERATION,SIMULATION_REAL_TIME,REAL_ENVIRONMENT};
 	private long 		executionTime,timeUnit;
-	private MDBConfigs   dbConfigs;
-	private String  jarConfigs;
+	private MDBConfigs  dbConfigs;
+	private String  	jarConfigs;
 	private String 		systemSpecificationFilePath;
 	private String		LFPUBSOutputFilePath;
 	private String 		sessionFilePath;

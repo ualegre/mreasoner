@@ -3,9 +3,9 @@ package edu.casetools.mreasoner.database.core.operations;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import edu.casetools.mreasoner.configurations.data.MDBConfigs;
 import edu.casetools.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.mreasoner.database.core.connection.DBConnection.STATUS;
-import edu.casetools.mreasoner.input.configurations.MDBConfigs;
 
 
 

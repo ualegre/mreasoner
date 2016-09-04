@@ -1,4 +1,4 @@
-package edu.casetools.mreasoner.input.configurations;
+package edu.casetools.mreasoner.configurations.data;
 
 public class MDBConfigs {
 

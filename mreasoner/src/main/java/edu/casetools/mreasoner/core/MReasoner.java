@@ -2,6 +2,7 @@ package edu.casetools.mreasoner.core;
 
 import java.sql.Timestamp;
 
+import edu.casetools.mreasoner.configurations.data.MConfigurations;
 import edu.casetools.mreasoner.core.control.ReasonerSemaphore;
 import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.time.Time;
@@ -9,7 +10,6 @@ import edu.casetools.mreasoner.core.rules.RuleStratificator;
 import edu.casetools.mreasoner.core.rules.SystemRules;
 import edu.casetools.mreasoner.database.MDatabase;
 import edu.casetools.mreasoner.input.MInputData;
-import edu.casetools.mreasoner.input.configurations.MConfigurations;
 
 public class MReasoner extends Thread{
 

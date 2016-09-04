@@ -9,10 +9,10 @@ import java.util.Vector;
 
 import org.postgresql.util.PSQLException;
 
+import edu.casetools.mreasoner.configurations.data.MDBConfigs;
 import edu.casetools.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
-import edu.casetools.mreasoner.input.configurations.MDBConfigs;
 
 
 

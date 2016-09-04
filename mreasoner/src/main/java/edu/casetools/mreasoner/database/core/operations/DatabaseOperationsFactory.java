@@ -1,8 +1,8 @@
 package edu.casetools.mreasoner.database.core.operations;
 
+import edu.casetools.mreasoner.configurations.data.MDBConfigs;
+import edu.casetools.mreasoner.configurations.data.MDBTypes;
 import edu.casetools.mreasoner.database.core.implementations.PostgreSQL_DatabaseOperations;
-import edu.casetools.mreasoner.input.configurations.MDBConfigs;
-import edu.casetools.mreasoner.input.configurations.MDBTypes;
 
 public class DatabaseOperationsFactory {
 

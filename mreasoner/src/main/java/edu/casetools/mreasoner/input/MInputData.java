@@ -2,11 +2,11 @@ package edu.casetools.mreasoner.input;
 
 import java.util.Vector;
 
+import edu.casetools.mreasoner.configurations.data.MConfigurations;
 import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.events.Event;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.rules.SystemRules;
-import edu.casetools.mreasoner.input.configurations.MConfigurations;
 
 
 public class MInputData {

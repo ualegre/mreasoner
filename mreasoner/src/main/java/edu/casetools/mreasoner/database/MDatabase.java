@@ -1,6 +1,8 @@
 package edu.casetools.mreasoner.database;
 
 
+import edu.casetools.mreasoner.configurations.data.MConfigurations;
+import edu.casetools.mreasoner.configurations.data.MDBTypes;
 import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
@@ -11,8 +13,6 @@ import edu.casetools.mreasoner.database.tables.EventsTable;
 import edu.casetools.mreasoner.database.tables.InternalEventsTable;
 import edu.casetools.mreasoner.database.tables.ResultsTable;
 import edu.casetools.mreasoner.database.temporalOperatorChecker.TOC;
-import edu.casetools.mreasoner.input.configurations.MConfigurations;
-import edu.casetools.mreasoner.input.configurations.MDBTypes;
 
 
 public class MDatabase {
