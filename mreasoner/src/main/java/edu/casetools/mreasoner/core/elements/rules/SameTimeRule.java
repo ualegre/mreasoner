@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.core.elements.rules;
 
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.SystemStatus;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.states.DefaultState;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;

@@ -3,19 +3,20 @@ package edu.casetools.mreasoner.core;
 import java.sql.Timestamp;
 
 import edu.casetools.mreasoner.core.control.ReasonerSemaphore;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.time.Time;
 import edu.casetools.mreasoner.core.rules.RuleStratificator;
 import edu.casetools.mreasoner.core.rules.SystemRules;
 import edu.casetools.mreasoner.database.MDatabase;
-import edu.casetools.mreasoner.input.InputData;
-import edu.casetools.mreasoner.input.configurations.Configurations;
+import edu.casetools.mreasoner.input.MInputData;
+import edu.casetools.mreasoner.input.configurations.MConfigurations;
 
 public class MReasoner extends Thread{
 
 	public static SystemStatus        	   systemStatus;
 	public static ReasonerSemaphore 	   semaphore;
 	
-	private InputData			  	   	   systemInput;
+	private MInputData			  	   	   systemInput;
 	private SystemRules			 	   	   systemRules;		
 	private MDatabase				       database;
 	
@@ -24,7 +25,7 @@ public class MReasoner extends Thread{
 	private boolean hasMaxExecutionTime;
 	private boolean stratify;
 	
-	public MReasoner( InputData systemInput, Configurations systemConfigs){
+	public MReasoner( MInputData systemInput, MConfigurations systemConfigs){
 
 		this.systemInput       = systemInput;		
 		this.systemRules       = systemInput.getSystemRules();
@@ -43,7 +44,7 @@ public class MReasoner extends Thread{
 
 	}
 
-	private void initializeTime(Configurations configs){
+	private void initializeTime(MConfigurations configs){
 		Time time              = new Time  ( configs );
 		//time.setMaxExecutionTime(configs.getExecutionTime());
 		systemStatus      = systemInput.getSystemStatus();

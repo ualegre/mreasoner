@@ -1,7 +1,7 @@
 package edu.casetools.mreasoner.database;
 
 
-import edu.casetools.mreasoner.core.SystemStatus;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
 import edu.casetools.mreasoner.core.elements.time.Time;
@@ -11,8 +11,8 @@ import edu.casetools.mreasoner.database.tables.EventsTable;
 import edu.casetools.mreasoner.database.tables.InternalEventsTable;
 import edu.casetools.mreasoner.database.tables.ResultsTable;
 import edu.casetools.mreasoner.database.temporalOperatorChecker.TOC;
-import edu.casetools.mreasoner.input.configurations.Configurations;
-import edu.casetools.mreasoner.input.configurations.databases.DBTypes;
+import edu.casetools.mreasoner.input.configurations.MConfigurations;
+import edu.casetools.mreasoner.input.configurations.MDBTypes;
 
 
 public class MDatabase {
@@ -27,10 +27,10 @@ public class MDatabase {
 	TOC             		temporalOperatorChecker;
 
 	
-	public MDatabase( Configurations systemConfigs, SystemStatus systemStatus ){
+	public MDatabase( MConfigurations systemConfigs, SystemStatus systemStatus ){
 	
 		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
-				DBTypes.DB_IMPLEMENTATION.POSTGRESQL,
+				MDBTypes.DB_IMPLEMENTATION.POSTGRESQL,
 				systemConfigs.getDBConfigs());
 		
 		eventsTable 			  = new EventsTable			( databaseOperations );

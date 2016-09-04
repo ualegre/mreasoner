@@ -1,14 +1,14 @@
 package edu.casetools.mreasoner.database.core.operations;
 
 import edu.casetools.mreasoner.database.core.implementations.PostgreSQL_DatabaseOperations;
-import edu.casetools.mreasoner.input.configurations.databases.DBConfigs;
-import edu.casetools.mreasoner.input.configurations.databases.DBTypes;
+import edu.casetools.mreasoner.input.configurations.MDBConfigs;
+import edu.casetools.mreasoner.input.configurations.MDBTypes;
 
 public class DatabaseOperationsFactory {
 
 
 	public static DatabaseOperations getDatabaseOperations(
-		DBTypes.DB_IMPLEMENTATION implementation, DBConfigs configs) {
+		MDBTypes.DB_IMPLEMENTATION implementation, MDBConfigs configs) {
 		DatabaseOperations reasonerDb = null;
 			switch(implementation){
 				case MYSQL:

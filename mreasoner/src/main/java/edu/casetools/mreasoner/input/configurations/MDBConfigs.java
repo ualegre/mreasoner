@@ -1,6 +1,6 @@
-package edu.casetools.mreasoner.input.configurations.databases;
+package edu.casetools.mreasoner.input.configurations;
 
-public class DBConfigs {
+public class MDBConfigs {
 
 	private String dbType,driver,dbName,ip,port,user,password,table;
 

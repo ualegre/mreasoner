@@ -4,7 +4,7 @@ package edu.casetools.mreasoner.core.elements.time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import edu.casetools.mreasoner.input.configurations.Configurations;
+import edu.casetools.mreasoner.input.configurations.MConfigurations;
 
 
 public class Time {
@@ -19,7 +19,7 @@ public class Time {
 //	private boolean hasMaxExecutionTime;
 	private Calendar c;
 	
-	public Time( Configurations configs ){
+	public Time( MConfigurations configs ){
 		c = new GregorianCalendar();
 		
 	//	this.hasMaxExecutionTime 	= configs.useMaxExecutionTime();

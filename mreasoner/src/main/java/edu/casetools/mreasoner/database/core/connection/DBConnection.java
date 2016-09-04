@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.database.core.connection;
 
 import java.sql.*;
 
-import edu.casetools.mreasoner.input.configurations.databases.DBConfigs;
+import edu.casetools.mreasoner.input.configurations.MDBConfigs;
 
 
 
@@ -11,11 +11,11 @@ public class DBConnection {
 
    private Connection conn = null;
    private Statement stmt = null;
-   DBConfigs configs;
+   MDBConfigs configs;
    private STATUS connectionStatus;
    public enum STATUS {CONNECTED,DISCONNECTED,ERROR};
    
-   public DBConnection(DBConfigs dbConfigs){
+   public DBConnection(MDBConfigs dbConfigs){
 	   
 	   connectionStatus = STATUS.DISCONNECTED;
 	   this.configs = dbConfigs;
@@ -80,7 +80,7 @@ public class DBConnection {
 	   conn.close();   
    }
    
-   public DBConfigs getDBConfigs(){	   
+   public MDBConfigs getDBConfigs(){	   
 	   return this.configs;
 	   
    }

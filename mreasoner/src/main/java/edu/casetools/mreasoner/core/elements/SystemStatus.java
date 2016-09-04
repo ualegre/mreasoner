@@ -1,4 +1,4 @@
-package edu.casetools.mreasoner.core;
+package edu.casetools.mreasoner.core.elements;
 
 import java.util.Vector;
 

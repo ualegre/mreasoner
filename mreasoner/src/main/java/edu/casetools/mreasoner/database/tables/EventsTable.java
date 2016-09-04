@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.casetools.mreasoner.core.SystemStatus;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 

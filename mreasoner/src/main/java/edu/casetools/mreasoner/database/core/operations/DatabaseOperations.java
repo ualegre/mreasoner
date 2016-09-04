@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import edu.casetools.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.mreasoner.database.core.connection.DBConnection.STATUS;
-import edu.casetools.mreasoner.input.configurations.databases.DBConfigs;
+import edu.casetools.mreasoner.input.configurations.MDBConfigs;
 
 
 
@@ -14,7 +14,7 @@ public abstract class DatabaseOperations {
 	
 		protected DBConnection dbConnection;
 		
-		public DatabaseOperations(DBConfigs configs){
+		public DatabaseOperations(MDBConfigs configs){
 			this.dbConnection = new DBConnection(configs);
 			connect();
 		}
@@ -28,7 +28,7 @@ public abstract class DatabaseOperations {
 		}
 
 		public abstract void connect();
-		public abstract void reconnect(DBConfigs configs);
+		public abstract void reconnect(MDBConfigs configs);
 		public abstract void disconnect();
 		
 		public abstract boolean createDatabase(String dbName);

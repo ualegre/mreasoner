@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.core.elements.rules;
 
 
 
-import edu.casetools.mreasoner.core.SystemStatus;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.database.MDatabase;
 
 public class NextTimeRule extends SameTimeRule{

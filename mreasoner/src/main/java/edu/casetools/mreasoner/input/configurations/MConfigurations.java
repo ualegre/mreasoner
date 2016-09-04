@@ -2,13 +2,11 @@ package edu.casetools.mreasoner.input.configurations;
 
 import java.io.File;
 
-import edu.casetools.mreasoner.input.configurations.databases.DBConfigs;
-
-public class Configurations {
+public class MConfigurations {
 
 	public enum EXECUTION_MODE {SIMULATION_ITERATION,SIMULATION_REAL_TIME,REAL_ENVIRONMENT};
 	private long 		executionTime,timeUnit;
-	private DBConfigs   dbConfigs;
+	private MDBConfigs   dbConfigs;
 	private String  jarConfigs;
 	private String 		systemSpecificationFilePath;
 	private String		LFPUBSOutputFilePath;
@@ -23,8 +21,8 @@ public class Configurations {
 	private boolean 	useStratification;
 	private EXECUTION_MODE 		executionMode;
 	
-	public Configurations(){
-		dbConfigs = new DBConfigs();
+	public MConfigurations(){
+		dbConfigs = new MDBConfigs();
 		jarConfigs = "Please write the jar execution commands separated by commas:";
 		jarConfigs = jarConfigs + "\n Eg.: \"java -jar c:/a.jar,java -jar c:/b.jar\"";
 		this.executionMode = EXECUTION_MODE.SIMULATION_ITERATION;
@@ -57,10 +55,10 @@ public class Configurations {
 	public void setTimeUnit(long timeUnit) {
 		this.timeUnit = timeUnit;
 	}
-	public void setDBConfigs(DBConfigs dbConfigs){
+	public void setDBConfigs(MDBConfigs dbConfigs){
 		this.dbConfigs = dbConfigs;
 	}
-	public DBConfigs getDBConfigs(){
+	public MDBConfigs getDBConfigs(){
 		return dbConfigs;
 	}
 

@@ -12,17 +12,17 @@ import org.postgresql.util.PSQLException;
 import edu.casetools.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
-import edu.casetools.mreasoner.input.configurations.databases.DBConfigs;
+import edu.casetools.mreasoner.input.configurations.MDBConfigs;
 
 
 
 
 public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	String resultsQuery;
-	DBConfigs configs;
+	MDBConfigs configs;
 	private ResultSet rs;
 	
-	public PostgreSQL_DatabaseOperations(DBConfigs configs){
+	public PostgreSQL_DatabaseOperations(MDBConfigs configs){
 		super(configs);
 		this.configs = configs;
 		resultsQuery = "";
@@ -47,7 +47,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 
 	@Override
-	public void reconnect(DBConfigs configs) {
+	public void reconnect(MDBConfigs configs) {
 		dbConnection = new DBConnection(configs);
 		connect();
 	}

@@ -2,22 +2,22 @@ package edu.casetools.mreasoner.input;
 
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.SystemStatus;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.events.Event;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.rules.SystemRules;
-import edu.casetools.mreasoner.input.configurations.Configurations;
+import edu.casetools.mreasoner.input.configurations.MConfigurations;
 
 
-public class InputData {
+public class MInputData {
 	Vector<String>		 declaredStates;
 	Vector<State> 		 independentStates;
 	Vector<Event> 		 eventsHistory;
 	SystemRules 		 systemRules;
 	SystemStatus 		 systemStatus;
-	Configurations		 		 systemConfigs;
+	MConfigurations		 		 systemConfigs;
 
-	public InputData(){
+	public MInputData(){
     	independentStates = new Vector<State>();
     	eventsHistory     = new Vector<Event>();
     	systemRules 	  = new SystemRules();
@@ -56,11 +56,11 @@ public class InputData {
 		this.eventsHistory = eventsHistory;
 	}
 	
-	public Configurations getSystemConfigs() {
+	public MConfigurations getSystemConfigs() {
 		return systemConfigs;
 	}
 
-	public void setSystemConfigs(Configurations systemConfigs) {
+	public void setSystemConfigs(MConfigurations systemConfigs) {
 		this.systemConfigs = systemConfigs;
 	}
 	
