@@ -35,7 +35,7 @@ public class MReasoner extends Thread{
 		simulateEvents = systemConfigs.getSimulateEvents();
 		hasMaxExecutionTime       = systemConfigs.useMaxExecutionTime();
 		semaphore   = new MReasonerSemaphore(  simulateEvents );	
-	//	database    = new Database         (     systemConfigs,systemStatus    );
+		database    = new MDatabase         (     systemConfigs,systemStatus    );
 		
 
 		running 	   = true;
