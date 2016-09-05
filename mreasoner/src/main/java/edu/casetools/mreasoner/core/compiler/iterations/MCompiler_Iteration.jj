@@ -7,17 +7,14 @@ options
   static = false;
 }
 
-PARSER_BEGIN(MCompiler)
-package edu.casetools.mreasoner.input.compiler;
-
+PARSER_BEGIN(MCompiler_Iteration)
+package edu.casetools.mreasoner.input.simulation;
 import java.io.FileReader;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Vector;
 
-
-import edu.casetools.mreasoner.input.InputData;
-import edu.casetools.mreasoner.core.SystemStatus;
+import edu.casetools.mreasoner.input.MInputData;
+import edu.casetools.mreasoner.core.elements.SystemStatus;
 import edu.casetools.mreasoner.core.elements.events.Event;
 import edu.casetools.mreasoner.core.elements.rules.NextTimeRule;
 import edu.casetools.mreasoner.core.elements.rules.SameTimeRule;
@@ -37,11 +34,11 @@ import edu.casetools.mreasoner.core.elements.time.absolute.TimeOfDay;
 import edu.casetools.mreasoner.core.rules.*;
 
 
-public class MCompiler {
+public class MCompiler_Iteration {
   public static Vector<String > statesDeclaration = null;
 public static void main(String[] args) { 
 try{ 
-MCompiler parser = new MCompiler (new FileReader("C:/xampp/robots.txt"));  
+MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/xampp/robots.txt"));  
         parser.readSystemSpecifications(); 
 
 }catch (Exception ex) 
@@ -50,7 +47,7 @@ MCompiler parser = new MCompiler (new FileReader("C:/xampp/robots.txt"));
 
 }
 
-PARSER_END(MCompiler)
+PARSER_END(MCompiler_Iteration)
 
 TOKEN_MGR_DECLS :
 {
@@ -100,7 +97,6 @@ TOKEN : { < DIGIT : [ "0"-"9" ] > }
 TOKEN : { < ALPHABET: ["a" - "z"] > }
 TOKEN : { < CAPSALPHABET: ["A" - "Z"] > }
 TOKEN : { < ARROW: "->" > }
-TOKEN : { < SECONDS: "s." > }
 
 //State declaration
 TOKEN: { <STATE_DECLARATION_START: "states(" >}
@@ -133,17 +129,8 @@ TOKEN: { <NTR_START: "sEr(" >}
 TOKEN: { <STRONG: "[-]" >}
 TOKEN: { <WEAK: "<->" >}
 
-TOKEN: { <MON: "monday" >}
-TOKEN: { <TUE: "tuesday" >}
-TOKEN: { <WED: "wednesday" >}
-TOKEN: { <THU: "thursday" >}
-TOKEN: { <FRI: "friday" >}
-TOKEN: { <SAT: "saturday" >}
-TOKEN: { <SUN: "sunday" >}
-
-
-InputData readSystemSpecifications(): {
-	InputData inputData = new InputData();
+MInputData readSystemSpecifications(): {
+	MInputData inputData = new MInputData();
 	  // Vector<String > statesDeclaration = null;
 	   Vector<State> independentStates = new Vector<State>();
 	   Vector<Event> eventsHistory = new Vector<Event>();
@@ -156,16 +143,19 @@ InputData readSystemSpecifications(): {
         {
           initialStatus = setDeclaredStates(statesDeclaration);
         }
-        (          	(initialStatus     = stateInitialization(initialStatus))
-	        |(auxiliar = independentStates()
-	        {
-	          independentStates.add(auxiliar);
-	        })
-  			|(eventDeclaration(eventsHistory))
-  			|(systemRules=sameTimeRule(systemRules))
-  			|(systemRules = nextTimeRule(systemRules))
-  		)*
-  		< EOF >
+     (        (initialStatus     = stateInitialization(initialStatus))
+        |(auxiliar = independentStates()
+        		{
+          			independentStates.add(auxiliar);
+        		}
+         )
+        |(eventDeclaration(eventsHistory))
+  		|(systemRules=sameTimeRule(systemRules))
+  		|(systemRules = nextTimeRule(systemRules))
+  	  )*
+    
+    < EOF >
+
 
  {
    inputData.setDeclaredStates(statesDeclaration);
@@ -176,7 +166,6 @@ InputData readSystemSpecifications(): {
    //inputData.printInputData();
   return inputData;
  }
- 
 }
 //Generic functions
 
@@ -318,36 +307,20 @@ ClockBetween clockBetween(boolean status): {ClockBetween clockBetween = new Cloc
 {
   <CLOCK_BETWEEN_START>since=clockTime()<HYPHEN >until = clockTime()<RIGHT_BRACKET>
 	{
-
-	     if(since.getTime_of_day() > until.getTime_of_day()){
-        	    throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong time format: Since > Until");
-          } else if(since.getTime_of_day() == until.getTime_of_day()){
-				throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong time format: Please use clockAt("+
-				correctNumber(since.getHour())+":"+correctNumber(since.getMinute())+":"+correctNumber(since.getSecond())+")");
-        }
 	  clockBetween.setSince(since);
 	  clockBetween.setUntil(until);
 	  clockBetween.setStatus(status);
 	  return clockBetween;
 	}
 }
-
-String correctNumber(int number) :{
-  String result;}{
-   {    
-  if(number < 10) return "0"+number;
-  else return ""+number;	}  }
-
-
 DefaultState calendarState(boolean status): {DefaultState defaultState = null;} { (defaultState = calendarAt(status)| defaultState = calendarBetween(status))  {return defaultState;}  }
-CalendarAt calendarAt(boolean status): {CalendarAt calendarAt = new CalendarAt();Date date;} {  <CALENDAR_AT_START>date = calendarTime()< RIGHT_BRACKET >  {calendarAt.setDate(date);calendarAt.setStatus(status);checkDateWithActualTime(date);return calendarAt;} }
+CalendarAt calendarAt(boolean status): {CalendarAt calendarAt = new CalendarAt();Date date;} {  <CALENDAR_AT_START>date = calendarTime()< RIGHT_BRACKET >  {calendarAt.setDate(date);calendarAt.setStatus(status);return calendarAt;} }
 CalendarBetween calendarBetween(boolean status): {CalendarBetween calendarBetween = new CalendarBetween();Date since,until;}
 {
   <CALENDAR_BETWEEN_START> since=calendarTime()<HYPHEN >until=calendarTime()< RIGHT_BRACKET >
   			{
   			  	calendarBetween.setSince(since);
   			  	calendarBetween.setUntil(until);
-  			  	checkCalendarBoundTime(since,until);
   			  	calendarBetween.setStatus(status);
   			  	return calendarBetween;
   			}
@@ -362,7 +335,6 @@ WeekDayBetween weekDayBetween(boolean status): {WeekDayBetween weekDayBetween = 
 		{
 		  	weekDayBetween.setSince(since);
 		  	weekDayBetween.setUntil(until);
-		  	checkWeekDayBounds(since,until);
 		  	weekDayBetween.setStatus(status);
 		  	return weekDayBetween;
 		}
@@ -394,138 +366,11 @@ TimeOfDay clockTime():
 
 
 
-Date calendarTime(): {Date date = new Date();Token aux,aux2,aux3,aux4;}
-{
-	date = dayOfMonth(date) <SLASH >
-	date = month(date)<SLASH >
-	date = year(date)
-	{
-	  checkCalendarTime(date);
-	  return date;
-	}
-}
-
-void checkCalendarTime(Date date):{}{	{  
-   if(date.isEmptyDay_of_month()&&date.isEmptyMonth()&&date.isEmptyYear())  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong calendar time format. Calendar cannot be  empty (_/_/_) it must be (dd/mm/yyyy)");
-	}
-}
-
-void checkCalendarBoundTime(Date since, Date until):
-{
-}
-{	{
-	  
-    if(since.isEmptyDay_of_month()!=until.isEmptyDay_of_month())  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong undefined parameter format in calendar between time format. \n They must be symmetric. Eg. _/mm/yyyy-_/mm/yyyy  ");
-	if(since.isEmptyMonth()!=until.isEmptyMonth())  			  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong undefined parameter format in calendar between time format. \n They must be symmetric. Eg. _/mm/yyyy-_/mm/yyyy  ");
-	if(since.isEmptyYear()!=until.isEmptyYear())  				  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong undefined parameter format in calendar between time format. \nThey must be symmetric. Eg. _/mm/yyyy-_/mm/yyyy  ");
-
-	if(since.getYear() > until.getYear() ) throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong calendar between format. Since year higher than Until year");
-	else if(since.getYear() == until.getYear() )
-		if(since.getMonth() > until.getMonth() )
-	    	throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong calendar between format. Since month higher than Until month");	  	else if(since.getMonth() == until.getMonth() )
-	  		if( since.getDay_of_month() >= until.getDay_of_month() ) throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong calendar between format. Since higher or equal to Until.Remember that calendarAt() can be used instead.");
-
-	    checkDateWithActualTime(until);
-        
-	}
-}
-
-void checkWeekDayBounds(int since,int until):{
-  }{
-  {
- 	 if(since > until) 	 { 	   throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): "+
- 	   					"Wrong weekDayBetween() format. Not allowed the use of weeks from "+
- 	   					getWeekDayFromInt(since)+" until "+getWeekDayFromInt(until)+
- 	   					". \n The week starts on "+getWeekDayFromInt(1)+
- 	   					" and ends on "+getWeekDayFromInt(7)+".");
- 	}else if(since == until) throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong weekDayBetween() format. weekDayAt() must be used instead.");	return;
-  }
-}
-
-String getWeekDayFromInt(int weekDay):
-{
-  String weekDayString = "";
-}
-{
-  {    
- switch(weekDay) {	case (int)Calendar.MONDAY:
-		weekDayString = "monday";
-	break;
-	case (int) Calendar.TUESDAY:
-		weekDayString = "tuesday";
-	break;
-	case (int) Calendar.WEDNESDAY:
-		weekDayString = "wednesday";
-	break;
-	case (int) Calendar.THURSDAY:
-		weekDayString = "thursday";
-	break;
-	case (int) Calendar.FRIDAY:
-		weekDayString = "friday";
-	break;
-	case (int) Calendar.SATURDAY:
-		weekDayString = "saturday";
-	break;
-	case (int) Calendar.SUNDAY: 
-		weekDayString = "sunday";
-	break;
- }
- return weekDayString;
-}
-}
-
-
-
-void checkDateWithActualTime(Date date):
-{
-  }{
-  {
-    Calendar untilCalendar = date.setValuesIntoCalendar(new GregorianCalendar());
-    Calendar actualCalendar = new GregorianCalendar();
-    actualCalendar.setTimeInMillis(System.currentTimeMillis());
-      if(untilCalendar.compareTo(actualCalendar) < 0){
-	   System.out.print("WARNING (Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): The specified 'until' calendar time ");
-	   date.print();
-	   System.out.println(" happened already. The internal state leads to system inefficiency.");
-   }  }
-}
-
-Date dayOfMonth(Date date):{
-  Token aux = null, aux2 = null;}{
-  (    (aux=<DIGIT >aux2=<DIGIT >{ date.setDay_of_month(dayOfMonthToInt(aux.toString()+aux2.toString()));})
-  | ( <UNDERSCORE> {date.setEmptyDay_of_month();} )
-  )
-  {
-    return date;  }}
-
-Date month(Date date):
-{
-  Token aux = null, aux2 = null;
-}
-{
-  (
-    (aux=<DIGIT >aux2=<DIGIT >{ date.setMonth(monthToInt(aux.toString()+aux2.toString())-1);})
-  | ( <UNDERSCORE> {date.setEmptyMonth();} )
-  )
-  {
-    return date;
-  }
-}
-
-Date year(Date date):
-{
-  Token aux = null, aux2 = null, aux3 = null, aux4 = null;
-}
-{
-  (
-    (aux=<DIGIT >aux2=<DIGIT >aux3=<DIGIT >aux4=<DIGIT >{ date.setYear(yearToInt(aux.toString()+aux2.toString()+aux3.toString()+aux4.toString()));})
-  | ( <UNDERSCORE> {date.setEmptyYear();} )
-  )
-  {
-    return date;
-  }
-}
-
+Date calendarTime(): {Date date = new Date();Token aux,aux2,aux3,aux4;} { (aux=<DIGIT >aux2=<DIGIT >{ date.setDay_of_month(dayOfMonthToInt(aux.toString()+aux2.toString()));})<SLASH >
+																(aux=<DIGIT >aux2=<DIGIT >{ date.setMonth(monthToInt(aux.toString()+aux2.toString()));})<SLASH >
+																(aux=<DIGIT >aux2=<DIGIT >aux3=<DIGIT >aux4=<DIGIT >{ date.setYear(yearToInt(aux.toString()+aux2.toString()+aux3.toString()+aux4.toString()));})
+																{return date;
+																}}
 int minToInt(String value): {int result = 0;} {
 								{
 								  result = Integer.parseInt(value);
@@ -568,199 +413,109 @@ void isZero(String value):  {int result = 0;} {
 								  if((result != 0))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): The syntax to initialize values the format should be 'holdsAt(<sign><state_name>,0);'");
 								}
 							 }												
-int weekDay(): {} { ((< MON >{return Calendar.MONDAY;})|(< TUE >{return Calendar.TUESDAY;})
-					|(< WED >{return Calendar.WEDNESDAY;})|(< THU >{return Calendar.THURSDAY;})
-					|(< FRI >{return Calendar.FRIDAY;})|(< SAT >{return Calendar.SATURDAY;})|(< SUN >{return Calendar.SUNDAY;}))  }
-
-
-
-Bound absoluteTime(Bound bound):
+int weekDay(): {} { (("monday"{return Calendar.MONDAY;})|("tuesday"{return Calendar.TUESDAY;})
+					|("wednesday"{return Calendar.WEDNESDAY;})|("thursday"{return Calendar.THURSDAY;})
+					|("friday"{return Calendar.FRIDAY;})|("saturday"{return Calendar.SATURDAY;})|("sunday"{return Calendar.SUNDAY;}))  }
+Bound absoluteTime():
 {
-	int firstValue = 0;
-	String firstDigit = "";
-	Token t = null;
-	bound = new Bound();
+  Bound bound = new Bound();
+  Date date = new Date();
+  TimeOfDay time = new TimeOfDay();
+  int weekDay = 0;
+  Token t1,t2;
 }
 {
- 	t = < DIGIT > { firstDigit = t.toString(); }
-	t = < DIGIT > { firstDigit = firstDigit + t.toString(); }
+  	(		(	t1 = < DIGIT > t2 = <DIGIT >			{
+			  bound = regularAbsoluteTime(bound, t1.toString()+t2.toString());			}
+		)?
 		
-	bound = clockOrCalendarOrLongTime(bound,firstDigit) 
-
- {
-   return bound;
- }
+  	   (  	      weekDay = weekDay()			{			  bound.setWeekDay(weekDay);			}  	    )?
+  	)
+  	{
+  	  return bound;  	}
 }
 
-String readFirstDigits():{
-  String firstDigits = "";
-  Token t;}{
-  (    t = < DIGIT >
-     {
-      firstDigits = firstDigits + t.toString();    }
-  )+
+Bound simulationValue():
+{
+  Bound bound = new Bound();
+  String value = "";
+  Token t1;
+}
+{
+  	(				
+		( t1 = < DIGIT >			{
+			  value = value + t1.toString();			}
+		)+
 
-  {
-    return firstDigits;  }}
+  	)
+  	{  	  bound.setSimulation_value(Long.parseLong(value));
+  	  return bound;
+  	}
+}
 
-Bound absoluteOrRelativeTime(Bound bound):
+
+Bound regularAbsoluteTime(Bound bound, String firstDigit):
 {
 	int firstValue = 0;
-	String firstDigit = "";
-	Token t = null;
-	bound = new Bound();
-}
-{
- 	(
- 	 // firstDigit = readFirstDigits()	 	  t = < DIGIT > { firstDigit = t.toString(); }
-	 	 (	 	    ( bound = incompleteRelativeTime(bound,firstDigit)   )
-	 	
-	| ( t = < DIGIT >			{
-			  firstDigit = firstDigit + t.toString();			}
-			(
-			      (	bound = clockOrCalendarOrLongTime(bound,firstDigit)	)
-			    | ( bound = incompleteRelativeTime(bound,firstDigit)    )
-			    | ( ( < DIGIT> {firstDigit = firstDigit + t.toString();}  )( < DIGIT> {firstDigit = firstDigit + t.toString();}  )? ( bound = incompleteRelativeTime(bound,firstDigit) )  )
-			)
-		{
-		  firstDigit = firstDigit + t.toString();}
-		)
-)
-    )
- {
-   return bound;
- }
-}
+	Token t1,t2;
+}{
+    (     (< SLASH >	 {	   firstValue = dayOfMonthToInt(firstDigit);
+	   bound.getDate().setDay_of_month(firstValue);
+	 }
+	 bound = regularAbsoluteTimeMonth(bound) )
+ |
+ (
+   < TWO_POINT >
+   {  
+     firstValue = hourToInt(firstDigit);
+     bound.getTime_of_day().setHour(firstValue);
+     bound = regularAbsoluteTime_TimeOfDay(bound);
+   }   
+ )	)
 
-Bound eventTime(Bound bound):
+ {
+   return bound; }}
+
+Bound regularAbsoluteTime_TimeOfDay(Bound bound):
 {
-	int firstValue = 0;
-	String firstDigit = "";
-	Token t = null,t1 = null;
-	bound = new Bound();
-}
-{
-   
-	 	
-	    t = < DIGIT > t1 = < DIGIT >
+  Token aux,aux2;
+  String seconds = "00";
+}{
+(  
+  			(
+  			  aux = <DIGIT > aux2 =<DIGIT >
+				 {
+					bound.getTime_of_day().setMinute(minToInt(aux.toString()+aux2.toString()));
+				 }
+			 )
+			(				   <TWO_POINT >
+				   			(
+	  			  aux = <DIGIT > aux2 =<DIGIT >
+					 {
+						seconds = aux.toString()+aux2.toString();
+					 }
+				 )
+			)?
+			//<TWO_POINT > aux = <DIGIT > aux2 =<DIGIT > {timeOfDay.setSecond(minToInt(aux.toString()+aux2.toString()));}
+)
 			{
-			  firstDigit =  t.toString() + t1.toString();
-			}
-			
-	   	bound = clockOrCalendarOrLongTime(bound,firstDigit)	
-    
- {
-   return bound;
- }
- 
-}
+			  bound.getTime_of_day().setSecond(minToInt(seconds));
+			 return bound;
+			}}
 
-
-Bound clockOrCalendarOrLongTime(Bound bound,String firstDigit):
+Bound regularAbsoluteTimeMonth(Bound bound):
 {
-	int firstValue = 0;
-//	String firstDigit = "";
-	Token t = null;
-}
-{
-	(	  (bound = incompleteClockTime(bound,firstDigit))
-	 |(bound = incompleteCalendarTime(bound,firstDigit))
-
-	)
-
- {
-   return bound;
- }
-}
-
-Bound incompleteClockTime(Bound bound,String firstDigit):
-{
-	Token t1 = null, t2 = null;
-	TimeOfDay timeOfDay = new TimeOfDay();
-	int counter = 0;
-}
-{
+  Token aux,aux2,aux3,aux4;
+}{
+	(aux=<DIGIT> aux2=<DIGIT > { bound.getDate().setMonth(monthToInt(aux.toString()+aux2.toString()));})
+	<SLASH >
+	(aux=<DIGIT > aux2=<DIGIT > aux3=<DIGIT > aux4=<DIGIT >{ bound.getDate().setYear(yearToInt(aux.toString()+aux2.toString()+aux3.toString()+aux4.toString()));})
+  	(< POINT >	  	{
+	  	  bound.setTime_of_day(clockTime());	  	}
+  	)?
   {
-    timeOfDay.setHour(hourToInt(firstDigit));
-    timeOfDay.setSecond(0);  }
-	< TWO_POINT >	{
-	   if(firstDigit.length() != 2) throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid clock time format.");	}
-	t1 = < DIGIT >
-	t2 = < DIGIT >
-	{
-	  timeOfDay.setMinute(minToInt(t1.toString()+t2.toString()));	}
-
-	(
-	  < TWO_POINT >	 t1 = < DIGIT >
-	 t2 = < DIGIT >
-	{
-	  timeOfDay.setSecond(minToInt(t1.toString()+t2.toString()));
-	}
-	{
-	  if(counter!=0) 	throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid clock time format.");	  counter++;
-	}
-	)?
- {
-   bound.setTime_of_day(timeOfDay);
-   return bound;
- }
-}
-
-Bound incompleteCalendarTime(Bound bound,String firstDigit):
-{
-	Token t1 = null, t2 = null, t3=null, t4 = null;
-	Date date = new Date();
-	int counter = 0;
-}
-{
-  {
-   
-    date.setDay_of_month(Integer.parseInt(firstDigit));
-  }
-	< SLASH >	{
-	   if(firstDigit.length() != 2) throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid calendar time format.");	}
-	t1 = < DIGIT >
-	t2 = < DIGIT >
-	{
-	  date.setMonth(monthToInt(t1.toString()+t2.toString())-1);
-	}
-	< SLASH >
-	 t1 = < DIGIT >
-	 t2 = < DIGIT >
-	 t3 = < DIGIT >
-	 t4 = < DIGIT >
-	{
-	  date.setYear(yearToInt(t1.toString()+t2.toString()+t3.toString()+t4.toString()));
-	}
-
-
-	    
-	 (	  < POINT >	  t1 = < DIGIT >	  t2 = < DIGIT >	  bound = incompleteClockTime(bound,t1.toString()+t2.toString())	 {	   if(counter!=0) 	throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid clock time format.");	   counter++;	 }	)?
-
-	
- {
-   bound.setDate(date);
-   return bound;
- }
-}
-
-Bound incompleteRelativeTime(Bound bound,String firstDigit):
-{
-	int firstValue = 0;
-	Token t = null;
-	String aux = firstDigit;
-}
-{ 
-
-	< SECONDS >
-
- {
-   if(Integer.parseInt(firstDigit) == 0)throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid relative to present operator.\n If the delay is of 0 seconds, there is no need of using temporal operators.");   
-   bound.setSimulation_value(Long.parseLong(aux)*1000);
-   return bound;
- }
-}
-
+    return bound;  }}
+//Bound regularAbsoluteTime()://{//  Bound bound = new Bound();//  Date date = new Date();//  TimeOfDay time = new TimeOfDay();//}//{		date = calendarTime()// (<POINT> time = clockTime())?//		{//		  bound.setDate(date);//    	  bound.setTime_of_day(time);//    	  return bound;//    	}//}
 
 //Bounded Past Operators
 TemporalOperator temporalOperator(): {TemporalOperator temporalOperator = null;
@@ -776,86 +531,64 @@ TemporalOperator operator(boolean isStrong):{TemporalOperator temporalOperator =
 { ((temporalOperator = absolute(isStrong)))
    {return temporalOperator;}
 }
+//TemporalOperator inmediate(boolean isStrong):{//  							  TemporalOperator temporalOperator = new TemporalOperator();//						      Bound bound = new Bound();//							  Token auxiliar;//							  String digit = "";//							 }//						     {//						      (auxiliar = <DIGIT >{digit = digit + auxiliar.toString();})*//							  {bound.setSimulation_value(Long.parseLong(digit));//							   temporalOperator.setSinceValue(bound);//							   if(isStrong) temporalOperator.setType(TOP_TYPE.STRONG_RELATIVE);//							   else temporalOperator.setType(TOP_TYPE.WEAK_RELATIVE);//							   return temporalOperator;}//							  //							 }
 							 
-
 TemporalOperator absolute(boolean isStrong):
 {
  TemporalOperator temporalOperator = new TemporalOperator();
  Bound since = null ,until = null;
- int counter = 0;
- int weekDay = 0;
 }
  {
- (    (
-    ( since = absoluteOrRelativeTime(since) )		
-  	   |(
-
-
-
-  	(//  	     (< MON >{weekDay =  Calendar.MONDAY;})|(< TUE >{weekDay = Calendar.TUESDAY;})//					|(< WED >{weekDay = Calendar.WEDNESDAY;})|(< THU >{weekDay = Calendar.THURSDAY;})//					|(< FRI >{weekDay = Calendar.FRIDAY;})|(< SAT >{weekDay = Calendar.SATURDAY;})|(< SUN >{weekDay = Calendar.SUNDAY;})
-			{
-			  weekDay = weekDay();
-			  since = new Bound();
-			  since.setWeekDay(weekDay); 
-			})
-			
-			< HYPHEN >
-			(//			(< MON >{weekDay =  Calendar.MONDAY;})|(< TUE >{weekDay = Calendar.TUESDAY;})//					|(< WED >{weekDay = Calendar.WEDNESDAY;})|(< THU >{weekDay = Calendar.THURSDAY;})//					|(< FRI >{weekDay = Calendar.FRIDAY;})|(< SAT >{weekDay = Calendar.SATURDAY;})|(< SUN >{weekDay = Calendar.SUNDAY;})
-
-			{
-			  weekDay = weekDay();
-			  until = new Bound();
-			  until.setWeekDay(weekDay);
-			  counter ++;
-			}
-			)
-  	    )
-   )
+    (since = simulationValue())
 
 	{
 	 if(isStrong) temporalOperator.setType(TOP_TYPE.STRONG_RELATIVE);
-	 else temporalOperator.setType(TOP_TYPE.WEAK_RELATIVE);
-	}
-    (<HYPHEN >
-   	   ( until = absoluteTime(until)
-	   {
-	     if(counter!=0) 	throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid clock time format.");   
-	     counter++;
+	 else temporalOperator.setType(TOP_TYPE.WEAK_RELATIVE);	}
+   
+   (<HYPHEN>
+   	   ( until = simulationValue())	   {
 	     if(isStrong) temporalOperator.setType(TOP_TYPE.STRONG_ABSOLUTE);
-		 else temporalOperator.setType(TOP_TYPE.WEAK_ABSOLUTE);
-	   })
-//	 | ({//			  weekDay = weekDay();//			  until = new Bound();//			  until.setWeekDay(weekDay); //			}//	   )
-   )? )
+		 else temporalOperator.setType(TOP_TYPE.WEAK_ABSOLUTE);	   }
+   )?
    {
-     if(until != null)     {       //checkBounds(since,until);
-      //checkCalendarBoundTime(since.getDate(),until.getDate());
-       //checkWeekDayBounds(since.getWeekDay(),until.getWeekDay());
-     }
+     if(until != null)checkBounds(since,until);
+     else if (since.getSimulation_value() == 0)throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Zero value is not allowed.");
+   
      temporalOperator.setSinceValue(since);
      temporalOperator.setUntilValue(until);
      return temporalOperator;
    }
  }
-
-
-
 boolean checkBounds(Bound since,Bound until): {boolean result = false;} {
 	
 	{
-	  if(since.isEmpty_Simulation() == until.isEmpty_Simulation() )	  {	    result = true;
-	  //  System.out.println("SINCE: "+since.getSimulation_value());
-	 //  System.out.println("UNTIL: "+until.getSimulation_value());	  }	  
-	  else if(since.isEmpty_RealTime() == until.isEmpty_RealTime() )	  {	    result =  false;
-	  ///  System.out.println("SINCE: ");
-	    since.printRealTime();
-	   //	System.out.println("UNTIL: ");
-	    until.printRealTime();	  } 
+	  if(since.isEmpty_Simulation() == until.isEmpty_Simulation() )	  {
+	    result = true;
+//	    System.out.println("SINCE: "+since.getSimulation_value());//	    System.out.println("UNTIL: "+until.getSimulation_value());	  }	  
+	  else if(since.isEmpty_RealTime() == until.isEmpty_RealTime() )	  {	     result =  false;
+
+	//    System.out.println("SINCE: ");
+	 //   since.printRealTime();
+	  // 	System.out.println("UNTIL: ");
+	 //   until.printRealTime();	  } 
 	  else	  {
  		throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid temporal operator format.");		
 	  }
 
 	  return result;	}
-  }//Bound simulatedTime()://{//  Bound bound = new Bound();//  Token t;//  String value = "";//}//{//  < LEFT_BRACKET >//  (t = < DIGIT >//  {//    value = value + t.toString();//  }//  )+//  < RIGHT_BRACKET >//  {//    bound.setSimulation_value(Long.parseLong(value));//    return bound;//  }//}
+  }Bound simulatedTime():
+{
+  Bound bound = new Bound();
+  Token t;
+  String value = "";}{
+  < LEFT_BRACKET >
+  (t = < DIGIT >  {
+    value = value + t.toString();  }
+  )+
+  < RIGHT_BRACKET >
+  {
+    bound.setSimulation_value(Long.parseLong(value));
+    return bound;  }}
 //Independent States
 State independentStates(): {State state;} {
   independentStatesStart()
@@ -875,42 +608,20 @@ return eventsHistory;} }
 void eventDeclarationStart(): {} {  <EVENT_START> }
 void eventDeclarationStop(): {} {  genericStop() }
 
-Vector<Event > eventDeclarationContent(Vector<Event > eventsHistory):
-{
-  	Event event;
-	Token t1,t2;
-	Bound bound = null;
-}
-{
+Vector<Event > eventDeclarationContent(Vector<Event > eventsHistory): {Event event;Token auxiliar;String time="";} {
 
  event = eventIngression()
-< COMMA > (
-  		       bound = eventTime(bound)
-		  )
+< COMMA > (auxiliar = <DIGIT>
 {
-   //event.setTime(bound.getBoundInMillis());
-   if(!bound.getTime_of_day().isEmpty())
-   		event.setTimeOfDay(bound.getTime_of_day());
-   if(!bound.getDate().isEmpty())
-  		 event.setDate(bound.getDate());
-  		 checkEvent(event);
+  time = time + auxiliar.toString();
+}
+)*
+{
+  event.setTime(Long.parseLong(time));
    eventsHistory.add(event);
    return eventsHistory;
 }
 }
-
-void checkEvent(Event event):{
-      	Calendar c1 = new GregorianCalendar();
-		Calendar c2 = new GregorianCalendar();
-		long time = 0;}{
-  {
-		time = System.currentTimeMillis();
-		c1.setTimeInMillis(time);
-		c2.setTimeInMillis(time);
-		
-		c2 = event.setValuesIntoCalendar(c2);
-		
-		if( c1.compareTo(c2) >= 0)  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid event time. Already happened.");;  }}
 Event eventIngression(): {State state;} {  eventIngressionStart() state = genericState() eventIngressionStop()
 {
   Event event = new Event();
@@ -996,7 +707,6 @@ NextTimeRule nextTimeRuleContent(): {NextTimeRule nextTimeRule = new NextTimeRul
 }
 NextTimeRule nextTimeRuleAntecedentContent(NextTimeRule nextTimeRule,boolean status): {State state;DefaultState defaultState;TemporalOperator temporalOperator;}
 {
-  
 //<LEFT_BRACKET > ( (state = genericState(){nextTimeRule.getAntecedents().add(state);})// 					  |(temporalOperator = genericStateWithOperator(){nextTimeRule.getTemporalOperators().add(temporalOperator);})// 					  |(defaultState = internalState(false){nextTimeRule.addInternalState(defaultState);})// 					 )//    (< COMMA > ((state = genericState(){nextTimeRule.getAntecedents().add(state);})|(temporalOperator = genericStateWithOperator(){nextTimeRule.getTemporalOperators().add(temporalOperator);})|(defaultState = internalState(false){ nextTimeRule.addInternalState(defaultState);} )))*//    <RIGHT_BRACKET >
 	  (  	 (defaultState = internalState(status){nextTimeRule.addInternalState(defaultState);})
  			|(temporalOperator = genericStateWithOperator(){nextTimeRule.getTemporalOperators().add(temporalOperator);})

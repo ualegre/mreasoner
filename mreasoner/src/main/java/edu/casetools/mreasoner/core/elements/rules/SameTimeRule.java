@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.core.elements.rules;
 
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.core.elements.states.DefaultState;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
@@ -69,7 +69,7 @@ public class SameTimeRule {
 	}
 		
 
-	public SystemStatus assertRule(SystemStatus systemStatus, MDatabase database){
+	public MStatus assertRule(MStatus systemStatus, MDatabase database){
 		boolean result = true;
 
 		result = checkAntecedents(systemStatus);
@@ -84,7 +84,7 @@ public class SameTimeRule {
 		return systemStatus;	
 	}
 
-	protected boolean checkAntecedents(SystemStatus systemStatus){
+	protected boolean checkAntecedents(MStatus systemStatus){
 		boolean result = true;
 		boolean systemStatusValue;
 		boolean antecedentsValue;
@@ -105,7 +105,7 @@ public class SameTimeRule {
 		
 	}
 	
-	public boolean getStatus( SystemStatus systemStatus, String state){
+	public boolean getStatus( MStatus systemStatus, String state){
 		
 		for(int i=0;i<systemStatus.getSystemStatus().size();i++){
 			if( systemStatus.getSystemStatus().get(i).getName().equalsIgnoreCase(state) ) return systemStatus.getSystemStatus().get(i).getStatus();
@@ -114,7 +114,7 @@ public class SameTimeRule {
 		return false; //Warning: This can cause future errors.
 	}
 	
-	protected boolean checkPastBoundedAntecedents(SystemStatus systemStatus, MDatabase database){
+	protected boolean checkPastBoundedAntecedents(MStatus systemStatus, MDatabase database){
 		boolean result = true;
 		boolean systemStatusValue;
 		

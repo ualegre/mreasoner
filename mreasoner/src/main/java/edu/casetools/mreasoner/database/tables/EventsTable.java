@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 
@@ -22,7 +22,7 @@ public class EventsTable {
 		reasonerDatabase.createEventsTable();
 	}
 	
-	public SystemStatus findLatestEvents(SystemStatus systemStatus){
+	public MStatus findLatestEvents(MStatus systemStatus){
 		ResultSet result;
 		
 	    try {

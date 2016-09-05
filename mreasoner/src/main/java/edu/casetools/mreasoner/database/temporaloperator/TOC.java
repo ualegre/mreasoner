@@ -1,4 +1,4 @@
-package edu.casetools.mreasoner.database.temporalOperatorChecker;
+package edu.casetools.mreasoner.database.temporaloperator;
 
 
 import java.sql.SQLException;

@@ -5,13 +5,13 @@ import java.util.Vector;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.Time;
 
-public class SystemStatus {
+public class MStatus {
 
 	private Vector<State> systemStatus;
 	private Time		  time;
 
 	
-	public SystemStatus(){
+	public MStatus(){
 		systemStatus = new Vector<State>();
 	}
 	

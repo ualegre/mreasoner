@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.Time;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
@@ -47,7 +47,7 @@ public class InternalEventsTable {
 	
 
 	
-	public SystemStatus findLatestEvents(SystemStatus systemStatus){
+	public MStatus findLatestEvents(MStatus systemStatus){
 		ResultSet result;
 
 	    try {

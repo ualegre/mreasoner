@@ -1,16 +1,16 @@
-package edu.casetools.mreasoner.core.rules;
+package edu.casetools.mreasoner.core.elements;
 
 import java.util.Vector;
 
 import edu.casetools.mreasoner.core.elements.rules.NextTimeRule;
 import edu.casetools.mreasoner.core.elements.rules.SameTimeRule;
 
-public class SystemRules {
+public class MRules {
 
 	private Vector<SameTimeRule>  sameTimeRules;
 	private Vector<NextTimeRule>  nextTimeRules;
 	
-	public SystemRules(){
+	public MRules(){
 		sameTimeRules     		= new Vector<SameTimeRule>();
 	    nextTimeRules           = new Vector<NextTimeRule>();
 	}

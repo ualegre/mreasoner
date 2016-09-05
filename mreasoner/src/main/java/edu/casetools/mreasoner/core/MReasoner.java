@@ -3,21 +3,21 @@ package edu.casetools.mreasoner.core;
 import java.sql.Timestamp;
 
 import edu.casetools.mreasoner.configurations.data.MConfigurations;
-import edu.casetools.mreasoner.core.control.ReasonerSemaphore;
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MInputData;
+import edu.casetools.mreasoner.core.elements.MRules;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.core.elements.time.Time;
-import edu.casetools.mreasoner.core.rules.RuleStratificator;
-import edu.casetools.mreasoner.core.rules.SystemRules;
+import edu.casetools.mreasoner.core.engine.MReasonerSemaphore;
+import edu.casetools.mreasoner.core.engine.RuleStratificator;
 import edu.casetools.mreasoner.database.MDatabase;
-import edu.casetools.mreasoner.input.MInputData;
 
 public class MReasoner extends Thread{
 
-	public static SystemStatus        	   systemStatus;
-	public static ReasonerSemaphore 	   semaphore;
+	public static MStatus        	   systemStatus;
+	public static MReasonerSemaphore 	   semaphore;
 	
 	private MInputData			  	   	   systemInput;
-	private SystemRules			 	   	   systemRules;		
+	private MRules			 	   	   systemRules;		
 	private MDatabase				       database;
 	
 	private boolean running;
@@ -34,7 +34,7 @@ public class MReasoner extends Thread{
 
 		simulateEvents = systemConfigs.getSimulateEvents();
 		hasMaxExecutionTime       = systemConfigs.useMaxExecutionTime();
-		semaphore   = new ReasonerSemaphore(  simulateEvents );	
+		semaphore   = new MReasonerSemaphore(  simulateEvents );	
 	//	database    = new Database         (     systemConfigs,systemStatus    );
 		
 
