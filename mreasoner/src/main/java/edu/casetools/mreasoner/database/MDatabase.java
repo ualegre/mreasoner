@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.database;
 
 import edu.casetools.mreasoner.configurations.data.MConfigurations;
 import edu.casetools.mreasoner.configurations.data.MDBTypes;
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
 import edu.casetools.mreasoner.core.elements.time.Time;
@@ -12,7 +12,7 @@ import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactor
 import edu.casetools.mreasoner.database.tables.EventsTable;
 import edu.casetools.mreasoner.database.tables.InternalEventsTable;
 import edu.casetools.mreasoner.database.tables.ResultsTable;
-import edu.casetools.mreasoner.database.temporalOperatorChecker.TOC;
+import edu.casetools.mreasoner.database.temporaloperator.TOC;
 
 
 public class MDatabase {
@@ -27,7 +27,7 @@ public class MDatabase {
 	TOC             		temporalOperatorChecker;
 
 	
-	public MDatabase( MConfigurations systemConfigs, SystemStatus systemStatus ){
+	public MDatabase( MConfigurations systemConfigs, MStatus systemStatus ){
 	
 		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
 				MDBTypes.DB_IMPLEMENTATION.POSTGRESQL,
@@ -42,7 +42,7 @@ public class MDatabase {
 	}
 	
 	
-	public SystemStatus findLatestEvents(SystemStatus systemStatus){
+	public MStatus findLatestEvents(MStatus systemStatus){
 		
 		systemStatus = internalEventsTable.findLatestEvents(systemStatus);
 		systemStatus = eventsTable.findLatestEvents(systemStatus);
@@ -57,7 +57,7 @@ public class MDatabase {
 		internalEventsTable.insertNextTimeRuleEffect(consequence,time);
 	}
 	
-	public void writeLog(SystemStatus systemStatus){
+	public void writeLog(MStatus systemStatus){
 		resultsTable.write(systemStatus);
 	}
 	

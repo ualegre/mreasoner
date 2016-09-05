@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.core.elements.rules;
 
 
 
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.database.MDatabase;
 
 public class NextTimeRule extends SameTimeRule{
@@ -11,7 +11,7 @@ public class NextTimeRule extends SameTimeRule{
 		super();
 	}
 	
-	public SystemStatus assertRule(SystemStatus systemStatus,MDatabase database){
+	public MStatus assertRule(MStatus systemStatus,MDatabase database){
 		boolean result = true;
 
 		result = checkAntecedents(systemStatus);

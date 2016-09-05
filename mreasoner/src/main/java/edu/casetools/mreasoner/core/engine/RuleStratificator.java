@@ -1,7 +1,8 @@
-package edu.casetools.mreasoner.core.rules;
+package edu.casetools.mreasoner.core.engine;
 
 import java.util.Vector;
 
+import edu.casetools.mreasoner.core.elements.MRules;
 import edu.casetools.mreasoner.core.elements.rules.NextTimeRule;
 import edu.casetools.mreasoner.core.elements.rules.SameTimeRule;
 import edu.casetools.mreasoner.core.elements.states.State;
@@ -13,7 +14,7 @@ public class RuleStratificator {
 	Vector<State> independentStates;
 	boolean lastRuleLevelEmpty;
 	
-	public RuleStratificator(SystemRules systemRules){
+	public RuleStratificator(MRules systemRules){
 		this.sameTimeRules = systemRules.getSameTimeRules();
 		this.nextTimeRules = systemRules.getNextTimeRules();
 		lastRuleLevelEmpty = false;
