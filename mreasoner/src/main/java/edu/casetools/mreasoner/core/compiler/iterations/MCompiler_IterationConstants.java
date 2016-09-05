@@ -97,7 +97,7 @@ public interface MCompiler_IterationConstants {
     "\"*/\"",
     "<token of kind 9>",
     "<token of kind 10>",
-    "\"\\u00ef\\u00bf\\u00bd\"",
+    "\"\\u00ac\"",
     "\"^\"",
     "\"(\"",
     "\")\"",

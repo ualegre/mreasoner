@@ -8,13 +8,14 @@ options
 }
 
 PARSER_BEGIN(MCompiler_Iteration)
-package edu.casetools.mreasoner.input.simulation;
+package edu.casetools.mreasoner.core.compiler.iterations;
 import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Vector;
 
-import edu.casetools.mreasoner.input.MInputData;
-import edu.casetools.mreasoner.core.elements.SystemStatus;
+import edu.casetools.mreasoner.core.elements.MInputData;
+import edu.casetools.mreasoner.core.elements.MRules;
+import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.core.elements.events.Event;
 import edu.casetools.mreasoner.core.elements.rules.NextTimeRule;
 import edu.casetools.mreasoner.core.elements.rules.SameTimeRule;
@@ -31,14 +32,14 @@ import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator.TOP_TYPE;
 import edu.casetools.mreasoner.core.elements.time.absolute.Date;
 import edu.casetools.mreasoner.core.elements.time.absolute.TimeOfDay;
-import edu.casetools.mreasoner.core.rules.*;
+
 
 
 public class MCompiler_Iteration {
   public static Vector<String > statesDeclaration = null;
 public static void main(String[] args) { 
 try{ 
-MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/xampp/robots.txt"));  
+MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/MTPL/input/Examples/Example01/inputSystem.mtpl"));  
         parser.readSystemSpecifications(); 
 
 }catch (Exception ex) 
@@ -78,7 +79,7 @@ SKIP :
 //TOKEN : /* Numbers and identifiers *///{//< NUM : (<DIGIT>)+ >//| < DIGIT : ["0" - "9"] >|// < TEXT : (<LETTER>)+ >//| < #LETTER : ["a" - "z", "A" - "Z","_"] >//}
 
 
-TOKEN :{ < NEGATION: "ï¿½" >}
+TOKEN :{ < NEGATION: "¬" >}
 TOKEN : { <AND: "^" > }
 TOKEN : { <LEFT_BRACKET: "(" > }
 TOKEN : { <RIGHT_BRACKET: ")" > }
@@ -134,8 +135,8 @@ MInputData readSystemSpecifications(): {
 	  // Vector<String > statesDeclaration = null;
 	   Vector<State> independentStates = new Vector<State>();
 	   Vector<Event> eventsHistory = new Vector<Event>();
-	   SystemStatus initialStatus = new SystemStatus();
-	   SystemRules systemRules = new SystemRules();
+	   MStatus initialStatus = new MStatus();
+	   MRules systemRules = new MRules();
 	    State auxiliar;
 }
 {    
@@ -226,9 +227,9 @@ String readString(): {
 {return auxiliar;} }
 
 //Java functions
-SystemStatus setDeclaredStates(Vector<String >statesDeclaration):
+MStatus setDeclaredStates(Vector<String >statesDeclaration):
 {
-  SystemStatus systemStatus = new SystemStatus();
+  MStatus systemStatus = new MStatus();
 }
 {
   {
@@ -242,7 +243,7 @@ SystemStatus setDeclaredStates(Vector<String >statesDeclaration):
   }
 }
 
-SystemStatus setInitialValue(SystemStatus systemStatus,State state):
+MStatus setInitialValue(MStatus systemStatus,State state):
 {
 }
 {
@@ -633,21 +634,21 @@ void eventIngressionStart(): {} {  <INGRESSION_START>  }
 void eventIngressionStop(): {} {  <RIGHT_BRACKET> }
 
 //State Initialization
-SystemStatus stateInitialization(SystemStatus systemStatus): {} {  stateInitializationStart() stateInitializationContent(systemStatus) stateInitializationStop()
+MStatus stateInitialization(MStatus systemStatus): {} {  stateInitializationStart() stateInitializationContent(systemStatus) stateInitializationStop()
 {
   return systemStatus;
 } }
 void stateInitializationStart(): {} {  <STATE_INITIALIZATION_START>  }
 void stateInitializationStop(): {} {  genericStop() }
-SystemStatus stateInitializationContent(SystemStatus systemStatus): {Token zero;} {  systemStatus = initializeState(systemStatus) <COMMA > zero = <DIGIT>
+MStatus stateInitializationContent(MStatus systemStatus): {Token zero;} {  systemStatus = initializeState(systemStatus) <COMMA > zero = <DIGIT>
 {isZero(zero.toString());return systemStatus;}}
-SystemStatus initializeState(SystemStatus systemStatus):{}{
+MStatus initializeState(MStatus systemStatus):{}{
 {
   return setInitialValue(systemStatus,genericState());
 }
  }
 //Same Time Rules
-SystemRules sameTimeRule(SystemRules systemRules): {SameTimeRule sameTimeRule;} {  sameTimeRuleStart() sameTimeRule = sameTimeRuleContent() sameTimeRuleStop(){ systemRules.getSameTimeRules().add(sameTimeRule);return systemRules;}
+MRules sameTimeRule(MRules systemRules): {SameTimeRule sameTimeRule;} {  sameTimeRuleStart() sameTimeRule = sameTimeRuleContent() sameTimeRuleStop(){ systemRules.getSameTimeRules().add(sameTimeRule);return systemRules;}
 }
 void sameTimeRuleStart(): {} {  <STR_START>  }
 void sameTimeRuleStop(): {} {  genericStop() }
@@ -681,7 +682,7 @@ SameTimeRule sameTimeRuleAntecedentContent(SameTimeRule sameTimeRule,boolean sta
 SameTimeRule sameTimeRuleConsequenceContent(SameTimeRule sameTimeRule): {State state;} {   state = genericState(){sameTimeRule.addConsequence(state);return sameTimeRule;} } 
 
 //Next Time Rules
-SystemRules nextTimeRule(SystemRules systemRules): {NextTimeRule nextTimeRule;}
+MRules nextTimeRule(MRules systemRules): {NextTimeRule nextTimeRule;}
  {  (nextTimeRuleStart() nextTimeRule = nextTimeRuleContent() nextTimeRuleStop())
   { systemRules.getNextTimeRules().add(nextTimeRule);return systemRules;}
  }

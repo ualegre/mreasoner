@@ -23,14 +23,14 @@ import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
 import edu.casetools.mreasoner.core.elements.time.TemporalOperator.TOP_TYPE;
 import edu.casetools.mreasoner.core.elements.time.absolute.Date;
 import edu.casetools.mreasoner.core.elements.time.absolute.TimeOfDay;
-import edu.casetools.mreasoner.core.engine.*;
+
 
 
 public class MCompiler_Iteration implements MCompiler_IterationConstants {
   public static Vector<String > statesDeclaration = null;
 public static void main(String[] args) {
 try{
-MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/xampp/robots.txt"));
+MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/MTPL/input/Examples/Example01/inputSystem.mtpl"));
         parser.readSystemSpecifications();
 
 }catch (Exception ex)
@@ -899,7 +899,7 @@ MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/xampp/r
   }
 
   final public MStatus stateInitializationContent(MStatus systemStatus) throws ParseException {
-                                                                     Token zero;
+                                                           Token zero;
     systemStatus = initializeState(systemStatus);
     jj_consume_token(COMMA);
     zero = jj_consume_token(DIGIT);
@@ -914,11 +914,11 @@ MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/xampp/r
 
 //Same Time Rules
   final public MRules sameTimeRule(MRules systemRules) throws ParseException {
-                                                    SameTimeRule sameTimeRule;
+                                          SameTimeRule sameTimeRule;
     sameTimeRuleStart();
     sameTimeRule = sameTimeRuleContent();
     sameTimeRuleStop();
-                                                                                                                                                                systemRules.getSameTimeRules().add(sameTimeRule);{if (true) return systemRules;}
+                                                                                                                                                      systemRules.getSameTimeRules().add(sameTimeRule);{if (true) return systemRules;}
     throw new Error("Missing return statement in function");
   }
 
@@ -1042,7 +1042,7 @@ MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/xampp/r
 
 //Next Time Rules
   final public MRules nextTimeRule(MRules systemRules) throws ParseException {
-                                                    NextTimeRule nextTimeRule;
+                                          NextTimeRule nextTimeRule;
     nextTimeRuleStart();
     nextTimeRule = nextTimeRuleContent();
     nextTimeRuleStop();

@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+
 import edu.casetools.mreasoner.core.elements.MInputData;
 import edu.casetools.mreasoner.core.elements.MRules;
 import edu.casetools.mreasoner.core.elements.MStatus;
@@ -1117,7 +1118,7 @@ MCompiler parser = new MCompiler (new FileReader("C:/xampp/robots.txt"));
   }
 
   final public MStatus stateInitializationContent(MStatus systemStatus) throws ParseException {
-                                                                     Token zero;
+                                                           Token zero;
     systemStatus = initializeState(systemStatus);
     jj_consume_token(COMMA);
     zero = jj_consume_token(DIGIT);
@@ -1132,11 +1133,11 @@ MCompiler parser = new MCompiler (new FileReader("C:/xampp/robots.txt"));
 
 //Same Time Rules
   final public MRules sameTimeRule(MRules systemRules) throws ParseException {
-                                                    SameTimeRule sameTimeRule;
+                                          SameTimeRule sameTimeRule;
     sameTimeRuleStart();
     sameTimeRule = sameTimeRuleContent();
     sameTimeRuleStop();
-                                                                                                                                                                systemRules.getSameTimeRules().add(sameTimeRule);{if (true) return systemRules;}
+                                                                                                                                                      systemRules.getSameTimeRules().add(sameTimeRule);{if (true) return systemRules;}
     throw new Error("Missing return statement in function");
   }
 
@@ -1260,7 +1261,7 @@ MCompiler parser = new MCompiler (new FileReader("C:/xampp/robots.txt"));
 
 //Next Time Rules
   final public MRules nextTimeRule(MRules systemRules) throws ParseException {
-                                                    NextTimeRule nextTimeRule;
+                                          NextTimeRule nextTimeRule;
     nextTimeRuleStart();
     nextTimeRule = nextTimeRuleContent();
     nextTimeRuleStop();

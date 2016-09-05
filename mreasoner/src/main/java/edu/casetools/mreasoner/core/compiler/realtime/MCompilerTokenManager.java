@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-
 import edu.casetools.mreasoner.core.elements.MInputData;
 import edu.casetools.mreasoner.core.elements.MRules;
 import edu.casetools.mreasoner.core.elements.MStatus;
