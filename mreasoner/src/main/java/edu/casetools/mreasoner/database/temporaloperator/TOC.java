@@ -29,14 +29,13 @@ public class TOC {
 	public void adjustToPresent(TemporalOperator TOp, Time time){
 
 		if(!simulatedTime){
-			long realTime 	   = time.getSystemRealTimeLastUnit() - TOp.getSinceValue().getSimulation_value();
+			long realTime 	   = time.getSystemRealTimeLastUnit() - TOp.getSinceValue().getBoundInMillis();
 			long  realTimeComp = realTime - time.getBaseTimeMillis();
 			since = databaseOperations.getIterationFromRealTime(""+realTime);
 //			System.out.println("REAL TIME: "+time.getSystemRealTimeLastUnit());
 //			System.out.println("VALUE: "+TOp.getSinceValue().getSimulation_value());
 //			System.out.println(time.getSystemRealTimeLastUnit() +">="+ time.getBaseTimeMillis());
-//			System.out.println("REAL TIME COMP:"+realTimeComp);
-			
+//			System.out.println("REAL TIME COMP:"+realTimeComp); 
 			if(realTimeComp >= 0 )  {	
 				until = time.getIteration();
 			}else{
@@ -201,10 +200,10 @@ public class TOC {
 	}
 	
 	public void printTemporalOperator(TemporalOperator TOp){
-	//	String negative = "";
-	//	if(!TOp.getStatus()) negative = "�";
-		
-	//	TOp.print();
+//		String negative = "";
+//		if(!TOp.getStatus()) negative = "#";
+//		
+//		TOp.print();
 //		switch(TOp.getType()){
 //		case STRONG_ABSOLUTE:
 //			System.out.print("\t [-]"+negative+TOp.getName()+" - "+"FROM [ "+since+" , "+until+" ] => ");

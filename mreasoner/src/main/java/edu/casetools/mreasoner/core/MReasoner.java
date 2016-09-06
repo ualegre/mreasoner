@@ -65,7 +65,7 @@ public class MReasoner extends Thread{
 		printHeader();
 		System.out.println("INITIALIZATION AT t = 0");
 		systemStatus.getTime().start();
-	//	systemStatus.getTime().getSystemRealTime();
+		System.out.println(systemStatus.getTime().getSystemRealTime());
 		assertSameTimeRules();
 		assertNextTimeRules();
 		nextIteration();

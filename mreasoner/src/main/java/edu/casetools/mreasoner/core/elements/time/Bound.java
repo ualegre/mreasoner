@@ -74,8 +74,18 @@ public class Bound {
 	
 	public long getBoundInMillis(){
 		Calendar c = new GregorianCalendar();
-		this.date.setValuesIntoCalendar(c);
-		this.time_of_day.setValuesIntoCalendar(c);
+		if(!this.date.isEmpty()) {
+			date.setValuesIntoCalendar(c);
+			if(!this.time_of_day.isEmpty()){
+				time_of_day.setValuesIntoCalendar(c);
+			}
+		}
+		else {
+			if(!this.time_of_day.isEmpty()){
+				return (time_of_day.getTimeOfDayInSeconds()*1000);
+			}
+			else return 0;
+		}
 		return c.getTimeInMillis();
 	}
 
