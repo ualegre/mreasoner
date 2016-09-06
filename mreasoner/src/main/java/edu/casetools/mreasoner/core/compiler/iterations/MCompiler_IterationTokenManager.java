@@ -219,6 +219,8 @@ private int jjMoveStringLiteralDfa0_0()
 {
    switch(curChar)
    {
+      case 35:
+         return jjStopAtPos(0, 11);
       case 40:
          return jjStopAtPos(0, 13);
       case 41:
@@ -268,8 +270,6 @@ private int jjMoveStringLiteralDfa0_0()
          return jjStopAtPos(0, 17);
       case 125:
          return jjStopAtPos(0, 18);
-      case 172:
-         return jjStopAtPos(0, 11);
       default :
          return jjMoveNfa_0(3, 0);
    }
@@ -928,9 +928,9 @@ static final int[] jjnextStates = {
 
 /** Token literal values. */
 public static final String[] jjstrLiteralImages = {
-"", null, null, null, null, null, null, null, null, null, null, "\254", 
-"\136", "\50", "\51", "\133", "\135", "\173", "\175", "\56", "\73", "\72", "\54", 
-"\57", "\55", null, null, null, null, "\55\76", "\163\164\141\164\145\163\50", 
+"", null, null, null, null, null, null, null, null, null, null, "\43", "\136", 
+"\50", "\51", "\133", "\135", "\173", "\175", "\56", "\73", "\72", "\54", "\57", 
+"\55", null, null, null, null, "\55\76", "\163\164\141\164\145\163\50", 
 "\151\163\50", "\143\154\157\143\153\101\164\50", 
 "\143\154\157\143\153\102\145\164\167\145\145\156\50", "\143\141\154\145\156\144\141\162\101\164\50", 
 "\143\141\154\145\156\144\141\162\102\145\164\167\145\145\156\50", "\167\145\145\153\104\141\171\101\164\50", 

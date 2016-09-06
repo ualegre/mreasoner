@@ -113,7 +113,7 @@ public interface MCompilerConstants {
     "\"*/\"",
     "<token of kind 9>",
     "<token of kind 10>",
-    "\"\\u00ef\\u00bf\\u00bd\"",
+    "\"#\"",
     "\"^\"",
     "\"(\"",
     "\")\"",

@@ -220,6 +220,8 @@ private int jjMoveStringLiteralDfa0_0()
 {
    switch(curChar)
    {
+      case 35:
+         return jjStopAtPos(0, 11);
       case 40:
          return jjStopAtPos(0, 13);
       case 41:
@@ -269,8 +271,6 @@ private int jjMoveStringLiteralDfa0_0()
          return jjStopAtPos(0, 17);
       case 125:
          return jjStopAtPos(0, 18);
-      case 239:
-         return jjMoveStringLiteralDfa1_0(0x800L);
       default :
          return jjMoveNfa_0(3, 0);
    }
@@ -322,8 +322,6 @@ private int jjMoveStringLiteralDfa1_0(long active0)
          return jjMoveStringLiteralDfa2_0(active0, 0x80000000L);
       case 117:
          return jjMoveStringLiteralDfa2_0(active0, 0x10800000000000L);
-      case 191:
-         return jjMoveStringLiteralDfa2_0(active0, 0x800L);
       default :
          break;
    }
@@ -376,10 +374,6 @@ private int jjMoveStringLiteralDfa2_0(long old0, long active0)
          return jjMoveStringLiteralDfa3_0(active0, 0x8000000000000L);
       case 117:
          return jjMoveStringLiteralDfa3_0(active0, 0x2000000000000L);
-      case 189:
-         if ((active0 & 0x800L) != 0L)
-            return jjStopAtPos(2, 11);
-         break;
       default :
          break;
    }
@@ -939,10 +933,10 @@ static final int[] jjnextStates = {
 
 /** Token literal values. */
 public static final String[] jjstrLiteralImages = {
-"", null, null, null, null, null, null, null, null, null, null, 
-"\357\277\275", "\136", "\50", "\51", "\133", "\135", "\173", "\175", "\56", "\73", "\72", 
-"\54", "\57", "\55", null, null, null, null, "\55\76", "\163\56", 
-"\163\164\141\164\145\163\50", "\151\163\50", "\143\154\157\143\153\101\164\50", 
+"", null, null, null, null, null, null, null, null, null, null, "\43", "\136", 
+"\50", "\51", "\133", "\135", "\173", "\175", "\56", "\73", "\72", "\54", "\57", 
+"\55", null, null, null, null, "\55\76", "\163\56", "\163\164\141\164\145\163\50", 
+"\151\163\50", "\143\154\157\143\153\101\164\50", 
 "\143\154\157\143\153\102\145\164\167\145\145\156\50", "\143\141\154\145\156\144\141\162\101\164\50", 
 "\143\141\154\145\156\144\141\162\102\145\164\167\145\145\156\50", "\167\145\145\153\104\141\171\101\164\50", 
 "\167\145\145\153\104\141\171\102\145\164\167\145\145\156\50", "\157\143\143\165\162\163\50", "\151\156\147\162\50", 

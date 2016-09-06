@@ -79,7 +79,7 @@ SKIP :
 //TOKEN : /* Numbers and identifiers *///{//< NUM : (<DIGIT>)+ >//| < DIGIT : ["0" - "9"] >|// < TEXT : (<LETTER>)+ >//| < #LETTER : ["a" - "z", "A" - "Z","_"] >//}
 
 
-TOKEN :{ < NEGATION: "¬" >}
+TOKEN :{ < NEGATION: "#" >}
 TOKEN : { <AND: "^" > }
 TOKEN : { <LEFT_BRACKET: "(" > }
 TOKEN : { <RIGHT_BRACKET: ")" > }
