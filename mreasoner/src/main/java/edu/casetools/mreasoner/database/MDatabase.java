@@ -30,7 +30,7 @@ public class MDatabase {
 	public MDatabase( MConfigurations systemConfigs, MStatus systemStatus ){
 	
 		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
-				MDBTypes.DB_IMPLEMENTATION.POSTGRESQL,
+				MDBTypes.DB_IMPLEMENTATION.MYSQL,
 				systemConfigs.getDBConfigs());
 		
 		eventsTable 			  = new EventsTable			( databaseOperations );

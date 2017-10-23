@@ -2,7 +2,8 @@ package edu.casetools.mreasoner.database.core.operations;
 
 import edu.casetools.mreasoner.configurations.data.MDBConfigs;
 import edu.casetools.mreasoner.configurations.data.MDBTypes;
-import edu.casetools.mreasoner.database.core.implementations.PostgreSQL_DatabaseOperations;
+import edu.casetools.mreasoner.database.core.implementations.MySQL_DatabaseOperations;
+//import edu.casetools.mreasoner.database.core.implementations.PostgreSQL_DatabaseOperations;
 
 public class DatabaseOperationsFactory {
 
@@ -12,9 +13,10 @@ public class DatabaseOperationsFactory {
 		DatabaseOperations reasonerDb = null;
 			switch(implementation){
 				case MYSQL:
+					reasonerDb = new MySQL_DatabaseOperations(configs);
 					break;
 				case POSTGRESQL:
-					reasonerDb = new PostgreSQL_DatabaseOperations(configs);
+					//reasonerDb = new PostgreSQL_DatabaseOperations(configs);
 					break;
 				default:
 					break;
