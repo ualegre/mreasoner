@@ -73,11 +73,11 @@ public class DBConnection {
 	}
    
   public void closeStatement() throws SQLException{
-	   stmt.close();
+	   try { stmt.close(); } catch (Exception e) { /* ignored */ };   
    }
    
-   public void disconnect()throws SQLException{
-	   conn.close();   
+   public void disconnect() throws SQLException{
+	   try { conn.close(); } catch (Exception e) { /* ignored */ };   
    }
    
    public MDBConfigs getDBConfigs(){	   

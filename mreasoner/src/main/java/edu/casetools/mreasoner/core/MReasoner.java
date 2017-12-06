@@ -37,17 +37,14 @@ public class MReasoner extends Thread{
 		semaphore   = new MReasonerSemaphore(  simulateEvents );	
 		database    = new MDatabase         (     systemConfigs,systemStatus    );
 		
-
 		running 	   = true;
-		
 		stratify = systemConfigs.useStratification();
 
 	}
 
 	private void initializeTime(MConfigurations configs){
 		Time time              = new Time  ( configs );
-		//time.setMaxExecutionTime(configs.getExecutionTime());
-		systemStatus      = systemInput.getSystemStatus();
+		systemStatus      	   = systemInput.getSystemStatus();
 		systemStatus.setTime(time);
 	}
 	
@@ -57,7 +54,6 @@ public class MReasoner extends Thread{
 		System.out.println("**********************************************************");
 		systemRules.showSystemRules();
 		systemStatus.showStates();
-	//	logger.writeHeader( systemStatus );	
 	}
 	
 	public void MTPLInitialization(){
@@ -95,7 +91,7 @@ public class MReasoner extends Thread{
 					assertSameTimeRules();	
 					assertNextTimeRules();	
 					nextIteration();
-				semaphore.inputPut();
+			   semaphore.inputPut();
 	}
 	
 
@@ -126,10 +122,10 @@ public class MReasoner extends Thread{
 	}
 	
 	public void terminate(){
-	//	logger.close();
-		database.disconnect();
 		running = false;
-		System.out.println("REASONER THREAD FINISHED");
+		semaphore.reasonerTake();
+			database.disconnect();
+		semaphore.inputPut();
 	}
 	
 	

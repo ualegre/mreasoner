@@ -3,14 +3,6 @@ package edu.casetools.mreasoner.database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-
-
-
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import edu.casetools.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.core.elements.states.State;
 import edu.casetools.mreasoner.core.elements.time.Time;

@@ -1,7 +1,6 @@
 package edu.casetools.mreasoner.core.elements.states.Internal;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import edu.casetools.mreasoner.core.elements.states.DefaultState;
 import edu.casetools.mreasoner.core.elements.time.Time;

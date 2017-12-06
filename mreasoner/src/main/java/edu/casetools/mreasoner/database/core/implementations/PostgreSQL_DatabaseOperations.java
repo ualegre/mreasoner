@@ -501,7 +501,6 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 	
 	private boolean createDBIfDoesNotExist(String dbName){
-		boolean result = false;
 		try {
 			Connection postgresDBConnection = DriverManager.getConnection( configs.getConnectionString()+"postgres", configs.getUser(), configs.getPassword());
 			Statement stmt = null;
