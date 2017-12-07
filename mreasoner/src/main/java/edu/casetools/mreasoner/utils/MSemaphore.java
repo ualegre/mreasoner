@@ -2,10 +2,10 @@ package edu.casetools.mreasoner.utils;
 
 import java.util.concurrent.Semaphore;
 
-public class MReasonerSemaphore {
+public class MSemaphore {
 		Semaphore reasoner,input;
 		
-		public MReasonerSemaphore(boolean enable){
+		public MSemaphore(boolean enable){
 			if(enable){
 				reasoner = new Semaphore(0);
 				input    = new Semaphore(0);

@@ -1,16 +1,22 @@
 package edu.casetools.mreasoner;
 
-import edu.casetools.mreasoner.utils.simulator.SimulatorLauncher;
+import edu.casetools.mreasoner.utils.Launcher;
 
 public class Main {
 
 	public static void main(String[] args) {
 		        	
             String 				 configsFileName = args[0];
-            SimulatorLauncher	 launcher = new SimulatorLauncher();
+            Launcher	 launcher = new Launcher();
             
-			launcher.loadMInputData(configsFileName);
-			launcher.launchMReasoner();
+			try {
+				launcher.readMSpecification(configsFileName);
+				launcher.start();
+				launcher.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 	}
 

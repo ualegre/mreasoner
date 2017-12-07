@@ -8,38 +8,28 @@ import edu.casetools.mreasoner.core.data.MRules;
 import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.core.data.time.Time;
 import edu.casetools.mreasoner.database.MDatabase;
-import edu.casetools.mreasoner.utils.MReasonerSemaphore;
+import edu.casetools.mreasoner.utils.MSemaphore;
 import edu.casetools.mreasoner.utils.RuleStratificator;
 
 public class MReasoner extends Thread {
 
-	public static MStatus        	   systemStatus;
-	public static MReasonerSemaphore 	   semaphore;
-	
-	private MSpecification			  	   	   systemInput;
-	private MRules			 	   	   systemRules;		
-	private MDatabase				       database;
+	public  static MStatus        	   systemStatus;
+	public  static MSemaphore  semaphore;	
+	private 	   MSpecification	   systemInput;
+	private 	   MRules			   systemRules;		
+	private 	   MDatabase		   database;
 	
 	private boolean running;
-	private boolean simulateEvents;
 	private boolean hasMaxExecutionTime;
-	private boolean stratify;
 	
 	public MReasoner( MSpecification systemInput ){
-
-		this.systemInput       = systemInput;		
-		this.systemRules       = systemInput.getSystemRules();
-		MConfigurations systemConfigs = systemInput.getSystemConfigs();
-		initTime( systemConfigs );
-
-		simulateEvents = systemConfigs.getSimulateEvents();
-		hasMaxExecutionTime       = systemConfigs.useMaxExecutionTime();
-		semaphore   = new MReasonerSemaphore(  simulateEvents );	
-		database    = new MDatabase         (     systemConfigs,systemStatus    );
-		
-		running 	   = true;
-		stratify = systemConfigs.useStratification();
-
+		running 	   		= true;
+		this.systemInput    = systemInput;		
+		this.systemRules    = systemInput.getSystemRules();
+		hasMaxExecutionTime = systemInput.getSystemConfigs().useMaxExecutionTime();		
+		semaphore   		= new MSemaphore( systemInput.getSystemConfigs().getSimulateEvents() );	
+		initTime( systemInput.getSystemConfigs() );
+		database    		= new MDatabase         ( systemInput.getSystemConfigs(), systemStatus );
 	}
 
 	private void initTime(MConfigurations configs){
@@ -56,8 +46,8 @@ public class MReasoner extends Thread {
 		systemStatus.showStates();
 	}
 	
-	public void InitReasoner(){
-		if(stratify) stratify();
+	public void initReasoner(){
+		if(systemInput.getSystemConfigs().useStratification()) stratify();
 		printHeader();
 		System.out.println("INITIALIZATION AT t = 0");
 		systemStatus.getTime().start();
@@ -73,8 +63,7 @@ public class MReasoner extends Thread {
 
 	
 	public void run(){
-		this.InitReasoner();
-		System.out.println("SIMULATE EVENTS "+simulateEvents);
+		this.initReasoner();
 		if(hasMaxExecutionTime)
 			while(systemStatus.getTime().simulationTime()&&running) iteration();
 		else while(running) iteration();
@@ -86,27 +75,18 @@ public class MReasoner extends Thread {
 	private void iteration(){
 	    System.out.println("\nITERATION: "+systemStatus.getTime().getIteration() +" - "+new Timestamp(systemStatus.getTime().getSystemRealTime())+"\n");
 
-			   semaphore.reasonerTake();
-					readEvents();
-					assertSameTimeRules();	
-					assertNextTimeRules();	
-					nextIteration();
-			   semaphore.inputPut();
+	   semaphore.reasonerTake();
+			readEvents();
+			assertSameTimeRules();	
+			assertNextTimeRules();	
+			nextIteration();
+	   semaphore.inputPut();
 	}
 	
 
 	private void readEvents(){
 		systemStatus = database.findLatestEvents(systemStatus);
 	
-	}
-	
-	private void stratify(){
-		RuleStratificator ruleStratificator = new RuleStratificator(systemRules);
-		System.out.println("______________________________________");
-		System.out.println("Statifying..");
-		systemRules.setSameTimeRules( ruleStratificator.stratify( systemInput.getIndependentStates()) );
-		System.out.println("______________________________________");
-		System.out.println("Same Time rules succesfully stratified\n");
 	}
 	
 	public void assertSameTimeRules(){	
@@ -121,14 +101,6 @@ public class MReasoner extends Thread {
 		}
 	}
 	
-	public void terminate(){
-		running = false;
-		semaphore.reasonerTake();
-			database.disconnect();
-		semaphore.inputPut();
-	}
-	
-	
 	private void nextIteration(){
 		database.writeLog(systemStatus);
 		while(!systemStatus.getTime().endOfTimeUnit());
@@ -137,6 +109,20 @@ public class MReasoner extends Thread {
 		
 	}
 	
-
+	public void terminate(){
+		running = false;
+		semaphore.reasonerTake();
+			database.disconnect();
+		semaphore.inputPut();
+	}
+	
+	private void stratify(){
+		RuleStratificator ruleStratificator = new RuleStratificator(systemRules);
+		System.out.println("______________________________________");
+		System.out.println("Statifying..");
+		systemRules.setSameTimeRules( ruleStratificator.stratify( systemInput.getIndependentStates()) );
+		System.out.println("______________________________________");
+		System.out.println("Same Time rules succesfully stratified\n");
+	}
 
 }

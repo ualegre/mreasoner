@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class LibraryThread extends Thread{
+public class LibraryThread extends Thread {
 
 	InputStream in;
 	Console console;
@@ -42,13 +42,14 @@ public class LibraryThread extends Thread{
 	        if (reader != null) {
 	          try {
 	            reader.close();
+	  	        console.addText("FINISHED THE THREAD WITH THE COMMAND "+command);
 	          } catch (IOException e) {
 	            // ignore
 	          }
 	        }
 	      }
 	      
-	      console.addText("FINISHED THE THREAD WITH THE COMMAND "+command);
+
 	    }
 	
 }

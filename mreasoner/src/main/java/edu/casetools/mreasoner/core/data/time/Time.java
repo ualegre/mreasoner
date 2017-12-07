@@ -142,18 +142,10 @@ public class Time {
 	
 	
 	public boolean simulationTime(){
-		if( timeIsGivenInIterations ){
-			if( (ITERATION <= CONFIGS_MAX_EXECUTION_TIME)  ) return true;
-			else return false;
-		}
-		else {
-			//System.out.println("ENTROOO BIEN "+ITERATION_MILLIS+" "+MAX_EXECUTION_TIME);
-			//System.out.println("ITERATION MILLIS: "+ITERATION_MILLIS+" < "+MAX_EXECUTION_TIME);
-			if( (ITERATION_MILLIS <= MAX_EXECUTION_TIME) ) return true;
-			else return false;
-		}
-		
-		
+		if( timeIsGivenInIterations )
+			return (ITERATION <= CONFIGS_MAX_EXECUTION_TIME);
+		else 
+			return (ITERATION_MILLIS <= MAX_EXECUTION_TIME) ;
 	}
 
 
