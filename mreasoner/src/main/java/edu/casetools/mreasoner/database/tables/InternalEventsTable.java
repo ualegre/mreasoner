@@ -3,9 +3,9 @@ package edu.casetools.mreasoner.database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.casetools.mreasoner.core.elements.MStatus;
-import edu.casetools.mreasoner.core.elements.states.State;
-import edu.casetools.mreasoner.core.elements.time.Time;
+import edu.casetools.mreasoner.core.data.MStatus;
+import edu.casetools.mreasoner.core.data.states.State;
+import edu.casetools.mreasoner.core.data.time.Time;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 

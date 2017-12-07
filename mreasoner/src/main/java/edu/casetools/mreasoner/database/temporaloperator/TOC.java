@@ -3,9 +3,9 @@ package edu.casetools.mreasoner.database.temporaloperator;
 
 import java.sql.SQLException;
 
-import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
-import edu.casetools.mreasoner.core.elements.time.TemporalOperator.TOP_TYPE;
-import edu.casetools.mreasoner.core.elements.time.Time;
+import edu.casetools.mreasoner.core.data.time.TemporalOperator;
+import edu.casetools.mreasoner.core.data.time.Time;
+import edu.casetools.mreasoner.core.data.time.TemporalOperator.TOP_TYPE;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 

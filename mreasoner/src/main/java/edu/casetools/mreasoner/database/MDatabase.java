@@ -1,12 +1,12 @@
 package edu.casetools.mreasoner.database;
 
 
-import edu.casetools.mreasoner.configurations.data.MConfigurations;
-import edu.casetools.mreasoner.configurations.data.MDBTypes;
-import edu.casetools.mreasoner.core.elements.MStatus;
-import edu.casetools.mreasoner.core.elements.states.State;
-import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
-import edu.casetools.mreasoner.core.elements.time.Time;
+import edu.casetools.mreasoner.core.configs.MConfigurations;
+import edu.casetools.mreasoner.core.data.MStatus;
+import edu.casetools.mreasoner.core.data.states.State;
+import edu.casetools.mreasoner.core.data.time.TemporalOperator;
+import edu.casetools.mreasoner.core.data.time.Time;
+import edu.casetools.mreasoner.database.core.MDBImplementations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactory;
 import edu.casetools.mreasoner.database.tables.EventsTable;
@@ -30,7 +30,7 @@ public class MDatabase {
 	public MDatabase( MConfigurations systemConfigs, MStatus systemStatus ){
 	
 		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
-				MDBTypes.DB_IMPLEMENTATION.POSTGRESQL,
+				MDBImplementations.DB_IMPLEMENTATION.POSTGRESQL,
 				systemConfigs.getDBConfigs());
 		
 		eventsTable 			  = new EventsTable			( databaseOperations );

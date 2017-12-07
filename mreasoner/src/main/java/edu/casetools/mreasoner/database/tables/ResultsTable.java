@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.database.tables;
 
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.elements.MStatus;
+import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 
