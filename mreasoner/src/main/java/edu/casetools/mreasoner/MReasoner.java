@@ -8,6 +8,7 @@ import edu.casetools.mreasoner.core.data.MRules;
 import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.core.data.time.Time;
 import edu.casetools.mreasoner.database.MDatabase;
+import edu.casetools.mreasoner.utils.Launcher;
 import edu.casetools.mreasoner.utils.MSemaphore;
 import edu.casetools.mreasoner.utils.RuleStratificator;
 
@@ -124,5 +125,21 @@ public class MReasoner extends Thread {
 		System.out.println("______________________________________");
 		System.out.println("Same Time rules succesfully stratified\n");
 	}
+	
+	public static void main(String[] args) {
+    	
+        String 				 configsFileName = args[0];
+        Launcher	 launcher = new Launcher();
+        
+		try {
+			launcher.readMSpecification(configsFileName);
+			launcher.start();
+			launcher.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+}
 
 }
