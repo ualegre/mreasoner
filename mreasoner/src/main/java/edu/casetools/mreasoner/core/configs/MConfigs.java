@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.core.configs;
 
 import java.io.File;
 
-public class MConfigurations {
+public class MConfigs {
 
 	public enum EXECUTION_MODE {SIMULATION_ITERATION,SIMULATION_REAL_TIME,REAL_ENVIRONMENT};
 	private long 		executionTime,timeUnit;
@@ -21,7 +21,7 @@ public class MConfigurations {
 	private boolean 	useStratification;
 	private EXECUTION_MODE 		executionMode;
 	
-	public MConfigurations(){
+	public MConfigs(){
 		dbConfigs = new MDBConfigs();
 		jarConfigs = "Please write the jar execution commands separated by commas:";
 		jarConfigs = jarConfigs + "\n Eg.: \"java -jar c:/a.jar,java -jar c:/b.jar\"";

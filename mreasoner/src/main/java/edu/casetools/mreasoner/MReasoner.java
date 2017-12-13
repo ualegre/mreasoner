@@ -3,14 +3,14 @@ package edu.casetools.mreasoner;
 import java.sql.Timestamp;
 
 import edu.casetools.mreasoner.core.MSpecification;
-import edu.casetools.mreasoner.core.configs.MConfigurations;
+import edu.casetools.mreasoner.core.configs.MConfigs;
 import edu.casetools.mreasoner.core.data.MRules;
 import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.core.data.time.Time;
 import edu.casetools.mreasoner.database.MDatabase;
-import edu.casetools.mreasoner.utils.Launcher;
 import edu.casetools.mreasoner.utils.MSemaphore;
 import edu.casetools.mreasoner.utils.RuleStratificator;
+import edu.casetools.mreasoner.utils.deploy.Launcher;
 
 public class MReasoner extends Thread {
 
@@ -33,7 +33,7 @@ public class MReasoner extends Thread {
 		database    		= new MDatabase         ( systemInput.getSystemConfigs(), systemStatus );
 	}
 
-	private void initTime(MConfigurations configs){
+	private void initTime(MConfigs configs){
 		Time time              = new Time  ( configs );
 		systemStatus      	   = systemInput.getSystemStatus();
 		systemStatus.setTime(time);
@@ -129,16 +129,40 @@ public class MReasoner extends Thread {
 	public static void main(String[] args) {
     	
         String 				 configsFileName = args[0];
-        Launcher	 launcher = new Launcher();
-        
-		try {
-			launcher.readMSpecification(configsFileName);
-			launcher.start();
-			launcher.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        Launcher	 launcher = new Launcher(null, null);
+        if(configsFileName == null) {
+        	System.out.println("Please provide the configuration file when executing the command:");
+        	System.out.println("\t java -jar mreasoner.jar path/to/configs/your_configurations.txt");
+        } else {
+
+    			MConfigs configs = launcher.readMConfigurations(configsFileName);
+    			if(configs == null) System.out.println("Error reading the configuration file.");
+    			else {
+        			switch(configs.getExecutionMode()){
+	        			case SIMULATION_ITERATION:
+	        			case SIMULATION_REAL_TIME:
+	        	    		try {
+		            			launcher.readMSpecification(configsFileName);
+		            			launcher.start();
+		            			launcher.join();
+	        	    		} catch (InterruptedException e) {
+	        	    			// TODO Auto-generated catch block
+	        	    			e.printStackTrace();
+	        	    		}
+	        			break;
+	        			case REAL_ENVIRONMENT:
+	        				System.out.println("The real environment execution is not yet allowed for the command line.");
+	        			break;
+	        			default:
+	        				System.out.println("Error reading the execution mode of the configuration file.");
+	        			break;	
+        			}
+
+    			}
+
+
+        }
+
 
 }
 

@@ -2,7 +2,7 @@ package edu.casetools.mreasoner.core;
 
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.configs.MConfigurations;
+import edu.casetools.mreasoner.core.configs.MConfigs;
 import edu.casetools.mreasoner.core.data.MRules;
 import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.core.data.events.Event;
@@ -15,7 +15,7 @@ public class MSpecification {
 	Vector<Event> 		 eventsHistory;
 	MRules 		 		 systemRules;
 	MStatus 		 	 systemStatus;
-	MConfigurations		 systemConfigs;
+	MConfigs		 systemConfigs;
 
 	public MSpecification(){
     	independentStates = new Vector<State>();
@@ -56,11 +56,11 @@ public class MSpecification {
 		this.eventsHistory = eventsHistory;
 	}
 	
-	public MConfigurations getSystemConfigs() {
+	public MConfigs getSystemConfigs() {
 		return systemConfigs;
 	}
 
-	public void setSystemConfigs(MConfigurations systemConfigs) {
+	public void setSystemConfigs(MConfigs systemConfigs) {
 		this.systemConfigs = systemConfigs;
 	}
 	

@@ -1,7 +1,7 @@
 package edu.casetools.mreasoner.database;
 
 
-import edu.casetools.mreasoner.core.configs.MConfigurations;
+import edu.casetools.mreasoner.core.configs.MConfigs;
 import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.core.data.states.State;
 import edu.casetools.mreasoner.core.data.time.TemporalOperator;
@@ -27,7 +27,7 @@ public class MDatabase {
 	TOC             		temporalOperatorChecker;
 
 	
-	public MDatabase( MConfigurations systemConfigs, MStatus systemStatus ){
+	public MDatabase( MConfigs systemConfigs, MStatus systemStatus ){
 	
 		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
 				MDBImplementations.DB_IMPLEMENTATION.POSTGRESQL,

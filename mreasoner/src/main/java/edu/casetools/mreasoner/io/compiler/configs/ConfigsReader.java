@@ -2,10 +2,9 @@
 package edu.casetools.mreasoner.io.compiler.configs;
 
 import java.io.FileReader;
+import edu.casetools.mreasoner.core.configs.MConfigs;
 
-import edu.casetools.mreasoner.core.configs.MConfigurations;
-
-
+@SuppressWarnings("all")
 public class ConfigsReader implements ConfigsReaderConstants {
  public static void main(String[] args) {
 try{
@@ -16,16 +15,16 @@ ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.t
 {ex.printStackTrace() ;}
 }
 
-  final public MConfigurations readConfigs() throws ParseException {
-                                MConfigurations configs = new MConfigurations();String aux = "";
+  final public MConfigs readConfigs() throws ParseException {
+                                MConfigs configs = new MConfigs();String aux = "";
     jj_consume_token(EXECUTION_MODE);
     aux = readString();
     if(aux.equals("SIMULATION_ITERATION"))
-        configs.setExecutionMode(MConfigurations.EXECUTION_MODE.SIMULATION_ITERATION);
+        configs.setExecutionMode(MConfigs.EXECUTION_MODE.SIMULATION_ITERATION);
     else if(aux.equals("SIMULATION_REAL_TIME"))
-        configs.setExecutionMode(MConfigurations.EXECUTION_MODE.SIMULATION_REAL_TIME);
+        configs.setExecutionMode(MConfigs.EXECUTION_MODE.SIMULATION_REAL_TIME);
     else if(aux.equals("REAL_ENVIRONMENT"))
-        configs.setExecutionMode(MConfigurations.EXECUTION_MODE.REAL_ENVIRONMENT);
+        configs.setExecutionMode(MConfigs.EXECUTION_MODE.REAL_ENVIRONMENT);
 
    // System.out.println("EXECUTION MODE"+configs.getExecutionMode());
 

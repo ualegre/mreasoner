@@ -26,6 +26,7 @@ import edu.casetools.mreasoner.core.data.time.absolute.TimeOfDay;
 
 
 
+@SuppressWarnings("all")
 public class MCompiler_Iteration implements MCompiler_IterationConstants {
   public static Vector<String > statesDeclaration = null;
 public static void main(String[] args) {
@@ -39,7 +40,6 @@ MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/MTPL/in
 
   final public MSpecification readSystemSpecifications() throws ParseException {
         MSpecification inputData = new MSpecification();
-          // Vector<String > statesDeclaration = null;
            Vector<State> independentStates = new Vector<State>();
            Vector<Event> eventsHistory = new Vector<Event>();
            MStatus initialStatus = new MStatus();

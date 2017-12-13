@@ -8,12 +8,12 @@ options
 }
 
 PARSER_BEGIN(ConfigsReader)
-package edu.casetools.mreasoner.configurations.reader;
+package edu.casetools.mreasoner.io.compiler.configs;
 
 import java.io.FileReader;
-import edu.casetools.mreasoner.configurations.data.MConfigurations;
+import edu.casetools.mreasoner.core.configs.MConfigurations;
 
-
+@SuppressWarnings("all")
 public class ConfigsReader
 {
  public static void main(String[] args) { 

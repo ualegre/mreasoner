@@ -26,7 +26,7 @@ import edu.casetools.mreasoner.core.data.time.TemporalOperator.TOP_TYPE;
 import edu.casetools.mreasoner.core.data.time.absolute.Date;
 import edu.casetools.mreasoner.core.data.time.absolute.TimeOfDay;
 
-
+@SuppressWarnings("all")
 public class MCompiler implements MCompilerConstants {
   public static Vector<String > statesDeclaration = null;
 public static void main(String[] args) {

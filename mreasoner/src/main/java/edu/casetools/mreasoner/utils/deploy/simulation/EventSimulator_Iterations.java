@@ -1,9 +1,9 @@
-package edu.casetools.mreasoner.utils.simulator;
+package edu.casetools.mreasoner.utils.deploy.simulation;
 
 import java.util.Vector;
 
 import edu.casetools.mreasoner.MReasoner;
-import edu.casetools.mreasoner.core.configs.MConfigurations;
+import edu.casetools.mreasoner.core.configs.MConfigs;
 import edu.casetools.mreasoner.core.data.events.Event;
 import edu.casetools.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
@@ -18,7 +18,7 @@ public class EventSimulator_Iterations extends Thread{
 	boolean                   running;
 	boolean 				  isRealTime;
 	
-	public EventSimulator_Iterations(Vector<Event> eventHistory,MConfigurations configs){
+	public EventSimulator_Iterations(Vector<Event> eventHistory,MConfigs configs){
 		this.eventHistory = eventHistory;
 		this.connection = 
 				DatabaseOperationsFactory.getDatabaseOperations( DB_IMPLEMENTATION.POSTGRESQL,

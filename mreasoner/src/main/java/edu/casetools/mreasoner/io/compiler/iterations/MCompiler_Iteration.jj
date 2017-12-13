@@ -8,33 +8,34 @@ options
 }
 
 PARSER_BEGIN(MCompiler_Iteration)
-package edu.casetools.mreasoner.core.compiler.iterations;
+package edu.casetools.vera.logreader.io.configs.compiler;
 import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.elements.MInputData;
-import edu.casetools.mreasoner.core.elements.MRules;
-import edu.casetools.mreasoner.core.elements.MStatus;
-import edu.casetools.mreasoner.core.elements.events.Event;
-import edu.casetools.mreasoner.core.elements.rules.NextTimeRule;
-import edu.casetools.mreasoner.core.elements.rules.SameTimeRule;
-import edu.casetools.mreasoner.core.elements.states.DefaultState;
-import edu.casetools.mreasoner.core.elements.states.State;
-import edu.casetools.mreasoner.core.elements.states.Internal.CalendarAt;
-import edu.casetools.mreasoner.core.elements.states.Internal.CalendarBetween;
-import edu.casetools.mreasoner.core.elements.states.Internal.ClockAt;
-import edu.casetools.mreasoner.core.elements.states.Internal.ClockBetween;
-import edu.casetools.mreasoner.core.elements.states.Internal.WeekDayAt;
-import edu.casetools.mreasoner.core.elements.states.Internal.WeekDayBetween;
-import edu.casetools.mreasoner.core.elements.time.Bound;
-import edu.casetools.mreasoner.core.elements.time.TemporalOperator;
-import edu.casetools.mreasoner.core.elements.time.TemporalOperator.TOP_TYPE;
-import edu.casetools.mreasoner.core.elements.time.absolute.Date;
-import edu.casetools.mreasoner.core.elements.time.absolute.TimeOfDay;
+import edu.casetools.mreasoner.core.MSpecification;
+import edu.casetools.mreasoner.core.data.MRules;
+import edu.casetools.mreasoner.core.data.MStatus;
+import edu.casetools.mreasoner.core.data.events.Event;
+import edu.casetools.mreasoner.core.data.rules.NextTimeRule;
+import edu.casetools.mreasoner.core.data.rules.SameTimeRule;
+import edu.casetools.mreasoner.core.data.states.DefaultState;
+import edu.casetools.mreasoner.core.data.states.State;
+import edu.casetools.mreasoner.core.data.states.Internal.CalendarAt;
+import edu.casetools.mreasoner.core.data.states.Internal.CalendarBetween;
+import edu.casetools.mreasoner.core.data.states.Internal.ClockAt;
+import edu.casetools.mreasoner.core.data.states.Internal.ClockBetween;
+import edu.casetools.mreasoner.core.data.states.Internal.WeekDayAt;
+import edu.casetools.mreasoner.core.data.states.Internal.WeekDayBetween;
+import edu.casetools.mreasoner.core.data.time.Bound;
+import edu.casetools.mreasoner.core.data.time.TemporalOperator;
+import edu.casetools.mreasoner.core.data.time.TemporalOperator.TOP_TYPE;
+import edu.casetools.mreasoner.core.data.time.absolute.Date;
+import edu.casetools.mreasoner.core.data.time.absolute.TimeOfDay;
 
 
 
+@SuppressWarnings("all")
 public class MCompiler_Iteration {
   public static Vector<String > statesDeclaration = null;
 public static void main(String[] args) { 
@@ -130,9 +131,8 @@ TOKEN: { <NTR_START: "sEr(" >}
 TOKEN: { <STRONG: "[-]" >}
 TOKEN: { <WEAK: "<->" >}
 
-MInputData readSystemSpecifications(): {
-	MInputData inputData = new MInputData();
-	  // Vector<String > statesDeclaration = null;
+MSpecification readSystemSpecifications(): {
+	MSpecification inputData = new MSpecification();
 	   Vector<State> independentStates = new Vector<State>();
 	   Vector<Event> eventsHistory = new Vector<Event>();
 	   MStatus initialStatus = new MStatus();
