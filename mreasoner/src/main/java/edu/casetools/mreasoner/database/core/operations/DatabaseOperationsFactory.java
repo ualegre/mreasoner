@@ -1,7 +1,7 @@
 package edu.casetools.mreasoner.database.core.operations;
 
 
-import edu.casetools.mreasoner.core.configs.MDBConfigs;
+import edu.casetools.mreasoner.configs.data.db.MDBConfigs;
 import edu.casetools.mreasoner.database.core.MDBImplementations;
 import edu.casetools.mreasoner.database.core.implementations.PostgreSQL_DatabaseOperations;
 

@@ -2,10 +2,7 @@ package edu.casetools.mreasoner.database.core.connection;
 
 import java.sql.*;
 
-import edu.casetools.mreasoner.core.configs.MDBConfigs;
-
-
-
+import edu.casetools.mreasoner.configs.data.db.MDBConfigs;
 
 public class DBConnection {
 

@@ -1,7 +1,7 @@
 package edu.casetools.mreasoner.database;
 
 
-import edu.casetools.mreasoner.core.configs.MConfigs;
+import edu.casetools.mreasoner.configs.data.MConfigs;
 import edu.casetools.mreasoner.core.data.MStatus;
 import edu.casetools.mreasoner.core.data.states.State;
 import edu.casetools.mreasoner.core.data.time.TemporalOperator;
@@ -15,7 +15,7 @@ import edu.casetools.mreasoner.database.tables.ResultsTable;
 import edu.casetools.mreasoner.database.temporaloperator.TOC;
 
 
-public class MDatabase {
+public class MDatabase implements MDBInterface{
 
 	
 	DatabaseOperations      databaseOperations;
@@ -23,7 +23,6 @@ public class MDatabase {
 	EventsTable				eventsTable;
 	InternalEventsTable     internalEventsTable;
 	ResultsTable			resultsTable;
-
 	TOC             		temporalOperatorChecker;
 
 	
@@ -36,11 +35,10 @@ public class MDatabase {
 		eventsTable 			  = new EventsTable			( databaseOperations );
 		internalEventsTable 	  = new InternalEventsTable ( databaseOperations );
 		resultsTable			  = new ResultsTable		( databaseOperations, systemStatus );
-		temporalOperatorChecker   = new TOC					( databaseOperations, systemConfigs.getTimeIsGivenInIterations() );
+		temporalOperatorChecker   = new TOC					( databaseOperations, systemConfigs.getTimeConfigs().isSimulation() );
 
 		
 	}
-	
 	
 	public MStatus findLatestEvents(MStatus systemStatus){
 		
@@ -65,12 +63,5 @@ public class MDatabase {
 			databaseOperations.disconnect();
 
 	}
-	
-//	private EF_TYPE getType(boolean simulation){
-//		if(simulation) return EF_TYPE.SIMULATION;
-//		else           return EF_TYPE.REAL_TIME;
-//	}
-	
-	
 	
 }

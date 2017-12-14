@@ -1,720 +1,0 @@
-/**
- * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
- */
-options
-{
-  JDK_VERSION = "1.8";
-  static = false;
-}
-
-PARSER_BEGIN(MCompiler_Iteration)
-package edu.casetools.vera.logreader.io.configs.compiler;
-import java.io.FileReader;
-import java.util.Calendar;
-import java.util.Vector;
-
-import edu.casetools.mreasoner.core.MSpecification;
-import edu.casetools.mreasoner.core.data.MRules;
-import edu.casetools.mreasoner.core.data.MStatus;
-import edu.casetools.mreasoner.core.data.events.Event;
-import edu.casetools.mreasoner.core.data.rules.NextTimeRule;
-import edu.casetools.mreasoner.core.data.rules.SameTimeRule;
-import edu.casetools.mreasoner.core.data.states.DefaultState;
-import edu.casetools.mreasoner.core.data.states.State;
-import edu.casetools.mreasoner.core.data.states.Internal.CalendarAt;
-import edu.casetools.mreasoner.core.data.states.Internal.CalendarBetween;
-import edu.casetools.mreasoner.core.data.states.Internal.ClockAt;
-import edu.casetools.mreasoner.core.data.states.Internal.ClockBetween;
-import edu.casetools.mreasoner.core.data.states.Internal.WeekDayAt;
-import edu.casetools.mreasoner.core.data.states.Internal.WeekDayBetween;
-import edu.casetools.mreasoner.core.data.time.Bound;
-import edu.casetools.mreasoner.core.data.time.TemporalOperator;
-import edu.casetools.mreasoner.core.data.time.TemporalOperator.TOP_TYPE;
-import edu.casetools.mreasoner.core.data.time.absolute.Date;
-import edu.casetools.mreasoner.core.data.time.absolute.TimeOfDay;
-
-
-
-@SuppressWarnings("all")
-public class MCompiler_Iteration {
-  public static Vector<String > statesDeclaration = null;
-public static void main(String[] args) { 
-try{ 
-MCompiler_Iteration parser = new MCompiler_Iteration (new FileReader("C:/MTPL/input/Examples/Example01/inputSystem.mtpl"));  
-        parser.readSystemSpecifications(); 
-
-}catch (Exception ex) 
-{ex.printStackTrace() ;} 
-} 
-
-}
-
-PARSER_END(MCompiler_Iteration)
-
-TOKEN_MGR_DECLS :
-{
-static int commentNesting=0;
-}
-
-SKIP: {     " " | "\t" | "\n" | "\r" | <"--" (~["\n","\r"])* ("\n"|"\r")> }
-
-SKIP : /* COMMENTS */
-{
-"/*" { commentNesting++; } : IN_COMMENT
-}
-<IN_COMMENT> SKIP :
-{
-"/*" { commentNesting++; }
-| "*/" { commentNesting--;
-if (commentNesting == 0)
-SwitchTo(DEFAULT);
-}
-| <~[]>
-}
-
-SKIP :
-{
-    <"//" (~["\n"])* "\n">
-}
-
-//TOKEN : /* Numbers and identifiers *///{//< NUM : (<DIGIT>)+ >//| < DIGIT : ["0" - "9"] >|// < TEXT : (<LETTER>)+ >//| < #LETTER : ["a" - "z", "A" - "Z","_"] >//}
-
-
-TOKEN :{ < NEGATION: "#" >}
-TOKEN : { <AND: "^" > }
-TOKEN : { <LEFT_BRACKET: "(" > }
-TOKEN : { <RIGHT_BRACKET: ")" > }
-TOKEN : { <LEFT_SQR_BRACKET: "[" > }
-TOKEN : { <RIGHT_SQR_BRACKET: "]" > }
-TOKEN : { <LEFT_KEY_BRACKET: "{" > }
-TOKEN : { <RIGHT_KEY_BRACKET: "}" > }
-TOKEN : { <POINT: "." > }
-TOKEN : { <POINT_COMMA: ";" > }
-TOKEN : { <TWO_POINT: ":" > }
-TOKEN : { <COMMA: "," > }
-TOKEN : { < SLASH: "/" > }
-TOKEN : { <HYPHEN: "-" > }
-TOKEN : { < UNDERSCORE: ["_"] >	}
-TOKEN : { < DIGIT : [ "0"-"9" ] > }
-TOKEN : { < ALPHABET: ["a" - "z"] > }
-TOKEN : { < CAPSALPHABET: ["A" - "Z"] > }
-TOKEN : { < ARROW: "->" > }
-
-//State declaration
-TOKEN: { <STATE_DECLARATION_START: "states(" >}
-
-//Independent states
-TOKEN: { <INDEPENDENT_STATE_START: "is(" >}
-
-//Internal states
-TOKEN: { <CLOCK_AT_START: "clockAt(" >}
-TOKEN: { <CLOCK_BETWEEN_START: "clockBetween(" >}
-TOKEN: { <CALENDAR_AT_START: "calendarAt(" >{System.out.println("WARNING (Line:"+input_stream.line+",Column:"+input_stream.column+"): The abuse of the internal state "+image+") could lead to system inefficiency.");}}
-TOKEN: { <CALENDAR_BETWEEN_START: "calendarBetween(" >{System.out.println("WARNING(Line:"+input_stream.line+",Column:"+input_stream.column+"): The abuse of the internal state "+image+") could lead to system inefficiency.");}}
-TOKEN: { <WEEKDAY_AT_START: "weekDayAt(" >{System.out.println("WARNING(Line:"+input_stream.line+",Column:"+input_stream.column+"): The abuse of the internal state "+image+") could lead to system inefficiency.");}}
-TOKEN: { <WEEKDAY_BETWEEN_START: "weekDayBetween(" >{System.out.println("WARNING(Line:"+input_stream.line+",Column:"+input_stream.column+"): The abuse of the internal state "+image+") could lead to system inefficiency.");}}
-
-//Events
-TOKEN: { <EVENT_START: "occurs(" >}
-TOKEN: { <INGRESSION_START: "ingr(" >}
-
-//Initial State Declaration
-TOKEN: { <STATE_INITIALIZATION_START: "holdsAt(" >}
-
-//Same Time Rule
-TOKEN: { <STR_START: "ssr(" >}
-
-//Next Time Rule
-TOKEN: { <NTR_START: "sEr(" >}
-
-//Past Operators
-TOKEN: { <STRONG: "[-]" >}
-TOKEN: { <WEAK: "<->" >}
-
-MSpecification readSystemSpecifications(): {
-	MSpecification inputData = new MSpecification();
-	   Vector<State> independentStates = new Vector<State>();
-	   Vector<Event> eventsHistory = new Vector<Event>();
-	   MStatus initialStatus = new MStatus();
-	   MRules systemRules = new MRules();
-	    State auxiliar;
-}
-{    
-        (statesDeclaration = statesDeclaration())
-        {
-          initialStatus = setDeclaredStates(statesDeclaration);
-        }
-     (        (initialStatus     = stateInitialization(initialStatus))
-        |(auxiliar = independentStates()
-        		{
-          			independentStates.add(auxiliar);
-        		}
-         )
-        |(eventDeclaration(eventsHistory))
-  		|(systemRules=sameTimeRule(systemRules))
-  		|(systemRules = nextTimeRule(systemRules))
-  	  )*
-    
-    < EOF >
-
-
- {
-   inputData.setDeclaredStates(statesDeclaration);
-   inputData.setIndependentStates(independentStates);
-   inputData.setSystemStatus(initialStatus);
-   inputData.setEventsHistory(eventsHistory);
-   inputData.setSystemRules(systemRules);
-   //inputData.printInputData();
-  return inputData;
- }
-}
-//Generic functions
-
-void genericStop(): {} { <RIGHT_BRACKET ><POINT_COMMA >     }
-State genericState(): {State state = new State();
-						String name = "";}
-{
-		(
-		  (
-		    name = readString()
-		    
-		{
-		  state.setStatus(true);
-		})
-		 |(< NEGATION> name = readString(){
-		  state.setStatus(false);
-		})
-)
-		{
-		  stateIsDeclared(name);
-		  state.setName(name);
-		  return state;
-		}
-}
-
-State genericStateWithoutSign(boolean status): {State state = new State();
-						String name = "";}
-{			  
-		name = readString()  
-
-		{ 
-		  stateIsDeclared(name);
-		  state.setName(name);
-		  state.setStatus(status);
-		  return state;
-		}
-		
-}
-TemporalOperator genericStateWithOperator(): {
-  											  TemporalOperator temporalOperator = null;
-											  State state = null;
-										     }
-										     {
-										         (temporalOperator = temporalOperator() state = genericState())
-										         {
-										           temporalOperator.setName(state.getName());
-										           temporalOperator.setStatus(state.getStatus());
-										           return temporalOperator;
-										         }
-										     }
-String readString(): {
-      Token name;
-      String auxiliar = "";
-      } {
-    ( name = <DIGIT>	 {	   auxiliar = auxiliar + name.toString();	 }	 | name = <ALPHABET> {	   auxiliar = auxiliar + name.toString();	 }	 | name = <UNDERSCORE> {	   auxiliar = auxiliar + name.toString();	 }	 | name = <CAPSALPHABET> {	   auxiliar = auxiliar + name.toString();	 }	)+
-
-
-{return auxiliar;} }
-
-//Java functions
-MStatus setDeclaredStates(Vector<String >statesDeclaration):
-{
-  MStatus systemStatus = new MStatus();
-}
-{
-  {
-      for(int i=0;i<statesDeclaration.size();i++)
-	  {
-		    	State s = new State();
-    	  		s.setName(statesDeclaration.get(i));
-                systemStatus.getSystemStatus().add(s);
-	  }
-	  return systemStatus;
-  }
-}
-
-MStatus setInitialValue(MStatus systemStatus,State state):
-{
-}
-{
-  {
-      for(int i=0;i<systemStatus.getSystemStatus().size();i++)
-      {
-                if(systemStatus.getSystemStatus().get(i).getName().equals(state.getName()))
-                        systemStatus.getSystemStatus().setElementAt(state, i);
-      }
-	  return systemStatus;
-  }
-}
-
-boolean stateIsDeclared(String state):
-{
-}
-{
-  {
-      for(int i=0;i<statesDeclaration.size();i++)
-      {
-           if(statesDeclaration.get(i).equals(state)) return true;  
-      }
-      throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): State "+state+" is not declared.");
-	  return false;
-  }
-}
-
-//Generic States Declaration
-Vector<String> statesDeclaration():
-{
-  Vector<String> states = null;
-}
-{     statesDeclarationStart()
-  	  states = statesDeclarationContent()
-  	  statesDeclarationStop()
-{
-    return states;
-}
-}
-void statesDeclarationStart(): {} { <STATE_DECLARATION_START>   }
-void statesDeclarationStop(): {} { genericStop()     }
-Vector<String> statesDeclarationContent():
-{
-    Vector<String> states = new Vector<String>();
-}
-{
-	{ states.add(readString()); }
-    (< COMMA >{ states.add(readString()); })*
-	{
-	  return states;
-	}
-}
-
-//Internal States
-DefaultState internalState(boolean status): {DefaultState defaultState = null;} {
-  ( defaultState = clockState(status)|defaultState = calendarState(status)|defaultState = weekDayState(status)) //	| (//	{//	  status = false;//	}//	defaultState = clockState(status)|defaultState = calendarState(status)|defaultState = weekDayState(status)))
-	{return defaultState;}
-}
-DefaultState clockState(boolean status): {DefaultState defaultState = null;} {  (defaultState = clockAt(status)| defaultState = clockBetween(status) ){return defaultState;} }
-ClockAt clockAt(boolean status): {ClockAt clockAt = new ClockAt();TimeOfDay timeOfDay;} { <CLOCK_AT_START>timeOfDay = clockTime()<RIGHT_BRACKET> {clockAt.setTime(timeOfDay);clockAt.setStatus(status);return clockAt;}  }
-ClockBetween clockBetween(boolean status): {ClockBetween clockBetween = new ClockBetween();TimeOfDay since,until;}
-{
-  <CLOCK_BETWEEN_START>since=clockTime()<HYPHEN >until = clockTime()<RIGHT_BRACKET>
-	{
-	  clockBetween.setSince(since);
-	  clockBetween.setUntil(until);
-	  clockBetween.setStatus(status);
-	  return clockBetween;
-	}
-}
-DefaultState calendarState(boolean status): {DefaultState defaultState = null;} { (defaultState = calendarAt(status)| defaultState = calendarBetween(status))  {return defaultState;}  }
-CalendarAt calendarAt(boolean status): {CalendarAt calendarAt = new CalendarAt();Date date;} {  <CALENDAR_AT_START>date = calendarTime()< RIGHT_BRACKET >  {calendarAt.setDate(date);calendarAt.setStatus(status);return calendarAt;} }
-CalendarBetween calendarBetween(boolean status): {CalendarBetween calendarBetween = new CalendarBetween();Date since,until;}
-{
-  <CALENDAR_BETWEEN_START> since=calendarTime()<HYPHEN >until=calendarTime()< RIGHT_BRACKET >
-  			{
-  			  	calendarBetween.setSince(since);
-  			  	calendarBetween.setUntil(until);
-  			  	calendarBetween.setStatus(status);
-  			  	return calendarBetween;
-  			}
-}
-DefaultState weekDayState(boolean status): {DefaultState defaultState = null;}
-{ (defaultState = weekDayAt(status)| defaultState = weekDayBetween(status))  {return defaultState;}  }
-
-WeekDayAt weekDayAt(boolean status): {WeekDayAt weekDayAt = new WeekDayAt();int weekDay;} {  (<WEEKDAY_AT_START> weekDay = weekDay()< RIGHT_BRACKET >) {weekDayAt.setWeekDay(weekDay);weekDayAt.setStatus(status);return weekDayAt;}}
-WeekDayBetween weekDayBetween(boolean status): {WeekDayBetween weekDayBetween = new WeekDayBetween();int since,until;}
-{
-  <WEEKDAY_BETWEEN_START> since = weekDay()< HYPHEN > until = weekDay()< RIGHT_BRACKET >
-		{
-		  	weekDayBetween.setSince(since);
-		  	weekDayBetween.setUntil(until);
-		  	weekDayBetween.setStatus(status);
-		  	return weekDayBetween;
-		}
-}
-
-//Time Definitions
-TimeOfDay clockTime():
-{
-  TimeOfDay timeOfDay = new TimeOfDay();
-  Token aux,aux2;
-  int[] min_sec = new int[2];
-  int index = 0;
-}{  	{
-	  for(int i=0;i<min_sec.length;i++) min_sec[i] = 0; 	}
-	aux = <DIGIT > aux2 = <DIGIT > {timeOfDay.setHour(hourToInt(aux.toString()+aux2.toString()));}
-			(<TWO_POINT > aux = <DIGIT > aux2 =<DIGIT >
-			{
-			    if (index > 1) throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong time format.");
-			  	min_sec[index] = minToInt(aux.toString()+aux2.toString());
-			  	index++;
-			 })*
-			//<TWO_POINT > aux = <DIGIT > aux2 =<DIGIT > {timeOfDay.setSecond(minToInt(aux.toString()+aux2.toString()));}
-			{
-			 timeOfDay.setMinute(min_sec[0]);
-			 timeOfDay.setSecond(min_sec[1]);			  return timeOfDay;
-			}
-}
-
-
-
-
-Date calendarTime(): {Date date = new Date();Token aux,aux2,aux3,aux4;} { (aux=<DIGIT >aux2=<DIGIT >{ date.setDay_of_month(dayOfMonthToInt(aux.toString()+aux2.toString()));})<SLASH >
-																(aux=<DIGIT >aux2=<DIGIT >{ date.setMonth(monthToInt(aux.toString()+aux2.toString()));})<SLASH >
-																(aux=<DIGIT >aux2=<DIGIT >aux3=<DIGIT >aux4=<DIGIT >{ date.setYear(yearToInt(aux.toString()+aux2.toString()+aux3.toString()+aux4.toString()));})
-																{return date;
-																}}
-int minToInt(String value): {int result = 0;} {
-								{
-								  result = Integer.parseInt(value);
-								  if((result > 59)||(result < 0))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong minute/second format.");
-								  return result;
-								}
-							 }
-							 
-int hourToInt(String value):  {int result = 0;} {
-								{
-								  result = Integer.parseInt(value);
-								  if((result > 23)||(result < 0))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong hour format.");
-								  return result;
-								}
-							 }
-int dayOfMonthToInt(String value): {int result = 0;} {
-								{
-								  result = Integer.parseInt(value);
-								  if((result > 31)||(result < 1))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong day of month format.");
-								  return result;
-								}
-							 }
-int monthToInt(String value):  {int result = 0;} {
-								{
-								  result = Integer.parseInt(value);
-								  if((result > 12)||(result < 1))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong month format.");
-								  return result;
-								}
-							 }
-int yearToInt(String value):  {int result = 0;} {
-								{
-								  result = Integer.parseInt(value);
-								  if((result < 0))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Wrong year format.");
-								  return result;
-								}
-							 }
-void isZero(String value):  {int result = 0;} {
-								{
-								  result = Integer.parseInt(value);
-								  if((result != 0))  throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): The syntax to initialize values the format should be 'holdsAt(<sign><state_name>,0);'");
-								}
-							 }												
-int weekDay(): {} { (("monday"{return Calendar.MONDAY;})|("tuesday"{return Calendar.TUESDAY;})
-					|("wednesday"{return Calendar.WEDNESDAY;})|("thursday"{return Calendar.THURSDAY;})
-					|("friday"{return Calendar.FRIDAY;})|("saturday"{return Calendar.SATURDAY;})|("sunday"{return Calendar.SUNDAY;}))  }
-Bound absoluteTime():
-{
-  Bound bound = new Bound();
-  Date date = new Date();
-  TimeOfDay time = new TimeOfDay();
-  int weekDay = 0;
-  Token t1,t2;
-}
-{
-  	(		(	t1 = < DIGIT > t2 = <DIGIT >			{
-			  bound = regularAbsoluteTime(bound, t1.toString()+t2.toString());			}
-		)?
-		
-  	   (  	      weekDay = weekDay()			{			  bound.setWeekDay(weekDay);			}  	    )?
-  	)
-  	{
-  	  return bound;  	}
-}
-
-Bound simulationValue():
-{
-  Bound bound = new Bound();
-  String value = "";
-  Token t1;
-}
-{
-  	(				
-		( t1 = < DIGIT >			{
-			  value = value + t1.toString();			}
-		)+
-
-  	)
-  	{  	  bound.setSimulation_value(Long.parseLong(value));
-  	  return bound;
-  	}
-}
-
-
-Bound regularAbsoluteTime(Bound bound, String firstDigit):
-{
-	int firstValue = 0;
-	Token t1,t2;
-}{
-    (     (< SLASH >	 {	   firstValue = dayOfMonthToInt(firstDigit);
-	   bound.getDate().setDay_of_month(firstValue);
-	 }
-	 bound = regularAbsoluteTimeMonth(bound) )
- |
- (
-   < TWO_POINT >
-   {  
-     firstValue = hourToInt(firstDigit);
-     bound.getTime_of_day().setHour(firstValue);
-     bound = regularAbsoluteTime_TimeOfDay(bound);
-   }   
- )	)
-
- {
-   return bound; }}
-
-Bound regularAbsoluteTime_TimeOfDay(Bound bound):
-{
-  Token aux,aux2;
-  String seconds = "00";
-}{
-(  
-  			(
-  			  aux = <DIGIT > aux2 =<DIGIT >
-				 {
-					bound.getTime_of_day().setMinute(minToInt(aux.toString()+aux2.toString()));
-				 }
-			 )
-			(				   <TWO_POINT >
-				   			(
-	  			  aux = <DIGIT > aux2 =<DIGIT >
-					 {
-						seconds = aux.toString()+aux2.toString();
-					 }
-				 )
-			)?
-			//<TWO_POINT > aux = <DIGIT > aux2 =<DIGIT > {timeOfDay.setSecond(minToInt(aux.toString()+aux2.toString()));}
-)
-			{
-			  bound.getTime_of_day().setSecond(minToInt(seconds));
-			 return bound;
-			}}
-
-Bound regularAbsoluteTimeMonth(Bound bound):
-{
-  Token aux,aux2,aux3,aux4;
-}{
-	(aux=<DIGIT> aux2=<DIGIT > { bound.getDate().setMonth(monthToInt(aux.toString()+aux2.toString()));})
-	<SLASH >
-	(aux=<DIGIT > aux2=<DIGIT > aux3=<DIGIT > aux4=<DIGIT >{ bound.getDate().setYear(yearToInt(aux.toString()+aux2.toString()+aux3.toString()+aux4.toString()));})
-  	(< POINT >	  	{
-	  	  bound.setTime_of_day(clockTime());	  	}
-  	)?
-  {
-    return bound;  }}
-//Bound regularAbsoluteTime()://{//  Bound bound = new Bound();//  Date date = new Date();//  TimeOfDay time = new TimeOfDay();//}//{		date = calendarTime()// (<POINT> time = clockTime())?//		{//		  bound.setDate(date);//    	  bound.setTime_of_day(time);//    	  return bound;//    	}//}
-
-//Bounded Past Operators
-TemporalOperator temporalOperator(): {TemporalOperator temporalOperator = null;
-									  boolean isStrong = false;}
-{
- ((strong(){isStrong = true;})|(weak(){isStrong = false;}))
- <LEFT_SQR_BRACKET> temporalOperator = operator(isStrong)< RIGHT_SQR_BRACKET >
- {return temporalOperator;}
-}
-void strong():           {} { <STRONG > }
-void weak(): 	         {} {  <WEAK>   }
-TemporalOperator operator(boolean isStrong):{TemporalOperator temporalOperator = null;}
-{ ((temporalOperator = absolute(isStrong)))
-   {return temporalOperator;}
-}
-//TemporalOperator inmediate(boolean isStrong):{//  							  TemporalOperator temporalOperator = new TemporalOperator();//						      Bound bound = new Bound();//							  Token auxiliar;//							  String digit = "";//							 }//						     {//						      (auxiliar = <DIGIT >{digit = digit + auxiliar.toString();})*//							  {bound.setSimulation_value(Long.parseLong(digit));//							   temporalOperator.setSinceValue(bound);//							   if(isStrong) temporalOperator.setType(TOP_TYPE.STRONG_RELATIVE);//							   else temporalOperator.setType(TOP_TYPE.WEAK_RELATIVE);//							   return temporalOperator;}//							  //							 }
-							 
-TemporalOperator absolute(boolean isStrong):
-{
- TemporalOperator temporalOperator = new TemporalOperator();
- Bound since = null ,until = null;
-}
- {
-    (since = simulationValue())
-
-	{
-	 if(isStrong) temporalOperator.setType(TOP_TYPE.STRONG_RELATIVE);
-	 else temporalOperator.setType(TOP_TYPE.WEAK_RELATIVE);	}
-   
-   (<HYPHEN>
-   	   ( until = simulationValue())	   {
-	     if(isStrong) temporalOperator.setType(TOP_TYPE.STRONG_ABSOLUTE);
-		 else temporalOperator.setType(TOP_TYPE.WEAK_ABSOLUTE);	   }
-   )?
-   {
-     if(until != null)checkBounds(since,until);
-     else if (since.getSimulation_value() == 0)throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Zero value is not allowed.");
-   
-     temporalOperator.setSinceValue(since);
-     temporalOperator.setUntilValue(until);
-     return temporalOperator;
-   }
- }
-boolean checkBounds(Bound since,Bound until): {boolean result = false;} {
-	
-	{
-	  if(since.isEmpty_Simulation() == until.isEmpty_Simulation() )	  {
-	    result = true;
-//	    System.out.println("SINCE: "+since.getSimulation_value());//	    System.out.println("UNTIL: "+until.getSimulation_value());	  }	  
-	  else if(since.isEmpty_RealTime() == until.isEmpty_RealTime() )	  {	     result =  false;
-
-	//    System.out.println("SINCE: ");
-	 //   since.printRealTime();
-	  // 	System.out.println("UNTIL: ");
-	 //   until.printRealTime();	  } 
-	  else	  {
- 		throw new Error("(Line:"+jj_input_stream.line+",Column:"+jj_input_stream.column+"): Invalid temporal operator format.");		
-	  }
-
-	  return result;	}
-  }Bound simulatedTime():
-{
-  Bound bound = new Bound();
-  Token t;
-  String value = "";}{
-  < LEFT_BRACKET >
-  (t = < DIGIT >  {
-    value = value + t.toString();  }
-  )+
-  < RIGHT_BRACKET >
-  {
-    bound.setSimulation_value(Long.parseLong(value));
-    return bound;  }}
-//Independent States
-State independentStates(): {State state;} {
-  independentStatesStart()
-  state = independentStatesContent()
-  independentStatesStop()
-  {
-    return state;
-  } }
-void independentStatesStart(): {} { <INDEPENDENT_STATE_START>  }
-void independentStatesStop(): {} { genericStop() }
-State independentStatesContent(): {} {{ return genericState();}}
-
-//Events
-Vector<Event > eventDeclaration(Vector<Event > eventsHistory): {} {  eventDeclarationStart() eventsHistory = eventDeclarationContent(eventsHistory) eventDeclarationStop()
-{
-return eventsHistory;} }
-void eventDeclarationStart(): {} {  <EVENT_START> }
-void eventDeclarationStop(): {} {  genericStop() }
-
-Vector<Event > eventDeclarationContent(Vector<Event > eventsHistory): {Event event;Token auxiliar;String time="";} {
-
- event = eventIngression()
-< COMMA > (auxiliar = <DIGIT>
-{
-  time = time + auxiliar.toString();
-}
-)*
-{
-  event.setTime(Long.parseLong(time));
-   eventsHistory.add(event);
-   return eventsHistory;
-}
-}
-Event eventIngression(): {State state;} {  eventIngressionStart() state = genericState() eventIngressionStop()
-{
-  Event event = new Event();
-  event.setStatus(state.getStatus());
-  event.setName(state.getName());
-  return event; 
-}}
-void eventIngressionStart(): {} {  <INGRESSION_START>  }
-void eventIngressionStop(): {} {  <RIGHT_BRACKET> }
-
-//State Initialization
-MStatus stateInitialization(MStatus systemStatus): {} {  stateInitializationStart() stateInitializationContent(systemStatus) stateInitializationStop()
-{
-  return systemStatus;
-} }
-void stateInitializationStart(): {} {  <STATE_INITIALIZATION_START>  }
-void stateInitializationStop(): {} {  genericStop() }
-MStatus stateInitializationContent(MStatus systemStatus): {Token zero;} {  systemStatus = initializeState(systemStatus) <COMMA > zero = <DIGIT>
-{isZero(zero.toString());return systemStatus;}}
-MStatus initializeState(MStatus systemStatus):{}{
-{
-  return setInitialValue(systemStatus,genericState());
-}
- }
-//Same Time Rules
-MRules sameTimeRule(MRules systemRules): {SameTimeRule sameTimeRule;} {  sameTimeRuleStart() sameTimeRule = sameTimeRuleContent() sameTimeRuleStop(){ systemRules.getSameTimeRules().add(sameTimeRule);return systemRules;}
-}
-void sameTimeRuleStart(): {} {  <STR_START>  }
-void sameTimeRuleStop(): {} {  genericStop() }
-SameTimeRule sameTimeRuleContent(): {SameTimeRule sameTimeRule = new SameTimeRule();boolean status = true;} {
-  (
-  <LEFT_BRACKET > (
-    				(< NEGATION > sameTimeRule = sameTimeRuleAntecedentContent(sameTimeRule,false))
-    				|(sameTimeRule = sameTimeRuleAntecedentContent(sameTimeRule,true))
-    			  )
-  (
-    < AND > (
-      			(< NEGATION >sameTimeRule = sameTimeRuleAntecedentContent(sameTimeRule,false))
-      			|(sameTimeRule = sameTimeRuleAntecedentContent(sameTimeRule,true))
-      		  )
-  )*
-  <RIGHT_BRACKET >
-   < ARROW > sameTimeRule = sameTimeRuleConsequenceContent(sameTimeRule)
-  )
-   { return sameTimeRule;}}
-SameTimeRule sameTimeRuleAntecedentContent(SameTimeRule sameTimeRule,boolean status): {State state;DefaultState defaultState;TemporalOperator temporalOperator;boolean sign = true;}
- {   (  			  (defaultState = internalState(status){sameTimeRule.addInternalState(defaultState);})
- 					  |(temporalOperator = genericStateWithOperator(){sameTimeRule.getTemporalOperators().add(temporalOperator);})
-					  |(state = genericStateWithoutSign(status){sameTimeRule.getAntecedents().add(state);})	 
- 	  )
-    
-	{
-		return sameTimeRule;
-	}
-}
-
-SameTimeRule sameTimeRuleConsequenceContent(SameTimeRule sameTimeRule): {State state;} {   state = genericState(){sameTimeRule.addConsequence(state);return sameTimeRule;} } 
-
-//Next Time Rules
-MRules nextTimeRule(MRules systemRules): {NextTimeRule nextTimeRule;}
- {  (nextTimeRuleStart() nextTimeRule = nextTimeRuleContent() nextTimeRuleStop())
-  { systemRules.getNextTimeRules().add(nextTimeRule);return systemRules;}
- }
-void nextTimeRuleStart(): {} {  <NTR_START>  }
-void nextTimeRuleStop(): {} {  genericStop() }
-NextTimeRule nextTimeRuleContent(): {NextTimeRule nextTimeRule = new NextTimeRule();}
-{
-  // (nextTimeRule = nextTimeRuleAntecedentContent(nextTimeRule))
-
-    <LEFT_BRACKET > (
-    				(< NEGATION > nextTimeRule = nextTimeRuleAntecedentContent(nextTimeRule,false))
-    				|(nextTimeRule = nextTimeRuleAntecedentContent(nextTimeRule,true))
-    			  )
-  (
-    < AND > (
-      			(< NEGATION >nextTimeRule = nextTimeRuleAntecedentContent(nextTimeRule,false))
-      			|(nextTimeRule = nextTimeRuleAntecedentContent(nextTimeRule,true))
-      		  )
-  )*
-  <RIGHT_BRACKET >
-   < ARROW > (nextTimeRule = nextTimeRuleConsequenceContent(nextTimeRule))
-   {return nextTimeRule;}
-}
-NextTimeRule nextTimeRuleAntecedentContent(NextTimeRule nextTimeRule,boolean status): {State state;DefaultState defaultState;TemporalOperator temporalOperator;}
-{
-//<LEFT_BRACKET > ( (state = genericState(){nextTimeRule.getAntecedents().add(state);})// 					  |(temporalOperator = genericStateWithOperator(){nextTimeRule.getTemporalOperators().add(temporalOperator);})// 					  |(defaultState = internalState(false){nextTimeRule.addInternalState(defaultState);})// 					 )//    (< COMMA > ((state = genericState(){nextTimeRule.getAntecedents().add(state);})|(temporalOperator = genericStateWithOperator(){nextTimeRule.getTemporalOperators().add(temporalOperator);})|(defaultState = internalState(false){ nextTimeRule.addInternalState(defaultState);} )))*//    <RIGHT_BRACKET >
-	  (  	 (defaultState = internalState(status){nextTimeRule.addInternalState(defaultState);})
- 			|(temporalOperator = genericStateWithOperator(){nextTimeRule.getTemporalOperators().add(temporalOperator);})
-			|(state = genericStateWithoutSign(status){nextTimeRule.getAntecedents().add(state);})	 
- 	  )
-	{
-		return nextTimeRule;
-	}
-}
-NextTimeRule nextTimeRuleConsequenceContent(NextTimeRule nextTimeRule):{State state;} {   state = genericState(){nextTimeRule.addConsequence(state);return nextTimeRule;} } 

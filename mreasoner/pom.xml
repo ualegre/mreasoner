@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.casetools</groupId>
   <artifactId>mreasoner</artifactId>
-  <version>0.0.7</version>
+  <version>0.0.8</version>
   <name>mreasoner</name>
   <url>https://github.com/ualegre/mreasoner/</url>
 
@@ -42,15 +42,47 @@
 		    <version>9.3-1100-jdbc3</version>
 		</dependency>
 		
+		 <dependency>
+		    <groupId>com.github.ualegre</groupId>
+		    <artifactId>lfpubs2m</artifactId>
+		    <version>v0.0.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.github.ualegre</groupId>
+		    <artifactId>m2nusmv</artifactId>
+		    <version>v0.2.6</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.github.ualegre</groupId>
+		    <artifactId>mreasoner-core</artifactId>
+		    <version>0c0d0d9850</version>
+		</dependency>
+		
 		<dependency>
 		    <groupId>com.github.ualegre</groupId>
 		    <artifactId>vera-manager</artifactId>
-		    <version>dev-SNAPSHOT</version>
+		    <version>v0.2.2</version>
 		</dependency>
-		
-		
+
+			
 	</dependencies>
  
+	  <build>
+	  	<plugins>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-compiler-plugin</artifactId>
+			    <version>3.1</version>
+			    <configuration>
+			        <source>1.8</source>
+			        <target>1.8</target>
+			    </configuration>
+			</plugin>	
+		</plugins>
+	  </build>
+
   
   
 </project>

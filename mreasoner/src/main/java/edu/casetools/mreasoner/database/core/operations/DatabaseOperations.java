@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.database.core.operations;
 import java.sql.ResultSet;
 import java.util.Vector;
 
-import edu.casetools.mreasoner.core.configs.MDBConfigs;
+import edu.casetools.mreasoner.configs.data.db.MDBConfigs;
 import edu.casetools.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.mreasoner.database.core.connection.DBConnection.STATUS;
 
