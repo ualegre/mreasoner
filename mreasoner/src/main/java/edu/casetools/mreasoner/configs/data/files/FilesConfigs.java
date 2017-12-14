@@ -61,6 +61,10 @@ public class FilesConfigs {
 		LFPUBSOutputFilePath = lFPUBSOutputFilePath;
 	}
 	
+	public boolean existsLFPUBSOutputFile(){
+		return new File(""+LFPUBSOutputFilePath).exists();
+	}
+	
 	public String getSshConfigsFilePath() {
 		return sshConfigsFilePath;
 	}

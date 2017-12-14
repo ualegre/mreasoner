@@ -7,8 +7,8 @@ import java.util.Vector;
 import edu.casetools.mreasoner.MReasoner;
 import edu.casetools.mreasoner.configs.MConfigsLoader;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.MSpecification;
-import edu.casetools.mreasoner.core.configs.TimeConfigs.EXECUTION_MODE;
+import edu.casetools.icase.mreasoner.core.MSpecification;
+import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs.EXECUTION_MODE;
 import edu.casetools.mreasoner.deployment.actuators.MActuatorManager;
 import edu.casetools.mreasoner.deployment.sensors.MVeraLogReader;
 import edu.casetools.mreasoner.deployment.simulation.EventSimulator;
@@ -26,14 +26,12 @@ public class Launcher extends Thread {
 //	Vector<LibraryThread> 		  externalLibraries;
 	MActuatorManager			  actuatorManager;
 	Vector<Actuator> 			  actuators;  
-	String 					  	  sshConfigsFileName;
 	Thread						  mreasonerThread;
 	
-	public Launcher(Vector<Actuator> actuators, String sshConfigsFileName){	
+	public Launcher(Vector<Actuator> actuators){	
 		minputLoader 	     	 = new MConfigsLoader();
 //		externalLibraries    	 = new Vector<LibraryThread>();
 		this.actuators 		 	 = actuators;
-		this.sshConfigsFileName  = sshConfigsFileName;
 	}
 	
 	public MConfigs readMSpecification(MConfigs configs) {
@@ -45,10 +43,10 @@ public class Launcher extends Thread {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (edu.casetools.mreasoner.compiler.realtime.ParseException e) {
+		} catch (edu.casetools.icase.mreasoner.compiler.realtime.ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (edu.casetools.mreasoner.compiler.iterations.ParseException e) {
+		} catch (edu.casetools.icase.mreasoner.compiler.iterations.ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
@@ -64,7 +62,7 @@ public class Launcher extends Thread {
 	public void run(){
 
 		if(minput != null){
-			MReasoner mtpl = new MReasoner(minput, mconfigs);
+			mtpl = new MReasoner(minput, mconfigs);
 			mreasonerThread = new Thread(mtpl);
 
 			if(mconfigs.getTimeConfigs().getExecutionMode().equals(EXECUTION_MODE.REAL_ENVIRONMENT)){
@@ -78,7 +76,12 @@ public class Launcher extends Thread {
 				System.out.println("\nSTARTING REASONER..\n");
 				mreasonerThread.run();	
 				if(!mconfigs.getTimeConfigs().getExecutionMode().equals(EXECUTION_MODE.REAL_ENVIRONMENT))
-					waitForThreadEnd();
+					try {
+						waitForThreadEnd();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			}	
 
 		} else  System.out.println("SSH Connection error");
@@ -122,7 +125,7 @@ public class Launcher extends Thread {
 	}
 
 	private void launchSensorManager(MConfigs mConfigs) {
-		sensorManager = new MVeraLogReader(mConfigs, sshConfigsFileName);
+		sensorManager = new MVeraLogReader(mConfigs);
 		sensorManager.start();
 		
 		while(!sensorManager.getSshClient().isInitializationFinished()){
@@ -132,24 +135,22 @@ public class Launcher extends Thread {
 		startSSHConnection();
 	}
 	
-	public void terminate(){
-		try {
-		
-			mtpl.terminate();
-			mreasonerThread.interrupt();
-			mreasonerThread.join();
-			if(mconfigs.getTimeConfigs().getExecutionMode().equals(EXECUTION_MODE.REAL_ENVIRONMENT))
-				terminateDeployment();
-			else
-				waitForThreadEnd();	
+	public void terminate() {
+
+
+			try {
+				mtpl.terminate();
+
+				if(mconfigs.getTimeConfigs().getExecutionMode().equals(EXECUTION_MODE.REAL_ENVIRONMENT))
+					terminateDeployment();
+				else
+					waitForThreadEnd();	
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
 	}
 
 
@@ -170,17 +171,13 @@ public class Launcher extends Thread {
 //				library.join();
 //			}
 //		}
+		waitForThreadEnd();	
 	}
 	
-	public void waitForThreadEnd() {
-		try {
+	public void waitForThreadEnd()  throws InterruptedException {
 			mreasonerThread.join();
 			inputSimulator.terminate();
 			inputSimulator.join();
-
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 

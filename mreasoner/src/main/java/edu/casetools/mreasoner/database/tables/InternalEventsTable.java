@@ -3,9 +3,9 @@ package edu.casetools.mreasoner.database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.casetools.mreasoner.core.data.MStatus;
-import edu.casetools.mreasoner.core.data.states.State;
-import edu.casetools.mreasoner.core.data.time.Time;
+import edu.casetools.icase.mreasoner.core.elements.MStatus;
+import edu.casetools.icase.mreasoner.core.elements.states.State;
+import edu.casetools.icase.mreasoner.core.elements.time.Time;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 
@@ -57,8 +57,9 @@ public class InternalEventsTable {
 														 result.getString("date"), 
 														 result.getString("time"));
 				}
+				result.close();
 			}else System.out.println("RESULT = NULL");
-			result.close();
+
 		} catch (SQLException e1) {
 		e1.printStackTrace();
 		}

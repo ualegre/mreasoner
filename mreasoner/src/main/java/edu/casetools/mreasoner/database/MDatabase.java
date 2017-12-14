@@ -1,11 +1,12 @@
 package edu.casetools.mreasoner.database;
 
 
+import edu.casetools.icase.mreasoner.database.MDBInterface;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.data.MStatus;
-import edu.casetools.mreasoner.core.data.states.State;
-import edu.casetools.mreasoner.core.data.time.TemporalOperator;
-import edu.casetools.mreasoner.core.data.time.Time;
+import edu.casetools.icase.mreasoner.core.elements.MStatus;
+import edu.casetools.icase.mreasoner.core.elements.states.State;
+import edu.casetools.icase.mreasoner.core.elements.time.Time;
+import edu.casetools.icase.mreasoner.core.elements.time.top.TemporalOperator;
 import edu.casetools.mreasoner.database.core.MDBImplementations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactory;

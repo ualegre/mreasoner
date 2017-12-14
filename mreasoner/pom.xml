@@ -35,35 +35,29 @@
 	</repositories>
 	
 	<dependencies>
-		
+			
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
 		    <version>9.3-1100-jdbc3</version>
 		</dependency>
 		
-		 <dependency>
+		<dependency>
 		    <groupId>com.github.ualegre</groupId>
 		    <artifactId>lfpubs2m</artifactId>
-		    <version>v0.0.2</version>
+		    <version>-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>com.github.ualegre</groupId>
 		    <artifactId>m2nusmv</artifactId>
-		    <version>v0.2.6</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.github.ualegre</groupId>
-		    <artifactId>mreasoner-core</artifactId>
-		    <version>0c0d0d9850</version>
+		    <version>-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>com.github.ualegre</groupId>
 		    <artifactId>vera-manager</artifactId>
-		    <version>v0.2.2</version>
+		    <version>-SNAPSHOT</version>
 		</dependency>
 
 			

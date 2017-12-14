@@ -1,14 +1,17 @@
 package edu.casetools.mreasoner;
 
+import java.util.Vector;
+
+import edu.casetools.icase.mreasoner.AbstractMReasoner;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.MSpecification;
-import edu.casetools.mreasoner.core.data.MStatus;
+import edu.casetools.icase.mreasoner.core.MSpecification;
 import edu.casetools.mreasoner.database.MDatabase;
 import edu.casetools.mreasoner.deployment.Launcher;
+import edu.casetools.mreasoner.vera.actuators.device.Actuator;
 
 public class  MReasoner extends  AbstractMReasoner  {
 
-	public  static MStatus        	   systemStatus;
+
 	public MReasoner( MSpecification systemInput, MConfigs mconfigs){
 		super(systemInput, mconfigs.getTimeConfigs(), mconfigs.useStratification(), mconfigs.useMaxExecutionTime());
 		this.database    		= new MDatabase ( mconfigs, systemStatus );
@@ -17,8 +20,13 @@ public class  MReasoner extends  AbstractMReasoner  {
 	
 	public static void main(String[] args) {
     	
-        String 				 configsFileName = args[0];
-        Launcher	 launcher = new Launcher(null, null);
+        String 	configsFileName = args[0];
+        Vector<Actuator> actuators = new Vector<>();
+        
+        //Add your own actuators here
+        //
+        
+        Launcher	 launcher = new Launcher(actuators);
         if(configsFileName == null) {
         	System.out.println("Please provide the configuration file when executing the command:");
         	System.out.println("\t java -jar mreasoner.jar path/to/configs/your_configurations.txt");

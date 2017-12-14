@@ -14,20 +14,20 @@ import edu.casetools.dcase.m2nusmv.data.elements.Rule;
 import edu.casetools.dcase.m2nusmv.data.elements.RuleElement;
 import edu.casetools.dcase.m2nusmv.data.elements.State;
 import edu.casetools.dcase.m2nusmv.data.elements.Time;
-import edu.casetools.mreasoner.compiler.MSpecificationLoader;
-import edu.casetools.mreasoner.compiler.iterations.ParseException;
+import edu.casetools.icase.mreasoner.compiler.MSpecificationLoader;
+import edu.casetools.icase.mreasoner.compiler.iterations.ParseException;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.MSpecification;
-import edu.casetools.mreasoner.core.configs.TimeConfigs.EXECUTION_MODE;
-import edu.casetools.mreasoner.core.data.rules.SameTimeRule;
-import edu.casetools.mreasoner.core.data.states.Internal.CalendarAt;
-import edu.casetools.mreasoner.core.data.states.Internal.CalendarBetween;
-import edu.casetools.mreasoner.core.data.states.Internal.ClockAt;
-import edu.casetools.mreasoner.core.data.states.Internal.ClockBetween;
-import edu.casetools.mreasoner.core.data.states.Internal.WeekDayAt;
-import edu.casetools.mreasoner.core.data.states.Internal.WeekDayBetween;
-import edu.casetools.mreasoner.core.data.time.TemporalOperator;
-import edu.casetools.mreasoner.core.data.time.TemporalOperator.TOP_TYPE;
+import edu.casetools.icase.mreasoner.core.MSpecification;
+import edu.casetools.icase.mreasoner.core.elements.rules.SameTimeRule;
+import edu.casetools.icase.mreasoner.core.elements.states.Internal.CalendarAt;
+import edu.casetools.icase.mreasoner.core.elements.states.Internal.CalendarBetween;
+import edu.casetools.icase.mreasoner.core.elements.states.Internal.ClockAt;
+import edu.casetools.icase.mreasoner.core.elements.states.Internal.ClockBetween;
+import edu.casetools.icase.mreasoner.core.elements.states.Internal.WeekDayAt;
+import edu.casetools.icase.mreasoner.core.elements.states.Internal.WeekDayBetween;
+import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs.EXECUTION_MODE;
+import edu.casetools.icase.mreasoner.core.elements.time.top.TemporalOperator;
+import edu.casetools.icase.mreasoner.core.elements.time.top.TemporalOperator.TOP_TYPE;
 
 
 public class NuSMVExportManager {
@@ -267,7 +267,7 @@ public class NuSMVExportManager {
 		return (c.getTime().getTime() - currentTime);
 	}
 
-	private RuleElement stateToRuleElement(edu.casetools.mreasoner.core.data.states.State state){
+	private RuleElement stateToRuleElement(edu.casetools.icase.mreasoner.core.elements.states.State state){
 		RuleElement ruleElement = new RuleElement();
 		ruleElement.setName(state.getName());
 		ruleElement.setStatus(Boolean.toString(state.getStatus()).toUpperCase());
@@ -276,7 +276,7 @@ public class NuSMVExportManager {
 	
 	private List<RuleElement> getRuleAntecedents(SameTimeRule str) {
 		List<RuleElement> antecedents = new ArrayList<RuleElement>();
-		for(edu.casetools.mreasoner.core.data.states.State state : str.getAntecedents()){
+		for(edu.casetools.icase.mreasoner.core.elements.states.State state : str.getAntecedents()){
 			antecedents.add(stateToRuleElement(state));
 		}
 		return antecedents;
@@ -300,7 +300,7 @@ public class NuSMVExportManager {
 	}
 
 	private void setInitialStates() {
-		for(edu.casetools.mreasoner.core.data.states.State systemState : systemData.getSystemStatus().getSystemStatus()){
+		for(edu.casetools.icase.mreasoner.core.elements.states.State systemState : systemData.getSystemStatus().getSystemStatus()){
 			for(int i=0; i < verificationData.getStates().size(); i++){
 				if(systemState.getName().equals(verificationData.getStates().get(i).getName())){
 					verificationData.getStates().get(i).setInitialValue(Boolean.toString(systemState.getStatus()).toUpperCase());
@@ -310,7 +310,7 @@ public class NuSMVExportManager {
 	}
 
 	private void setIndependentStates() {
-		for(edu.casetools.mreasoner.core.data.states.State systemState : systemData.getIndependentStates()){
+		for(edu.casetools.icase.mreasoner.core.elements.states.State systemState : systemData.getIndependentStates()){
 			for(int i=0; i < verificationData.getStates().size(); i++){
 				if(systemState.getName().equals(verificationData.getStates().get(i).getName())){
 					verificationData.getStates().get(i).setIndepedence(true);

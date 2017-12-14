@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.casetools.mreasoner.core.data.MStatus;
+import edu.casetools.icase.mreasoner.core.elements.MStatus;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 
 
@@ -38,8 +38,9 @@ public class EventsTable {
 													  result.getString("time_old"));
 					//lastId = result.getInt("id");
 				}
-			}else System.out.println("RESULT = NULL");
-			result.close();
+				result.close();
+			}else System.out.println("NULL RESULT FOR FINDING LATEST DATABASE EVENTS");
+
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

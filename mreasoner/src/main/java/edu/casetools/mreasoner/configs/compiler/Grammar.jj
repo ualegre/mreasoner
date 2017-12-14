@@ -12,7 +12,7 @@ package edu.casetools.mreasoner.configs.compiler;
 
 import java.io.FileReader;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.configs.TimeConfigs;
+import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs;
 
 @SuppressWarnings("all")
 public class ConfigsReader
@@ -221,6 +221,12 @@ MConfigs readConfigs(): {MConfigs configs = new MConfigs();String aux = "";}
     configs.getTimeConfigs().setTimeUnit(Long.parseLong(readString()));
   }
   <FIXED_ITERATION_TIME_END >
+  
+  < EXECUTION_TIME >
+  {
+    configs.getTimeConfigs().setExecutionTime(Long.parseLong(readString()));
+  }
+  <EXECUTION_TIME_END >
 
   < USE_MAX_EXECUTION_TIME >
   {
@@ -230,12 +236,6 @@ MConfigs readConfigs(): {MConfigs configs = new MConfigs();String aux = "";}
     	configs.setUseMaxExecutionTime(false);
   }
   <USE_MAX_EXECUTION_TIME_END >
-  
-  < EXECUTION_TIME >
-  {
-    configs.getTimeConfigs().setExecutionTime(Long.parseLong(readString()));
-  }
-  <EXECUTION_TIME_END >
 
   //File Paths
   <SYSTEM_SPECIFICATION_FILE_PATH>
@@ -304,8 +304,6 @@ MConfigs readConfigs(): {MConfigs configs = new MConfigs();String aux = "";}
     configs.getDBConfigs().setPassword(readString());
   }
   <DATABASE_PASSWORD_END>
-
-  
 
   <DATABASE_NAME>
   {

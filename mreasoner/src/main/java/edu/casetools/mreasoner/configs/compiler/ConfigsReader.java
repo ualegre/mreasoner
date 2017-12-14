@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.configs.compiler;
 
 import java.io.FileReader;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.configs.TimeConfigs;
+import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs;
 
 @SuppressWarnings("all")
 public class ConfigsReader implements ConfigsReaderConstants {
@@ -42,15 +42,15 @@ ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.t
     jj_consume_token(FIXED_ITERATION_TIME);
     configs.getTimeConfigs().setTimeUnit(Long.parseLong(readString()));
     jj_consume_token(FIXED_ITERATION_TIME_END);
+    jj_consume_token(EXECUTION_TIME);
+    configs.getTimeConfigs().setExecutionTime(Long.parseLong(readString()));
+    jj_consume_token(EXECUTION_TIME_END);
     jj_consume_token(USE_MAX_EXECUTION_TIME);
     if(readString().equals("true"))
         configs.setUseMaxExecutionTime(true);
     else
         configs.setUseMaxExecutionTime(false);
     jj_consume_token(USE_MAX_EXECUTION_TIME_END);
-    jj_consume_token(EXECUTION_TIME);
-    configs.getTimeConfigs().setExecutionTime(Long.parseLong(readString()));
-    jj_consume_token(EXECUTION_TIME_END);
     jj_consume_token(SYSTEM_SPECIFICATION_FILE_PATH);
     configs.getFilesConfigs().setSystemSpecificationFilePath(readString());
     jj_consume_token(SYSTEM_SPECIFICATION_FILE_PATH_END);

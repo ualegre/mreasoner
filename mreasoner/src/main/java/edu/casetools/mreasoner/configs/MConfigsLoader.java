@@ -3,7 +3,7 @@ package edu.casetools.mreasoner.configs;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import edu.casetools.mreasoner.compiler.MSpecificationLoader;
+import edu.casetools.icase.mreasoner.compiler.MSpecificationLoader;
 import edu.casetools.mreasoner.configs.compiler.ConfigsReader;
 import edu.casetools.mreasoner.configs.compiler.ParseException;
 import edu.casetools.mreasoner.configs.data.MConfigs;

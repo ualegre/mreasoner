@@ -15,8 +15,8 @@ public class MVeraLogReader extends AbstractSensorManager {
 	DatabaseOperations databaseOperations;
 	SSHConfigs sshConfigs;
 	
-	public MVeraLogReader(MConfigs configs, String configsFilename){
-		super(configsFilename);
+	public MVeraLogReader(MConfigs configs){
+		super(configs.getFilesConfigs().getSshConfigsFilePath());
 		databaseOperations = DatabaseOperationsFactory.getDatabaseOperations(DB_IMPLEMENTATION.POSTGRESQL, configs.getDBConfigs());
 		if(databaseOperations.getDBConnection().checkConnection() == STATUS.CONNECTED){
 			this.registerObserver(new MDataManager(databaseOperations));

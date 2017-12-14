@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import edu.casetools.mreasoner.AbstractMReasoner;
+import edu.casetools.icase.mreasoner.AbstractMReasoner;
 import edu.casetools.mreasoner.configs.data.MConfigs;
-import edu.casetools.mreasoner.core.data.events.Event;
+import edu.casetools.icase.mreasoner.core.elements.events.Event;
 import edu.casetools.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactory;
