@@ -5,8 +5,8 @@ import edu.casetools.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATIO
 import edu.casetools.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactory;
-import edu.casetools.mreasoner.vera.sensors.AbstractSensorManager;
-import edu.casetools.mreasoner.vera.sensors.ssh.configs.SSHConfigs;
+import edu.casetools.icase.mreasoner.vera.sensors.AbstractSensorManager;
+import edu.casetools.icase.mreasoner.vera.sensors.ssh.configs.SSHConfigs;
 
 
 

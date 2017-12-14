@@ -7,7 +7,7 @@ import edu.casetools.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.MSpecification;
 import edu.casetools.mreasoner.database.MDatabase;
 import edu.casetools.mreasoner.deployment.Launcher;
-import edu.casetools.mreasoner.vera.actuators.device.Actuator;
+import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
 
 public class  MReasoner extends  AbstractMReasoner  {
 

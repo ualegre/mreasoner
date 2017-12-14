@@ -6,9 +6,9 @@ import edu.casetools.mreasoner.configs.data.db.MDBConfigs;
 import edu.casetools.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperationsFactory;
-import edu.casetools.mreasoner.vera.actuators.data.Action;
-import edu.casetools.mreasoner.vera.actuators.data.ActuatorConfigs;
-import edu.casetools.mreasoner.vera.actuators.device.Actuator;
+import edu.casetools.icase.mreasoner.vera.actuators.data.Action;
+import edu.casetools.icase.mreasoner.vera.actuators.data.ActuatorConfigs;
+import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
 
 
 

@@ -12,7 +12,7 @@ import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs.EXECUTI
 import edu.casetools.mreasoner.deployment.actuators.MActuatorManager;
 import edu.casetools.mreasoner.deployment.sensors.MVeraLogReader;
 import edu.casetools.mreasoner.deployment.simulation.EventSimulator;
-import edu.casetools.mreasoner.vera.actuators.device.Actuator;
+import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
 
 
 public class Launcher extends Thread {

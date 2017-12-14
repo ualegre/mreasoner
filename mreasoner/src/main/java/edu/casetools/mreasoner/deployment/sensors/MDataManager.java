@@ -1,10 +1,10 @@
 package edu.casetools.mreasoner.deployment.sensors;
 
 import edu.casetools.mreasoner.database.core.operations.DatabaseOperations;
-import edu.casetools.mreasoner.vera.sensors.core.VeraLogDataObserver;
-import edu.casetools.mreasoner.vera.sensors.core.data.VeraData;
-import edu.casetools.mreasoner.vera.sensors.core.data.VeraEvent;
-import edu.casetools.mreasoner.vera.sensors.core.data.VeraVariable;
+import edu.casetools.icase.mreasoner.vera.sensors.core.VeraLogDataObserver;
+import edu.casetools.icase.mreasoner.vera.sensors.core.data.VeraData;
+import edu.casetools.icase.mreasoner.vera.sensors.core.data.VeraEvent;
+import edu.casetools.icase.mreasoner.vera.sensors.core.data.VeraVariable;
 
 public class MDataManager extends VeraLogDataObserver {
 
