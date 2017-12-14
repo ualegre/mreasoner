@@ -35,7 +35,12 @@
 	</repositories>
 	
 	<dependencies>
-			
+		<dependency>
+		    <groupId>com.github.ualegre</groupId>
+		    <artifactId>mreasoner-core</artifactId>
+		    <version>f55f4c0f94</version>
+		</dependency>
+				
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
@@ -52,6 +57,12 @@
 		    <groupId>com.github.ualegre</groupId>
 		    <artifactId>m2nusmv</artifactId>
 		    <version>-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.github.ualegre</groupId>
+		    <artifactId>vera-manager</artifactId>
+		    <version>73131a4246</version>
 		</dependency>
 			
 	</dependencies>
