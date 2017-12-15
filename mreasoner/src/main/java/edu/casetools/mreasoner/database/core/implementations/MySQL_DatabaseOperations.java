@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import org.postgresql.util.PSQLException;
+//import java.sql.SQLException;
 
 import edu.casetools.mreasoner.configurations.data.MDBConfigs;
 import edu.casetools.mreasoner.database.core.connection.DBConnection;
@@ -65,21 +66,21 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void createEventsTable() {
 		
-		String incommingEventsTableQuery = "CREATE TABLE IF NOT EXISTS \"incoming_events\" ("
-				 +" \"id\" serial PRIMARY KEY,"+
-				  "\"state\" varchar(50) NOT NULL,"+
-				  "\"value\" boolean NOT NULL,"+
-				  "\"iteration\" bigint NOT NULL,"+
-				  "\"date_old\" date NOT NULL,"+
-				  "\"time_old\" time NOT NULL );";
-		String eventLogTableQuery = "CREATE TABLE IF NOT EXISTS \"events_log\" ("
-				 +" \"id\" serial PRIMARY KEY,"+
-				 " \"is_internal\" boolean NOT NULL,"+
-				  "\"state\" varchar(50) NOT NULL,"+
-				  "\"value\" boolean NOT NULL,"+
-				  "\"iteration\" bigint NOT NULL,"+
-				  "\"date_old\" date NOT NULL,"+
-				  "\"time_old\" time NOT NULL );";
+		String incommingEventsTableQuery = "CREATE TABLE IF NOT EXISTS incoming_events ("
+				 +" id serial PRIMARY KEY,"+
+				  "state varchar(50) NOT NULL,"+
+				  "value boolean NOT NULL,"+
+				  "iteration bigint NOT NULL,"+
+				  "date_old date NOT NULL,"+
+				  "time_old time NOT NULL );";
+		String eventLogTableQuery = "CREATE TABLE IF NOT EXISTS events_log ("
+				 +" id serial PRIMARY KEY,"+
+				 " is_internal boolean NOT NULL,"+
+				  "state varchar(50) NOT NULL,"+
+				  "value boolean NOT NULL,"+
+				  "iteration bigint NOT NULL,"+
+				  "date_old date NOT NULL,"+
+				  "time_old time NOT NULL );";
 		
 		try {
 			dbConnection.executeUpdate(incommingEventsTableQuery);
@@ -94,8 +95,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void eraseEventsTable() {
 		try {
-			String incommingEventsTableQuery = "DELETE FROM \"incoming_events\"";
-			String eventLogTableQuery = "DELETE FROM \"events_log\"";
+			String incommingEventsTableQuery = "DELETE FROM incoming_events";
+			String eventLogTableQuery = "DELETE FROM events_log";
 
 			dbConnection.executeUpdate(incommingEventsTableQuery);
 			dbConnection.executeUpdate(eventLogTableQuery);
@@ -110,9 +111,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		
 	    try {
 
-			query = "INSERT INTO \"incoming_events\" (state, value,iteration, date_old, time_old)"
-					+"VALUES( '"+stateName+"', '"+status+"', '"+iteration+"','"+date+"', '"+time+"')";
-			
+			query = "INSERT INTO incoming_events (state, value,iteration, date_old, time_old)"
+					+"VALUES( '"+stateName+"', "+status+", '"+iteration+"','"+date+"', '"+time+"')";
 			dbConnection.executeUpdate(query);
     	
 		} catch (SQLException e1) {
@@ -130,7 +130,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query;
 		
 	    try {
-			query = "SELECT id,iteration,state,value,date_old,time_old FROM \"incoming_events\"";
+			query = "SELECT id,iteration,state,value,date_old,time_old FROM incoming_events";
+			//query = "select * from measure where idDevice=12 order by time desc limit 1";
+			//query = "select * from measure where time IN (SELECT MAX(time) from measure where idDevice=12)";
 			result =  dbConnection.executeQueryOpenStatement(query);
 	
 		} catch (SQLException e1) {
@@ -143,12 +145,12 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void logExternalEvent(String id, String iteration, String stateName, String status,
 			String data, String time) {
 	    try {
-			String query = "INSERT INTO \"events_log\" (is_internal,state, value, iteration,date_old, time_old)"
-					+"VALUES('f', '"+stateName+"', '"+status+"','"+iteration+"','"+data+"', '"+time+"')";
+			String query = "INSERT INTO events_log (is_internal,state, value, iteration,date_old, time_old)"
+					+"VALUES(false, '"+stateName+"', '"+status+"','"+iteration+"','"+data+"', '"+time+"')";
 
 			dbConnection.executeUpdate(query);
 			
-			query = "DELETE FROM \"incoming_events\" where id = "+id;
+			query = "DELETE FROM incoming_events where id = "+id;
 			
 			dbConnection.executeUpdate(query);
 			
@@ -166,14 +168,14 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void createInternalEventsTable() {
 	
-		String query = "CREATE TABLE IF NOT EXISTS \"internal_events\" ("
-				 +" \"id\" serial PRIMARY KEY,"+
-				 " \"iteration\" bigint NOT NULL,"+
-				  "\"state\" varchar(50) NOT NULL,"+
-				  "\"value\" boolean NOT NULL,"+
-				  "\"date\"  date NOT NULL,"+
-				  "\"time\"  time NOT NULL,"+
-				  "\"time_millis\"  bigint NOT NULL );";
+		String query = "CREATE TABLE IF NOT EXISTS internal_events ("
+				 +" id serial PRIMARY KEY,"+
+				 " iteration bigint NOT NULL,"+
+				  "state varchar(50) NOT NULL,"+
+				  "value boolean NOT NULL,"+
+				  "date  date NOT NULL,"+
+				  "time  time NOT NULL,"+
+				  "time_millis  bigint NOT NULL );";
 
 				try {
 					dbConnection.executeUpdate(query);
@@ -188,7 +190,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void eraseInternalEventsTable() {
 		String query;
 		try {
-			query = "DELETE FROM \"internal_events\"";
+			query = "DELETE FROM internal_events";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -201,7 +203,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query;
 		
 	    try {
-	    	query = "INSERT INTO  \"internal_events\" (\"iteration\", \"state\", \"value\", \"date\", \"time\", \"time_millis\") VALUES"+
+	    	query = "INSERT INTO  internal_events (iteration, state, value, date, time, time_millis) VALUES"+
 	    			"('"+iteration+"','"+stateName+"', '"+status+"', '"+date+"', '"+time+"', '"+time_millis+"');";
 	    	dbConnection.executeUpdate(query);
 		
@@ -216,12 +218,12 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 			String data, String time) {
 	    try {
 
-			String query = "INSERT INTO \"events_log\" (is_internal, state, value,iteration, date_old, time_old)"
+			String query = "INSERT INTO events_log (is_internal, state, value,iteration, date_old, time_old)"
 					+"VALUES( 't','"+stateName+"', "+status+",'"+iteration+"','"+data+"', '"+time+"')";
 			
 			dbConnection.executeUpdate(query);
 			
-			query = "DELETE FROM \"internal_events\" where id = "+id;
+			query = "DELETE FROM internal_events where id = "+id;
 			
 			dbConnection.executeUpdate(query);
 			
@@ -242,7 +244,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	    	//Borrar el where id..
 //			query = "SELECT id,state,value FROM \"internal_events\" WHERE id > '"+lastId+"'";		
 //			result = dbConnection.executeQueryOpenStatement(query);
-			query = "SELECT id,iteration,state,value,date,time FROM \"internal_events\"";//WHERE id > '"+lastId+"'";		
+			query = "SELECT id,iteration,state,value,date,time FROM internal_events";//WHERE id > '"+lastId+"'";		
 			result = dbConnection.executeQueryOpenStatement(query);
 		
 		} catch (SQLException e1) {
@@ -257,12 +259,12 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	
 		String query ="";
 
-		query = "CREATE TABLE IF NOT EXISTS \"results\" ("+
-				"\"iteration\" bigint PRIMARY KEY,"+
-				"\"system_time_millis\" bigint";	
+		query = "CREATE TABLE IF NOT EXISTS results ("+
+				"iteration bigint PRIMARY KEY,"+
+				"system_time_millis bigint";	
 					
 		for(int i=0;i<states.size();i++){
-			query = query + ",\""+states.get(i)+"\" boolean NOT NULL";
+			query = query + ","+states.get(i)+" boolean NOT NULL";
 		}
 		query = query + ")";
 		
@@ -278,9 +280,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 	
 	private void createInsertResultQuery(Vector<String> states){
-		resultsQuery = "INSERT INTO \"results\" (\"iteration\",\"system_time_millis\"";
+		resultsQuery = "INSERT INTO results (iteration,system_time_millis";
 		for(int i=0;i<states.size();i++){
-			resultsQuery = resultsQuery + ",\""+states.get(i)+"\"";
+			resultsQuery = resultsQuery + ","+states.get(i)+"";
 		}
 		resultsQuery = resultsQuery + ") VALUES (";
 	}
@@ -289,7 +291,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void eraseResultsTable() {
 	
 		try {
-			String query = "DELETE FROM \"results\"";
+			String query = "DELETE FROM results";
 			dbConnection.executeUpdate(query);
 
 		} catch (SQLException e) {
@@ -301,7 +303,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void dropResultsTable() {
 	
 		try {
-			String query = "DROP TABLE IF EXISTS \"results\"";
+			String query = "DROP TABLE IF EXISTS results";
 			dbConnection.executeUpdate(query);
 
 		} catch (SQLException e) {
@@ -319,10 +321,10 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	    	
 	    	for(int i=0;i<status.size();i++){
 	    		
-	    		statusQuery = statusQuery + ",'"+status.get(i)+"'";
+	    		statusQuery = statusQuery + ","+status.get(i);
 	    	}
 
-	    	statusQuery = statusQuery + ");";
+	    	statusQuery = statusQuery + ");";	    	
 			dbConnection.executeUpdate(statusQuery);
 		
 		} catch (SQLException e1) {
@@ -334,7 +336,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query = null;
 
 			try {
-				query = "select * from \"sensors\"";
+				query = "select * from sensors";
+				//query = "select * from measure";
 				resultSet = dbConnection.executeQueryOpenStatement(query);
 		
 	//		} catch (PSQLException e) {
@@ -349,7 +352,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void newSensorTableRelation(String device,String implementation,String state) {
 		String query = null;
 		try {
-			query = "insert into \"sensors\" (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
+			query = "insert into sensors (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
 			this.dbConnection.executeUpdate(query);
 //		} catch (PSQLException e) {
 //		//	dbConnection.setConnection(-1);
@@ -364,7 +367,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query = null;
 
 		try {
-			query = "DELETE FROM \"sensors\" where device ='"+
+			query = "DELETE FROM sensors where device ='"+
 					device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
 			
 			this.dbConnection.executeUpdate(query);
@@ -383,7 +386,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		try {
 			query = "SELECT iteration, state, value";
 			if(!iteration) query = query + ", date_old, time_old";
-			query = query + " FROM \"events_log\" WHERE \"is_internal\" = 'f' ";
+			query = query + " FROM events_log WHERE is_internal = 'f' ";
+			//query = query + " FROM events_log WHERE is_internal = 0 ";
 			
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 //		} catch (PSQLException e) {
@@ -400,7 +404,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		try {
 			query = "SELECT iteration, state, value";
 			if(!iteration) query = query + ", date_old, time_old";
-			query = query + " FROM \"events_log\" WHERE \"is_internal\" = 't' ";
+			query = query + " FROM events_log WHERE is_internal = 't' ";
 			
 			resultSet = this.dbConnection.executeQueryOpenStatement(query);
 //		}catch (PSQLException e) {
@@ -417,7 +421,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String 	  query     = null;
 		ResultSet resultSet = null;
 		try {
-			query = "select * from \"results\"";
+			query = "select * from results";
 			
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 //		} catch (PSQLException e) {
@@ -433,11 +437,11 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		createSensorImplementationTable();
 		String query ="";
 
-		 query = "CREATE TABLE IF NOT EXISTS \"sensors\" ("+
-				  "\"device\" varchar(50) PRIMARY KEY,"+
-				  "\"implementation\" varchar(50) references \"sensor_implementations\"(name),"+
-		 		  "\"state\" varchar(50) NOT NULL"
-		 		  + ");";
+		 query = "CREATE TABLE IF NOT EXISTS sensors ("
+							+"device varchar(50) PRIMARY KEY,"+
+							"implementation varchar(50) references sensor_implementations(name),"+
+							"state varchar(50) NOT NULL);";
+		 ///System.out.println(query);
 	 	   
 		try {
 			dbConnection.executeUpdate(query);
@@ -446,51 +450,38 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		}
 	}
 
-	@Override
-	public boolean createDatabase(String dbName) {
-//		String query ="";
-//		if(!databaseExists(dbName)){
-//			 query = "CREATE DATABASE "+dbName.toLowerCase()+"";
-//			 //System.out.println(query);
-//		 	   
-//			try {
-//				dbConnection.executeUpdate(query);
-//				
-//			} catch (SQLException e) {
-//				return false;
-//			}
-//			return true;
-//		}else{
-//			System.out.println("Database does not exist. Creating database");
-//			return createDBIfDoesNotExist(dbName);
-//		}
-		return createDBIfDoesNotExist(dbName);
-	}
+	
 	
 	public boolean databaseExists(String dbName){
-		boolean result = false;
-		try {
-			Connection postgresDBConnection = DriverManager.getConnection( configs.getConnectionString()+"postgres", configs.getUser(), configs.getPassword());
+		boolean result = false;		try {
+			Connection mysqlDBConnection = DriverManager.getConnection(configs.getConnectionString()+"mysql", configs.getUser(), configs.getPassword());
 			Statement stmt = null;
-			 String query = "SELECT count(*) from pg_catalog.pg_database where datname = '"+dbName.toLowerCase()+"'";
+			String query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '"+dbName.toLowerCase()+"'";
+	       //String query = "SELECT count(*) from pg_catalog.pg_database where datname = '"+dbName.toLowerCase()+"'"; //comment
+
 			//String query = "SELECT 1 FROM pg_database WHERE datname = '"+dbName+"'";
 			  rs = null;
-			   if(postgresDBConnection != null){
-				   stmt = postgresDBConnection.createStatement();
+			   if(mysqlDBConnection != null){
+				   stmt = mysqlDBConnection.createStatement();
 				   if(stmt != null){
-					   rs = stmt.executeQuery(query);
-
+					   rs = stmt.executeQuery(query); //comment					   
 				   }
 			   }
-			 if(rs.next()){
-				 if(rs.getInt("count") > 0) result = true;
-				 else return result = false;
-			 }
-			 else result = false;
+			   
+			   if(rs.next()){
+				   result = true;
+			   }else{
+				   result = false;
+			   }
+//			 if(rs.next()){
+//				 if(rs.getInt("count") > 0) result = true;
+//				 else return result = false;
+//			 }
+//			 else result = false;
 			 
 			 stmt.close();
 			 rs.close();
-			 postgresDBConnection.close();
+			 mysqlDBConnection.close();
 		 } catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -498,15 +489,15 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 	
 	private boolean createDBIfDoesNotExist(String dbName){
-		boolean result = false;
+//		boolean result = false;
 		try {
-			Connection postgresDBConnection = DriverManager.getConnection( configs.getConnectionString()+"postgres", configs.getUser(), configs.getPassword());
+			Connection mysqlDBConnection = DriverManager.getConnection( configs.getConnectionString()+"mysql", configs.getUser(), configs.getPassword());
 			Statement stmt = null;
 			 String query = "CREATE DATABASE "+dbName.toLowerCase()+"";
 			//String query = "SELECT 1 FROM pg_database WHERE datname = '"+dbName+"'";
 			  rs = null;
-			   if(postgresDBConnection != null){
-				   stmt = postgresDBConnection.createStatement();
+			   if(mysqlDBConnection != null){
+				   stmt = mysqlDBConnection.createStatement();
 				   if(stmt != null){
 					   stmt.executeUpdate(query);
 
@@ -515,14 +506,14 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 			 
 			 
 			 stmt.close();
-			 postgresDBConnection.close();
+			 mysqlDBConnection.close();
 		 } catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-
+	
 	private boolean getAtLeastOneValueQuery(String query){
 		//System.out.println(query+"2");
 		ResultSet resultSet;
@@ -549,9 +540,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public boolean getAtLeastOneValueQueryPresent(String since, String until,
 			String state, String status) {
-		String query = "SELECT \""+state+"\" FROM \"results\" WHERE iteration >= '"+since+
-	            "' and iteration < '"+until+"' and \""+
-	            state+"\" = '"+status+"'";
+		String query = "SELECT "+state+" FROM results WHERE iteration >= '"+since+
+	            "' and iteration < '"+until+"' and "+
+	            state+" = '"+status+"'";
 
 		return getAtLeastOneValueQuery(query);
 	}
@@ -561,9 +552,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public boolean getAtLeastOneValueQueryAbsolute(String since, String until,
 			String state, String status) {
-		String query = "SELECT \""+state+"\" FROM \"results\" WHERE iteration >= '"+since+
-	            "' and iteration <= '"+until+"' and \""+
-	            state+"\" = '"+status+"'";
+		String query = "SELECT "+state+" FROM results WHERE iteration >= '"+since+
+	            "' and iteration <= '"+until+"' and "+
+	            state+" = '"+status+"'";
 
 	           
 		return getAtLeastOneValueQuery(query);
@@ -592,9 +583,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public boolean getSameValueQueryPresent(String since, String until,
 			String state, String status) {
-		String query = "SELECT \""+state+"\" FROM \"results\" WHERE iteration >= '"+since+"' and "+
-		   	      "iteration < '"+until+"' and \""+state+
-		   	      "\" = '"+!Boolean.parseBoolean(status)+"'";
+		String query = "SELECT "+state+" FROM results WHERE iteration >= '"+since+"' and "+
+		   	      "iteration < '"+until+"' and "+state+
+		   	      " = '"+!Boolean.parseBoolean(status)+"'";
 		
 		return getSameValueQuery(query);
 	}
@@ -602,9 +593,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public boolean getSameValueQueryAbsolute(String since, String until,
 			String state, String status) {
-		String query = "SELECT \""+state+"\" FROM \"results\" WHERE system_time_millis >= '"+since+"' and "+
-		   	      "system_time_millis <= '"+until+"' and \""+state+
-		   	      "\" = '"+!Boolean.parseBoolean(status)+"'";
+		String query = "SELECT "+state+" FROM results WHERE system_time_millis >= '"+since+"' and "+
+		   	      "system_time_millis <= '"+until+"' and "+state+
+		   	      " = '"+!Boolean.parseBoolean(status)+"'";
 		//System.out.println(query);
 		return getSameValueQuery(query);
 	}
@@ -639,13 +630,13 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	
 	@Override
 	public boolean getEqualToFirstQueryPresent(String since, String state,String status) {
-		String query = "SELECT \""+state+"\" FROM \"results\" WHERE  iteration = '"+since+"'";
+		String query = "SELECT "+state+" FROM results WHERE  iteration = '"+since+"'";
 		return getEqualToFirstQuery(query,state,status);
 	}
 
 	@Override
 	public boolean getEqualToFirstQueryAbsolute(String since, String state, String status) {
-		String query = "SELECT \""+state+"\" FROM \"results\" WHERE iteration = (SELECT MIN(iteration) FROM \"results\" WHERE iteration >= '"+since+"')" ;
+		String query = "SELECT "+state+" FROM results WHERE iteration = (SELECT MIN(iteration) FROM results WHERE iteration >= '"+since+"')" ;
 		return getEqualToFirstQuery(query,state,status);
 	}
 
@@ -653,8 +644,11 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public String getDevice(String state) {
 		String query,result = null;
 		ResultSet resultSet;
+		//System.out.println(state);
 		
-		query = "SELECT device FROM \"sensors\" WHERE state = '"+state+"'";
+		query = "SELECT device FROM sensors WHERE state = '"+state+"'";
+		
+		//System.out.println(query);
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 			if(resultSet.next()){
@@ -675,8 +669,9 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public String getState(String device) {
 		String query,result = null;
 		ResultSet resultSet;
-		query = "SELECT state FROM \"sensors\" WHERE device = '"+device+"'";
-	
+		//query = "SELECT state FROM sensors WHERE device = '"+device+"'";
+		query = "SELECT state FROM data_storage.measure WHERE device = '"+device+"'";
+		
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 			if(resultSet.next()){
@@ -697,8 +692,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query;
 		ResultSet resultSet;
 		boolean result = false;
-		query = "SELECT \""+state+"\" FROM \"results\" WHERE iteration = (SELECT MAX(\"iteration\") from \"results\");";
-		
+		//query = "SELECT '"+state+"' FROM sensors.results WHERE iteration = (SELECT MAX(iteration) from sensors.results);";
+		query = "select newValue from data_storage.measure where idDevice=12 order by time desc limit 1;";
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 			if(resultSet.next()){
@@ -715,11 +710,12 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 
 	@Override
 	public void createSensorImplementationTable() {
-			String query = "CREATE TABLE IF NOT EXISTS \"sensor_implementations\" ("
-					 +"\"name\" varchar(50) PRIMARY KEY,"+
-					  "\"max_value\" varchar(50),"+
-					  "\"min_value\" varchar(50),"+
-					  "\"has_boolean_values\" boolean NOT NULL);";
+			String query = "CREATE TABLE IF NOT EXISTS sensor_implementations ("
+					 + "name varchar(50) PRIMARY KEY,"+
+					  "max_value varchar(50),"+
+					  "min_value varchar(50),"+
+					  "has_boolean_values boolean NOT NULL);";
+			//System.out.println(query);
 			
 			try {
 				dbConnection.executeUpdate(query);
@@ -734,12 +730,13 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void newSensorImplementation(String name, String maxValue,
 			String minValue, String isOnOff) {
+		
 		String query;
 		
 	    try {
 
-			query = "INSERT INTO \"sensor_implementations\" (name, max_value, min_value, has_boolean_values)"
-					+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', '"+isOnOff+"')";
+			query = "INSERT INTO sensor_implementations (name, max_value, min_value, has_boolean_values)"
+					+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', "+isOnOff+")";
 			
 			dbConnection.executeUpdate(query);
     	
@@ -763,7 +760,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query = null;
 
 			try {
-				query = "select * from \"sensor_implementations\"";
+				query = "select * from sensor_implementations";
 				resultSet = dbConnection.executeQueryOpenStatement(query);
 		
 	//		} catch (PSQLException e) {
@@ -779,20 +776,20 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void dropDatabase(String dbName) {
 		try {
-			Connection postgresDBConnection = DriverManager.getConnection( configs.getConnectionString()+"postgres", configs.getUser(), configs.getPassword());
+			Connection mysqlDBConnection = DriverManager.getConnection( configs.getConnectionString()+"mysql", configs.getUser(), configs.getPassword());
 			Statement stmt = null;
-			 String query = "DROP DATABASE \""+dbName.toLowerCase()+"\"";
-			 String session = "SELECT pg_terminate_backend(pg_stat_activity.pid)"+
-					 		  "FROM pg_stat_activity "+
-					 		  "WHERE pg_stat_activity.datname = '"+dbName.toLowerCase()+"'"+
-					 		  "AND pid <> pg_backend_pid()";
+			 String query = "DROP DATABASE "+dbName.toLowerCase()+"";
+//			 String session = "SELECT pg_terminate_backend(pg_stat_activity.pid)"+
+//					 		  "FROM pg_stat_activity "+
+//					 		  "WHERE pg_stat_activity.datname = '"+dbName.toLowerCase()+"'"+
+//					 		  "AND pid <> pg_backend_pid()";
 
 			//String query = "SELECT 1 FROM pg_database WHERE datname = '"+dbName+"'";
 			  rs = null;
-			   if(postgresDBConnection != null){
-				   stmt = postgresDBConnection.createStatement();
+			   if(mysqlDBConnection != null){
+				   stmt = mysqlDBConnection.createStatement();
 				   if(stmt != null){
-					  rs =  stmt.executeQuery(session);
+					  //rs =  stmt.executeQuery(session);
 					   stmt.executeUpdate(query);
 
 				   }
@@ -800,7 +797,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 			 
 			 if(stmt!=null)stmt.close();
 			 if(rs!=null)rs.close();
-			 postgresDBConnection.close();
+			 mysqlDBConnection.close();
 		 } catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -810,7 +807,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void eraseSensorTable() {
 		try {
-			String query = "DELETE FROM \"sensors\"";
+			String query = "DELETE FROM sensors";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -821,7 +818,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void eraseSensorImplementationTable() {
 		try {
-			String query = "DELETE FROM \"sensor_implementations\"";
+			String query = "DELETE FROM sensor_implementations";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -898,7 +895,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query;
 		ResultSet resultSet;
 		long result = 0;
-		query = "SELECT MIN(\"iteration\") FROM results WHERE system_time_millis >= "+string;
+		query = "SELECT MIN(iteration) FROM results WHERE system_time_millis >= "+string;
 	//	System.out.println(query);
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
@@ -914,6 +911,13 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		}
 		return result;
 	}
+
+	@Override
+	public boolean createDatabase(String dbName) {
+		return this.createDBIfDoesNotExist(dbName);
+	}
+
 	
-	
-}
+
+	}
+
