@@ -1,417 +1,0 @@
-/**
- * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
- */
-options
-{
-  JDK_VERSION = "1.8";
-  static = false;
-}
-
-PARSER_BEGIN(ConfigsReader)
-package edu.casetools.mreasoner.configurations.reader;
-
-import java.io.FileReader;
-import edu.casetools.mreasoner.configurations.data.MConfigurations;
-
-
-public class ConfigsReader
-{
- public static void main(String[] args) { 
-try{ 
-ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.txt"));  
-        parser.readConfigs(); 
-
-}catch (Exception ex) 
-{ex.printStackTrace() ;} 
-} 
-
-}
-
-PARSER_END(ConfigsReader)
-
-SKIP: {     " " | "\t" | "\n" | "\r" | <"--" (~["\n","\r"])* ("\n"|"\r")> }
-
-SKIP:
-{
-        <"/*">: INSIDE_COMMENT
-}
-
-<INSIDE_COMMENT>
-SKIP:
-{
-        <"*/">: DEFAULT
-|       <~[]>
-}
-
-//////////////////////
-TOKEN:
-{
-  <QUOTE:"\""> : STRING_STATE
-}
-
-<STRING_STATE> MORE:
-{
-  "\\" : ESC_STATE
-}
-
-<STRING_STATE> TOKEN:
-{
-  <ENDQUOTE:<QUOTE>> : DEFAULT
-| <CHAR:~["\"","\\"]>
-}
-
-<ESC_STATE> TOKEN:
-{
-  <CNTRL_ESC:["\"","\\","/","b","f","n","r","t"]> : STRING_STATE
-}
-/////////////////////
-
-
-TOKEN : { <LEFT_BRACKET: "(" > }
-TOKEN : { <RIGHT_BRACKET: ")" > }
-TOKEN : { <POINT: "." > }
-TOKEN : { <COMMA: "," > }
-TOKEN : { <TWO_POINT: ":" > }
-TOKEN : { <SLASH: "/" > }
-TOKEN : { <COUNTER_SLASH: "\\" > }
-TOKEN : { <LOWER: "<" > }
-TOKEN : { <HIGHER: ">" > }
-TOKEN : { <HYPHEN: "-" > }
- TOKEN : { < UNDERSCORE: ["_"] >	}
-TOKEN : { < DIGIT : [ "0"-"9" ] > }
-TOKEN : { < ALPHABET: ["a" - "z"] > }
-TOKEN : { < CAPSALPHABET: ["A" - "Z"] > }
-TOKEN : { <STRING: "'" (~["'"])* "'">   }
-
-// 11 is simulation of events
-TOKEN: { <EXECUTION_MODE: "<EXECUTION_MODE>" >}
-TOKEN: { <EXECUTION_MODE_END: "</EXECUTION_MODE>" >}
-
-// 11 is simulation of events
-TOKEN: { <STRATIFICATION: "<USE_STRATIFICATION>" >}
-TOKEN: { <STRATIFICATION_END: "</USE_STRATIFICATION>" >}
-
-// 1 Time Unit
-TOKEN: { <USE_FIXED_ITERATION_TIME: "<USE_FIXED_ITERATION_TIME>" >}
-TOKEN: { <USE_FIXED_ITERATION_TIME_END: "</USE_FIXED_ITERATION_TIME>" >}
-
-TOKEN: { <FIXED_ITERATION_TIME: "<FIXED_ITERATION_TIME>" >}
-TOKEN: { <FIXED_ITERATION_TIME_END: "</FIXED_ITERATION_TIME>" >}
-
-TOKEN: { <USE_MAX_EXECUTION_TIME: "<USE_MAX_EXECUTION_TIME>" >}
-TOKEN: { <USE_MAX_EXECUTION_TIME_END: "</USE_MAX_EXECUTION_TIME>" >}
-
-// 0 Execution time
-TOKEN: { <EXECUTION_TIME: "<EXECUTION_TIME>" >}
-TOKEN: { <EXECUTION_TIME_END: "</EXECUTION_TIME>" >}
-
-
-
-// 10 is simulation
-TOKEN: { <RELATIVE_TIME_IS_ITERATION: "<RELATIVE_TIME_IS_ITERATION>" >}
-TOKEN: { <RELATIVE_TIME_IS_ITERATION_END: "</RELATIVE_TIME_IS_ITERATION>" >}
-
-// 10 is simulation
-TOKEN: { <RELATIVE_VALUE: "<RELATIVE_TIME_VALUE>" >}
-TOKEN: { <RELATIVE_VALUE_END: "</RELATIVE_TIME_VALUE>" >}
-
-// 10 is simulation
-TOKEN: { <ABSOLUTE_TIME_IS_ITERATION: "<ABSOLUTE_TIME_IS_ITERATION>" >}
-TOKEN: { <ABSOLUTE_TIME_IS_ITERATION_END: "</ABSOLUTE_TIME_IS_ITERATION>" >}
-
-// 2 Database type
-TOKEN: { <DATABASE_TYPE: "<DATABASE_TYPE>" >}
-TOKEN: { <DATABASE_TYPE_END: "</DATABASE_TYPE>" >}
-
-// 3 Database driver
-TOKEN: { <DATABASE_DRIVER: "<DATABASE_DRIVER>" >}
-TOKEN: { <DATABASE_DRIVER_END: "</DATABASE_DRIVER>" >}
-
-// 4 Database table
-TOKEN: { <DATABASE_TABLE_GENERIC: "<DATABASE_TABLE_GENERIC>" >}
-TOKEN: { <DATABASE_TABLE_GENERIC_END: "</DATABASE_TABLE_GENERIC>" >}
-
-// 5 Databas Ip
-TOKEN: { <DATABASE_IP: "<DATABASE_IP>" >}
-TOKEN: { <DATABASE_IP_END: "</DATABASE_IP>">}
-
-// 6 Database port
-TOKEN: { <DATABASE_PORT: "<DATABASE_PORT>" >}
-TOKEN: { <DATABASE_PORT_END: "</DATABASE_PORT>" >}
-
-// 7 database user
-TOKEN: { <DATABASE_USER: "<DATABASE_USER>" >}
-TOKEN: { <DATABASE_USER_END: "</DATABASE_USER>" >}
-
-// 8 database pwd
-TOKEN: { <DATABASE_PASSWORD: "<DATABASE_PASSWORD>" >}
-TOKEN: { <DATABASE_PASSWORD_END: "</DATABASE_PASSWORD>" >}
-
-// 9 system declaration file path
-TOKEN: { <SYSTEM_SPECIFICATION_FILE_PATH: "<SYSTEM_SPECIFICATION_FILE_PATH>" >}
-TOKEN: { <SYSTEM_SPECIFICATION_FILE_PATH_END: "</SYSTEM_SPECIFICATION_FILE_PATH>" >}
-
-
-
-// 12 database name
-TOKEN: { <DATABASE_NAME: "<DATABASE_NAME>" >}
-TOKEN: { <DATABASE_NAME_END: "</DATABASE_NAME>" >}
-
-//// 13 is time of events simulated//TOKEN: { <: "<IS_TIME_OF_EVENTS_SIMULATED>" >}//TOKEN: { <IS_TIME_OF_EVENTS_SIMULATED_END: "</IS_TIME_OF_EVENTS_SIMULATED>" >}
-
-// 14 
-//TOKEN: { <SSH_HOSTNAME: "<SSH_HOSTNAME>" >}//TOKEN: { <SSH_HOSTNAME_END: "</SSH_HOSTNAME>" >}////// 15//TOKEN: { <SSH_USERNAME: "<SSH_USERNAME>" >}//TOKEN: { <SSH_USERNAME_END: "</SSH_USERNAME>" >}////// 16//TOKEN: { <SSH_PASSWORD: "<SSH_PASSWORD>" >}//TOKEN: { <SSH_PASSWORD_END: "</SSH_PASSWORD>" >}
-
-TOKEN: { <JARS_CONFIGS: "<EXTERNAL_JARS>" >}
-TOKEN: { <JARS_CONFIGS_END: "</EXTERNAL_JARS>" >}
-
-//17
-TOKEN: { <LFPUBS_OUTPUT_FILE_PATH: "<LFPUBS_OUTPUT_FILE_PATH>" >}
-TOKEN: { <LFPUBS_OUTPUT_FILE_PATH_END: "</LFPUBS_OUTPUT_FILE_PATH>" >}
-
-//18
-TOKEN: { <SESSION_FILE_PATH: "<SESSION_FILE_PATH>" >}
-TOKEN: { <SESSION_FILE_PATH_END: "</SESSION_FILE_PATH>" >}
-
-//19
-TOKEN: { <RESULTS_FILE_PATH: "<RESULTS_FILE_PATH>" >}
-TOKEN: { <RESULTS_FILE_PATH_END: "</RESULTS_FILE_PATH>" >}
-
-MConfigurations readConfigs(): {MConfigurations configs = new MConfigurations();String aux = "";}
-{
-
-  <EXECUTION_MODE> 
-  {
-    aux = readString();
-    if(aux.equals("SIMULATION_ITERATION"))
-    	configs.setExecutionMode(MConfigurations.EXECUTION_MODE.SIMULATION_ITERATION);
-    else if(aux.equals("SIMULATION_REAL_TIME"))
-    	configs.setExecutionMode(MConfigurations.EXECUTION_MODE.SIMULATION_REAL_TIME);
-    else if(aux.equals("REAL_ENVIRONMENT"))
-        configs.setExecutionMode(MConfigurations.EXECUTION_MODE.REAL_ENVIRONMENT);
-
-   // System.out.println("EXECUTION MODE"+configs.getExecutionMode());
-  }
-  <EXECUTION_MODE_END>
-
-  <STRATIFICATION>
-  {
-    if(readString().equals("true"))
-    	configs.useStratification(true);
-    else
-    	configs.useStratification(false);
-  }
-  <STRATIFICATION_END>
-
-  < USE_FIXED_ITERATION_TIME >
-  {
-    if(readString().equals("true"))
-    	configs.setUseFixedIterationTime(true);
-    else
-    	configs.setUseFixedIterationTime(false);
-  }
-  <USE_FIXED_ITERATION_TIME_END >
-  
-  < FIXED_ITERATION_TIME >
-  {
-    configs.setTimeUnit(Long.parseLong(readString()));
-  }
-  <FIXED_ITERATION_TIME_END >
-
-  < USE_MAX_EXECUTION_TIME >
-  {
-    if(readString().equals("true"))
-    	configs.setUseMaxExecutionTime(true);
-    else
-    	configs.setUseMaxExecutionTime(false);
-  }
-  <USE_MAX_EXECUTION_TIME_END >
-  
-  < EXECUTION_TIME >
-  {
-    configs.setExecutionTime(Long.parseLong(readString()));
-  }
-  <EXECUTION_TIME_END >
-
-//    <RELATIVE_TIME_IS_ITERATION>//  {//    if(readString().equals("true"))//    	configs.setRelativeTimeType(true);//    else//    	configs.setRelativeTimeType(false);//  }//  <RELATIVE_TIME_IS_ITERATION_END>
-
-//  <ABSOLUTE_TIME_IS_ITERATION>//  {//    if(readString().equals("true"))//    	configs.setAbsoluteTimeType(true);//    else//    	configs.setAbsoluteTimeType(false);//  }//  <ABSOLUTE_TIME_IS_ITERATION_END>
-
-  //File Paths
-  <SYSTEM_SPECIFICATION_FILE_PATH>
-  {
-    configs.setSystemSpecificationFilePath(readString());
-  }
-  <SYSTEM_SPECIFICATION_FILE_PATH_END>
-
-  <RESULTS_FILE_PATH>
-  {
-    configs.setResultsFilePath(readString());
-  }
-  <RESULTS_FILE_PATH_END>
-  
-   <LFPUBS_OUTPUT_FILE_PATH>
-  {
-    configs.setLFPUBSOutputFilePath(readString());
-  }
-  <LFPUBS_OUTPUT_FILE_PATH_END>
-
-  <SESSION_FILE_PATH>
-  {
-    configs.setSessionFilePath(readString());
-  }
-  <SESSION_FILE_PATH_END>
-
-
-  //Database Info
-  <DATABASE_TYPE>
-  {
-    configs.getDBConfigs().setDbType(readString());
-  }
-  <DATABASE_TYPE_END>
-
-  <DATABASE_DRIVER >
-  {
-    configs.getDBConfigs().setDriver(readString());
-  }
-  <DATABASE_DRIVER_END>
-
-//  <DATABASE_TABLE_GENERIC>//  {//    configs.getDBConfigs().setTable(readString());//  }//  <DATABASE_TABLE_GENERIC_END >
-
-  <DATABASE_IP >
-  {
-    configs.getDBConfigs().setIp(readString());
-  }
-  <DATABASE_IP_END>
- 
-  <DATABASE_PORT>
-  {
-    configs.getDBConfigs().setPort(readString());
-  }
-  <DATABASE_PORT_END>
-
-  <DATABASE_USER>
-  {
-    configs.getDBConfigs().setUser(readString());
-  }
-  <DATABASE_USER_END >
-
-  <DATABASE_PASSWORD>
-  {
-    configs.getDBConfigs().setPassword(readString());
-  }
-  <DATABASE_PASSWORD_END>
-
-  
-
-  <DATABASE_NAME>
-  {
-    configs.getDBConfigs().setDbName(readString());
-  }
-  <DATABASE_NAME_END>
-
-//  <IS_TIME_OF_EVENTS_SIMULATED>//  {//    if(readString().equals("true"))//    	configs.setSimulateEventTime(true);//    else//    	configs.setSimulateEventTime(false);//  }//  <IS_TIME_OF_EVENTS_SIMULATED_END >
-
-//  <SSH_HOSTNAME>//  {//    configs.getSshConfigs().setHostname(readString());//  }//  <SSH_HOSTNAME_END >////  <SSH_USERNAME>//  {//    configs.getSshConfigs().setUsername(readString());//  }//  <SSH_USERNAME_END>////  <SSH_PASSWORD>//  {//    configs.getSshConfigs().setPassword(readString());//  }//  <SSH_PASSWORD_END >
-
-< JARS_CONFIGS >
-{
-    configs.setJarConfigs(rawString());
- }
-< JARS_CONFIGS_END >
-
- 
-  {
-    return configs;
-  }
-}
-
-String readString(): 
-{
- Token name;
- String auxiliar = "";
-
-}
-{
-     ( name = <DIGIT>
-	 {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <ALPHABET> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <UNDERSCORE> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <CAPSALPHABET> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <POINT> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <LOWER> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <HIGHER> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <TWO_POINT> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <SLASH> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <COUNTER_SLASH> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <HYPHEN> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	 | name = <COMMA> {
-	   auxiliar = auxiliar + name.toString();
-	 }
-	)*
-{
-return auxiliar;}
-}
-
-
-String rawString() :
-{
-  StringBuilder builder = new StringBuilder();
-}
-{
-  <QUOTE> ( getChar(builder) )* <ENDQUOTE>
-  {
-    return builder.toString();
-  }
-}
-
-void getChar(StringBuilder builder):
-{
-  Token t;
-}
-{
-  ( t = <CHAR> | t = <CNTRL_ESC> )
-  {
-    if (t.image.length() < 2)
-    {
-      // CHAR
-      builder.append(t.image.charAt(0));
-    }
-    else if (t.image.length() < 6)
-    {
-      // ESC
-      char c = t.image.charAt(1);
-      switch (c)
-      {
-        case 'b': builder.append((char) 8); break;
-        case 'f': builder.append((char) 12); break;
-        case 'n': builder.append((char) 10); break;
-        case 'r': builder.append((char) 13); break;
-        case 't': builder.append((char) 9); break;
-        default: builder.append(c);
-      }
-    }
-  }
-}
