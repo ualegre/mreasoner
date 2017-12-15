@@ -132,7 +132,6 @@ public class Launcher extends Thread {
 			sleepWrapper(1);
 		}
 		
-		startSSHConnection();
 	}
 	
 	public void terminate() {

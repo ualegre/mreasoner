@@ -1,7 +1,6 @@
 package edu.casetools.icase.mreasoner.deployment.sensors;
 
 import edu.casetools.icase.mreasoner.configs.data.MConfigs;
-import edu.casetools.icase.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperationsFactory;
@@ -17,7 +16,7 @@ public class MVeraLogReader extends AbstractSensorManager {
 	
 	public MVeraLogReader(MConfigs configs){
 		super(configs.getFilesConfigs().getSshConfigsFilePath());
-		databaseOperations = DatabaseOperationsFactory.getDatabaseOperations(DB_IMPLEMENTATION.POSTGRESQL, configs.getDBConfigs());
+		databaseOperations = DatabaseOperationsFactory.getDatabaseOperations(configs.getDBConfigs());
 		if(databaseOperations.getDBConnection().checkConnection() == STATUS.CONNECTED){
 			this.registerObserver(new MDataManager(databaseOperations));
 		}else{

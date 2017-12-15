@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import org.postgresql.util.PSQLException;
 //import java.sql.SQLException;
 
 import edu.casetools.icase.mreasoner.configs.data.db.MDBConfigs;
@@ -36,8 +35,6 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		} catch (ClassNotFoundException e) {
 			dbConnection.setConnection(STATUS.ERROR);
 		//	e.printStackTrace();
-		} catch (PSQLException e) {	
-			dbConnection.setConnection(STATUS.ERROR);
 		} catch (SQLException e) {
 			dbConnection.setConnection(STATUS.ERROR);
 		//	e.printStackTrace();
@@ -54,8 +51,6 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		try {
 			dbConnection.disconnect();
 			dbConnection.setConnection(STATUS.DISCONNECTED);
-		}catch (PSQLException e) {		
-			dbConnection.setConnection(STATUS.ERROR);
 		} catch (SQLException e) {
 			dbConnection.setConnection(STATUS.ERROR);
 		//	e.printStackTrace();

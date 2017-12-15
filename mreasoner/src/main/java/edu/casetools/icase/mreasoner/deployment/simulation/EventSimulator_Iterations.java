@@ -5,7 +5,6 @@ import java.util.Vector;
 import edu.casetools.icase.mreasoner.AbstractMReasoner;
 import edu.casetools.icase.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.elements.events.Event;
-import edu.casetools.icase.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperationsFactory;
 
@@ -21,8 +20,7 @@ public class EventSimulator_Iterations extends Thread{
 	public EventSimulator_Iterations(Vector<Event> eventHistory, MConfigs configs){
 		this.eventHistory = eventHistory;
 		this.connection = 
-				DatabaseOperationsFactory.getDatabaseOperations( DB_IMPLEMENTATION.POSTGRESQL,
-																 configs.getDBConfigs()  );
+				DatabaseOperationsFactory.getDatabaseOperations( configs.getDBConfigs() );
 		this.isRealTime = !configs.getTimeConfigs().isSimulation();
 		running = true;
 	

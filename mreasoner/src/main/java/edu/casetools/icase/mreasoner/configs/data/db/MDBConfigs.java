@@ -1,5 +1,7 @@
 package edu.casetools.icase.mreasoner.configs.data.db;
 
+import edu.casetools.icase.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
+
 public class MDBConfigs {
 
 	private String dbType,driver,dbName,ip,port,user,password,table;
@@ -70,6 +72,15 @@ public class MDBConfigs {
 	
 	public String getConnectionStringWithDB() {
 		return "jdbc:"+this.getDbType().toLowerCase()+"://"+this.getIp()+":"+this.getPort()+"/"+this.getDbName();
+	}
+	
+	public DB_IMPLEMENTATION getDBImplementation(){
+		if(dbType.equalsIgnoreCase("PostgreSQL"))
+			return DB_IMPLEMENTATION.POSTGRESQL;
+		else if (dbType.equalsIgnoreCase("MySQL"))
+			return DB_IMPLEMENTATION.MYSQL;
+		else return DB_IMPLEMENTATION.POSTGRESQL;
+		
 	}
 	
 	public String parseConfigs(){

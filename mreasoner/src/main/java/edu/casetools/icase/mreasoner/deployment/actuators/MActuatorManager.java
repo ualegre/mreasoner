@@ -3,7 +3,6 @@ package edu.casetools.icase.mreasoner.deployment.actuators;
 import java.util.Vector;
 
 import edu.casetools.icase.mreasoner.configs.data.db.MDBConfigs;
-import edu.casetools.icase.mreasoner.database.core.MDBImplementations.DB_IMPLEMENTATION;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperationsFactory;
 import edu.casetools.icase.mreasoner.vera.actuators.data.Action;
@@ -21,7 +20,7 @@ public class MActuatorManager extends Thread{
 	
 	public MActuatorManager(MDBConfigs configs, Vector<Actuator> actuators){	
 		this.actuators = actuators;
-		databaseOperations = DatabaseOperationsFactory.getDatabaseOperations(DB_IMPLEMENTATION.POSTGRESQL, configs);
+		databaseOperations = DatabaseOperationsFactory.getDatabaseOperations(configs);
 		running = true;
 		
 	}

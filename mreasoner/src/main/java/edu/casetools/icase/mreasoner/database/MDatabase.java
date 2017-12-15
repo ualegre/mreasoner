@@ -2,7 +2,6 @@ package edu.casetools.icase.mreasoner.database;
 
 
 import edu.casetools.icase.mreasoner.database.MDBInterface;
-import edu.casetools.icase.mreasoner.database.core.MDBImplementations;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperationsFactory;
 import edu.casetools.icase.mreasoner.database.tables.EventsTable;
@@ -29,8 +28,7 @@ public class MDatabase implements MDBInterface{
 	
 	public MDatabase( MConfigs systemConfigs, MStatus systemStatus ){
 	
-		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations( 
-				MDBImplementations.DB_IMPLEMENTATION.POSTGRESQL,
+		databaseOperations         = DatabaseOperationsFactory.getDatabaseOperations(
 				systemConfigs.getDBConfigs());
 		
 		eventsTable 			  = new EventsTable			( databaseOperations );
