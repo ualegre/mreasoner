@@ -57,7 +57,7 @@ public class MReasoner extends Thread{
 		System.out.println("**********************************************************");
 		systemRules.showSystemRules();
 		systemStatus.showStates();
-	//	logger.writeHeader( systemStatus );	
+		//logger.writeHeader( systemStatus );	
 	}
 	
 	public void MTPLInitialization(){
@@ -126,7 +126,7 @@ public class MReasoner extends Thread{
 	}
 	
 	public void terminate(){
-	//	logger.close();
+		//logger.close();
 		database.disconnect();
 		running = false;
 		System.out.println("REASONER THREAD FINISHED");
@@ -136,7 +136,7 @@ public class MReasoner extends Thread{
 	private void nextIteration(){
 		database.writeLog(systemStatus);
 		while(!systemStatus.getTime().endOfTimeUnit());
-		systemStatus.getTime().nextTime();	
+		systemStatus.getTime().nextTime();
 		System.out.println("");
 		
 	}
