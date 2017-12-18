@@ -3,13 +3,14 @@ package edu.casetools.icase.mreasoner.configs.data;
 import edu.casetools.icase.mreasoner.configs.data.db.MDBConfigs;
 import edu.casetools.icase.mreasoner.configs.data.files.FilesConfigs;
 import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs;
+import edu.casetools.icase.mreasoner.vera.sensors.ssh.configs.SSHConfigs;
 
 public class MConfigs {
 
 	private MDBConfigs   dbConfigs;
 	private TimeConfigs  timeConfigs;
 	private FilesConfigs filesConfigs;
-	private String  	 jarConfigs;
+	private SSHConfigs   sshConfigs;
 
 	private boolean 	useStratification;
 	private boolean		useMaxExecutionTime;
@@ -18,9 +19,7 @@ public class MConfigs {
 		this.setDBConfigs(new MDBConfigs());
 		this.setFilesConfigs(new FilesConfigs());
 		this.setTimeConfigs(new TimeConfigs());
-		jarConfigs   = "Please write the jar execution commands separated by commas:";
-		jarConfigs   = jarConfigs + "\n Eg.: \"java -jar c:/a.jar,java -jar c:/b.jar\"";
-		
+		this.setSshConfigs(new SSHConfigs());		
 		this.useStratification(true);
 	
 	}
@@ -62,21 +61,10 @@ public class MConfigs {
 		//Database Info
 		result = result+dbConfigs.parseConfigs();
 		
-		//Jar configs
-		result = result+"<EXTERNAL_JARS> \n";
-		result = result+"\""+jarConfigs+"\""+"\n";
-		result = result+"</EXTERNAL_JARS> \n";
-
+		//SSH Info
+		result = result+sshConfigs.parseConfigs();
 		
 		return result;	
-	}
-
-	public String getJarConfigs() {
-		return jarConfigs;
-	}
-
-	public void setJarConfigs(String jarConfigs) {
-		this.jarConfigs = jarConfigs;
 	}
 
 	public boolean useMaxExecutionTime() {
@@ -101,6 +89,14 @@ public class MConfigs {
 
 	public void setFilesConfigs(FilesConfigs filesConfigs) {
 		this.filesConfigs = filesConfigs;
+	}
+
+	public SSHConfigs getSshConfigs() {
+		return sshConfigs;
+	}
+
+	public void setSshConfigs(SSHConfigs sshConfigs) {
+		this.sshConfigs = sshConfigs;
 	}	
 	
 }

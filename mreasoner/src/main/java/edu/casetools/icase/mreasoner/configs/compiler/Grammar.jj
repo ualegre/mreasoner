@@ -8,10 +8,10 @@ options
 }
 
 PARSER_BEGIN(ConfigsReader)
-package edu.casetools.mreasoner.configs.compiler;
+package edu.casetools.icase.mreasoner.configs.compiler;
 
 import java.io.FileReader;
-import edu.casetools.mreasoner.configs.data.MConfigs;
+import edu.casetools.icase.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs;
 
 @SuppressWarnings("all")
@@ -158,14 +158,6 @@ TOKEN: { <SYSTEM_SPECIFICATION_FILE_PATH_END: "</SYSTEM_SPECIFICATION_FILE_PATH>
 TOKEN: { <DATABASE_NAME: "<DATABASE_NAME>" >}
 TOKEN: { <DATABASE_NAME_END: "</DATABASE_NAME>" >}
 
-//// 13 is time of events simulated//TOKEN: { <: "<IS_TIME_OF_EVENTS_SIMULATED>" >}//TOKEN: { <IS_TIME_OF_EVENTS_SIMULATED_END: "</IS_TIME_OF_EVENTS_SIMULATED>" >}
-
-// 14 
-//TOKEN: { <SSH_HOSTNAME: "<SSH_HOSTNAME>" >}//TOKEN: { <SSH_HOSTNAME_END: "</SSH_HOSTNAME>" >}////// 15//TOKEN: { <SSH_USERNAME: "<SSH_USERNAME>" >}//TOKEN: { <SSH_USERNAME_END: "</SSH_USERNAME>" >}////// 16//TOKEN: { <SSH_PASSWORD: "<SSH_PASSWORD>" >}//TOKEN: { <SSH_PASSWORD_END: "</SSH_PASSWORD>" >}
-
-TOKEN: { <JARS_CONFIGS: "<EXTERNAL_JARS>" >}
-TOKEN: { <JARS_CONFIGS_END: "</EXTERNAL_JARS>" >}
-
 //17
 TOKEN: { <LFPUBS_OUTPUT_FILE_PATH: "<LFPUBS_OUTPUT_FILE_PATH>" >}
 TOKEN: { <LFPUBS_OUTPUT_FILE_PATH_END: "</LFPUBS_OUTPUT_FILE_PATH>" >}
@@ -310,13 +302,6 @@ MConfigs readConfigs(): {MConfigs configs = new MConfigs();String aux = "";}
     configs.getDBConfigs().setDbName(readString());
   }
   <DATABASE_NAME_END>
-
-  < JARS_CONFIGS >
-	{
-	    configs.setJarConfigs(rawString());
-	 }
-  < JARS_CONFIGS_END >
-
  
   {
     return configs;

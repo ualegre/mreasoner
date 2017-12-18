@@ -121,25 +121,21 @@ public interface ConfigsReaderConstants {
   /** RegularExpression Id. */
   int DATABASE_NAME_END = 64;
   /** RegularExpression Id. */
-  int JARS_CONFIGS = 65;
+  int LFPUBS_OUTPUT_FILE_PATH = 65;
   /** RegularExpression Id. */
-  int JARS_CONFIGS_END = 66;
+  int LFPUBS_OUTPUT_FILE_PATH_END = 66;
   /** RegularExpression Id. */
-  int LFPUBS_OUTPUT_FILE_PATH = 67;
+  int SESSION_FILE_PATH = 67;
   /** RegularExpression Id. */
-  int LFPUBS_OUTPUT_FILE_PATH_END = 68;
+  int SESSION_FILE_PATH_END = 68;
   /** RegularExpression Id. */
-  int SESSION_FILE_PATH = 69;
+  int RESULTS_FILE_PATH = 69;
   /** RegularExpression Id. */
-  int SESSION_FILE_PATH_END = 70;
+  int RESULTS_FILE_PATH_END = 70;
   /** RegularExpression Id. */
-  int RESULTS_FILE_PATH = 71;
+  int SSH_CONFIGS_FILE_PATH = 71;
   /** RegularExpression Id. */
-  int RESULTS_FILE_PATH_END = 72;
-  /** RegularExpression Id. */
-  int SSH_CONFIGS_FILE_PATH = 73;
-  /** RegularExpression Id. */
-  int SSH_CONFIGS_FILE_PATH_END = 74;
+  int SSH_CONFIGS_FILE_PATH_END = 72;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -217,8 +213,6 @@ public interface ConfigsReaderConstants {
     "\"</SYSTEM_SPECIFICATION_FILE_PATH>\"",
     "\"<DATABASE_NAME>\"",
     "\"</DATABASE_NAME>\"",
-    "\"<EXTERNAL_JARS>\"",
-    "\"</EXTERNAL_JARS>\"",
     "\"<LFPUBS_OUTPUT_FILE_PATH>\"",
     "\"</LFPUBS_OUTPUT_FILE_PATH>\"",
     "\"<SESSION_FILE_PATH>\"",

@@ -2,7 +2,6 @@
 package edu.casetools.icase.mreasoner.configs.compiler;
 
 import java.io.FileReader;
-
 import edu.casetools.icase.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs;
 
@@ -88,9 +87,6 @@ ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.t
     jj_consume_token(DATABASE_NAME);
     configs.getDBConfigs().setDbName(readString());
     jj_consume_token(DATABASE_NAME_END);
-    jj_consume_token(JARS_CONFIGS);
-            configs.setJarConfigs(rawString());
-    jj_consume_token(JARS_CONFIGS_END);
     {if (true) return configs;}
     throw new Error("Missing return statement in function");
   }
@@ -376,7 +372,7 @@ ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.t
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[75];
+    boolean[] la1tokens = new boolean[73];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -396,7 +392,7 @@ ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.t
         }
       }
     }
-    for (int i = 0; i < 75; i++) {
+    for (int i = 0; i < 73; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
