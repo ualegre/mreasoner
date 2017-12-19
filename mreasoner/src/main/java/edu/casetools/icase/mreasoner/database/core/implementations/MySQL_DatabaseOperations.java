@@ -687,8 +687,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query;
 		ResultSet resultSet;
 		boolean result = false;
-		//query = "SELECT '"+state+"' FROM sensors.results WHERE iteration = (SELECT MAX(iteration) from sensors.results);";
-		query = "select newValue from data_storage.measure where idDevice=12 order by time desc limit 1;";
+		query = "SELECT "+state+" FROM sensors.results WHERE iteration = (SELECT MAX(iteration) from sensors.results)";
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 			if(resultSet.next()){
