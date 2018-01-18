@@ -253,7 +253,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 
 	public void newDeviceMappingTableRelation(String device, String state) {
-		String 	query = "insert into \"device_mapping\" (device,implementation"+
+		String 	query = "insert into \"device_mapping\" (device"+
 						",state) values (DEFAULT,'"+device+"','"+state+"')";
 		this.executeUpdate(query);
 		
@@ -298,7 +298,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		createDevicesTable();
 		String query = "CREATE TABLE IF NOT EXISTS \"device_mapping\" ("+
 				  "\"id\" SERIAL PRIMARY KEY,"+	
-				  "\"device\" references \"devices\"(\"vera_id\"),"+
+				  "\"device\" varchar(50) REFERENCES \"devices\"(\"vera_id\"),"+
 		 		  "\"state\" varchar(50) NOT NULL"
 		 		  + ");";
 	 	   
@@ -319,8 +319,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 				   }
 			   }
-			 
-			 
+			   
 			 stmt.close();
 			 postgresDBConnection.close();
 		 } catch (SQLException e) {
@@ -544,8 +543,10 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void newDevicesTableRelation(String id, String name, String model, String location, String dataType, String maxValue,String minValue,String isBoolean) {
 		
+		dataType =  getDataTypeId(dataType);
+		
 		String query = "INSERT INTO \"devices\" (vera_id, name, model, location, data_type, max_value, min_value, has_boolean_values)"
-				+"VALUES( '"+id+"', '"+name+"', '"+model+"', '"+location+"', "+dataType+"', "+maxValue+",'"+minValue+"', '"+isBoolean+"')";
+				+"VALUES( '"+id+"', '"+name+"', '"+model+"', '"+location+"', '"+dataType+"', '"+maxValue+"','"+minValue+"', '"+isBoolean+"')";
 		
 		this.executeUpdate(query);
     	
@@ -628,7 +629,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public void createDataTypesTable() {
 		String query = "CREATE TABLE IF NOT EXISTS \"data_types\" ("+
 				  "\"id\" SERIAL PRIMARY KEY,"+
-				  "\"name\" varchar(50) FOREIGN KEY);";
+				  "\"name\" varchar(50) );";
 		
 		executeUpdate(query);
 		insertDataTypes();
@@ -637,7 +638,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void insertDataTypes() {		
 		String query = "";
-		for(String dataType : MDBImplementations.getDBImplementationNames()){
+		for(String dataType : MDBImplementations.getDataTypeNames()){
 			query = "INSERT INTO \"data_types\" VALUES(DEFAULT, '"+dataType+"');";
 			executeUpdate(query);
 		}
@@ -657,7 +658,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 		try {
 			if(next(resultSet)){
-				result = resultSet.getInt(0);
+				result = resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

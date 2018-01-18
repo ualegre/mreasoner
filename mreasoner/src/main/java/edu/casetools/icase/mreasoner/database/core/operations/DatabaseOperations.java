@@ -84,7 +84,7 @@ public abstract class DatabaseOperations {
 
 		public abstract long getIterationFromRealTime(String string);
 
-		public void insertSensorImplementations(Vector<SensorObserver> sensorObservers) {
+		public void insertDevices(Vector<SensorObserver> sensorObservers) {
 			for(SensorObserver sensorObserver : sensorObservers){
 				Sensor sensor = sensorObserver.getSensor();
 				this.newDevicesTableRelation(sensor.getDeviceId(),sensor.getName(),sensor.getModel(), sensor.getLocation(), sensor.getDataType(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
