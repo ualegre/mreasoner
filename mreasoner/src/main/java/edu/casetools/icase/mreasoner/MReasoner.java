@@ -7,6 +7,8 @@ import edu.casetools.icase.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.MSpecification;
 import edu.casetools.icase.mreasoner.database.MDatabase;
 import edu.casetools.icase.mreasoner.deployment.Launcher;
+import edu.casetools.icase.mreasoner.deployment.sensors.SensorObserver;
+
 import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
 
 public class  MReasoner extends  AbstractMReasoner  {
@@ -24,9 +26,14 @@ public class  MReasoner extends  AbstractMReasoner  {
         Vector<Actuator> actuators = new Vector<>();
         
         //Add your own actuators here
-        //
+		Vector<SensorObserver> sensorObservers = new Vector<>();
+		// Add your own list of sensor observers and its corresponding modelling rules
+		sensorObservers.add(new BatteryObserver());
+		
+		
+        Launcher	 launcher = new Launcher(actuators, sensorObservers);
         
-        Launcher	 launcher = new Launcher(actuators);
+        
         if(configsFileName == null) {
         	System.out.println("Please provide the configuration file when executing the command:");
         	System.out.println("\t java -jar mreasoner.jar path/to/configs/your_configurations.txt");

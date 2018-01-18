@@ -6,6 +6,7 @@ import java.util.Vector;
 import edu.casetools.icase.mreasoner.configs.data.db.MDBConfigs;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection.STATUS;
+import edu.casetools.icase.mreasoner.deployment.sensors.Sensor;
 
 
 
@@ -93,5 +94,12 @@ public abstract class DatabaseOperations {
 
 		public abstract long getIterationFromRealTime(String string);
 
+		public void insertSensorImplementations(Vector<Sensor> sensors) {
+			for(Sensor sensor : sensors){
+				this.newSensorImplementation(sensor.getName(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
+				this.newSensorTableRelation(sensor.getDeviceId(), sensor.getName(), sensor.getState());
+			}
+			
+		}
 		
 }

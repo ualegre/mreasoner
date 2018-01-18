@@ -35,12 +35,6 @@
 	</repositories>
 	
 	<dependencies>
-	
-		<dependency>
-		    <groupId>com.github.ualegre</groupId>
-		    <artifactId>mreasoner-core</artifactId>
-		    <version>v0.1.1</version>
-		</dependency>
 		
 		<dependency>
 		    <groupId>org.postgresql</groupId>
@@ -60,12 +54,6 @@
 		    <version>-SNAPSHOT</version>
 		</dependency>
 		
-		<dependency>
-		    <groupId>com.github.ualegre</groupId>
-		    <artifactId>vera-manager</artifactId>
-		    <version>2be2997fac</version>
-		</dependency>
-			
 	</dependencies>
  
 	  <build>

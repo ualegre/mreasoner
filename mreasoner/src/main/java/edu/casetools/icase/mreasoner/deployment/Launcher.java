@@ -9,10 +9,12 @@ import edu.casetools.icase.mreasoner.configs.MConfigsLoader;
 import edu.casetools.icase.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.MSpecification;
 import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs.EXECUTION_MODE;
+import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperationsFactory;
 import edu.casetools.icase.mreasoner.deployment.actuators.MActuatorManager;
-import edu.casetools.icase.mreasoner.deployment.sensors.MVeraLogReader;
+import edu.casetools.icase.mreasoner.deployment.sensors.SensorObserver;
 import edu.casetools.icase.mreasoner.deployment.simulation.EventSimulator;
 import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
+import edu.casetools.icase.mreasoner.vera.sensors.VeraSensorManager;
 
 
 public class Launcher extends Thread {
@@ -21,15 +23,17 @@ public class Launcher extends Thread {
 	MConfigs					  mconfigs;
 	MSpecification	      		  minput;
 	MReasoner 		  	  		  mtpl;
-	MVeraLogReader		  		  sensorManager;
+	VeraSensorManager		  	  sensorManager;
 	EventSimulator 	   		      inputSimulator;
+	Vector<SensorObserver>  sensorObservers;
 //	Vector<LibraryThread> 		  externalLibraries;
 	MActuatorManager			  actuatorManager;
 	Vector<Actuator> 			  actuators;  
 	Thread						  mreasonerThread;
 	
-	public Launcher(Vector<Actuator> actuators){	
+	public Launcher(Vector<Actuator> actuators, Vector<SensorObserver> sensorObservers){	
 		minputLoader 	     	 = new MConfigsLoader();
+		this.sensorObservers		 = sensorObservers;
 //		externalLibraries    	 = new Vector<LibraryThread>();
 		this.actuators 		 	 = actuators;
 	}
@@ -125,13 +129,21 @@ public class Launcher extends Thread {
 	}
 
 	private void launchSensorManager(MConfigs mConfigs) {
-		sensorManager = new MVeraLogReader(mConfigs);
+		sensorManager = new VeraSensorManager(mConfigs.getFilesConfigs().getSshConfigsFilePath());	
+		initObservers(mConfigs);				
 		sensorManager.start();
 		
 		while(!sensorManager.getSshClient().isInitializationFinished()){
 			sleepWrapper(1);
 		}
 		
+	}
+
+	private void initObservers(MConfigs mConfigs) {
+		for(SensorObserver observer : sensorObservers){
+			observer.initDataManager( DatabaseOperationsFactory.getDatabaseOperations(mConfigs.getDBConfigs()),this.mtpl);
+			sensorManager.registerObserver(observer);
+		}
 	}
 	
 	public void terminate() {

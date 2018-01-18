@@ -14,9 +14,6 @@ import edu.casetools.icase.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
 
-
-
-
 public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	String resultsQuery;
 	MDBConfigs configs;
@@ -916,9 +913,6 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		}
 		return result;
 	}
-
-
-
 
 
 }
