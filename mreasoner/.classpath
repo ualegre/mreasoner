@@ -23,6 +23,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/vera-manager"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/mreasoner-core"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
