@@ -326,7 +326,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		e1.printStackTrace();
 		}		
 	}
-	public ResultSet getSensorTableContent() {
+	public ResultSet getDeviceMappingTableContent() {
 		ResultSet resultSet = null;
 		String query = null;
 
@@ -428,8 +428,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 	
 	@Override
-	public void createSensorTable() {
-		createSensorImplementationTable();
+	public void createDeviceMappingTable() {
+		createDevicesTable();
 		String query ="";
 
 		 query = "CREATE TABLE IF NOT EXISTS device_mapping ("
@@ -704,7 +704,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public void createSensorImplementationTable() {
+	public void createDevicesTable() {
 			String query = "CREATE TABLE IF NOT EXISTS devices ("
 					 + "name varchar(50) PRIMARY KEY,"+
 					  "max_value varchar(50),"+
@@ -723,7 +723,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public void newSensorImplementation(String name, String maxValue,
+	public void newDevicesRelation(String name, String maxValue,
 			String minValue, String isOnOff) {
 		
 		String query;
@@ -750,7 +750,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public ResultSet getSensorImplementationTableContent() {
+	public ResultSet getDevicesTableContent() {
 		ResultSet resultSet = null;
 		String query = null;
 
@@ -800,7 +800,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public void eraseSensorTable() {
+	public void eraseDeviceMappingTable() {
 		try {
 			String query = "DELETE FROM device_mapping";
 			dbConnection.executeUpdate(query);
@@ -811,7 +811,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public void eraseSensorImplementationTable() {
+	public void eraseDevicesTable() {
 		try {
 			String query = "DELETE FROM devices";
 			dbConnection.executeUpdate(query);
@@ -846,6 +846,31 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public boolean createDatabase(String dbName) {
 		return this.createDBIfDoesNotExist(dbName);
+	}
+
+	@Override
+	public void createDataTypesTable() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void eraseDataTypesTable() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertDataTypes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getDataTypeId(String dataType) {
+		return dataType;
+		// TODO Auto-generated method stub
+		
 	}
 
 	

@@ -106,57 +106,32 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 	@Override
 	public void insertEvent(String stateName, String status, String iteration, String date, String time) {
-		String query;
-		
-	    try {
-
-			query = "INSERT INTO \"external_events\" (state, value,iteration, date_old, time_old)"
+		String query = "INSERT INTO \"external_events\" (state, value,iteration, date_old, time_old)"
 					+"VALUES( '"+stateName+"', '"+status+"', '"+iteration+"','"+date+"', '"+time+"')";
 			
-			dbConnection.executeUpdate(query);
-    	
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+		this.executeUpdate(query);
+   
 	}
 
 	@Override
 	public ResultSet findLatestEvents() {
-	
-		ResultSet result = null;
-	
-		String query;
-		
-	    try {
-			query = "SELECT id,iteration,state,value,date_old,time_old FROM \"external_events\"";
-			result =  dbConnection.executeQueryOpenStatement(query);
-	
-		} catch (SQLException e1) {
-		e1.printStackTrace();
-		}
-		return result;	
+		String query= "SELECT id,iteration,state,value,date_old,time_old FROM \"external_events\"";
+		return  this.executeQueryOpenStatement(query);
+
 	}
 	
 	@Override
 	public void logExternalEvent(String id, String iteration, String stateName, String status,
 			String data, String time) {
-	    try {
+
 			String query = "INSERT INTO \"events_log\" (is_internal,state, value, iteration,date_old, time_old)"
 					+"VALUES('f', '"+stateName+"', '"+status+"','"+iteration+"','"+data+"', '"+time+"')";
 
-			dbConnection.executeUpdate(query);
+			this.executeUpdate(query);
 			
 			query = "DELETE FROM \"external_events\" where id = "+id;
 			
-			dbConnection.executeUpdate(query);
-			
-    	
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+			this.executeUpdate(query);
 		
 	}
 	
@@ -175,82 +150,48 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 				  "\"time\"  time NOT NULL,"+
 				  "\"time_millis\"  bigint NOT NULL );";
 
-				try {
-					dbConnection.executeUpdate(query);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		executeUpdate(query);
 		
 	}
 
 	@Override
 	public void eraseInternalEventsTable() {
-		String query;
-		try {
-			query = "DELETE FROM \"internal_events\"";
-			dbConnection.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
+			this.executeUpdate("DELETE FROM \"internal_events\"");
 		
 	}
 
 	@Override
 	public void insertInternalEvent(String iteration, String stateName, String status, String date, String time, String time_millis) {
-		String query;
-		
-	    try {
-	    	query = "INSERT INTO  \"internal_events\" (\"iteration\", \"state\", \"value\", \"date\", \"time\", \"time_millis\") VALUES"+
-	    			"('"+iteration+"','"+stateName+"', '"+status+"', '"+date+"', '"+time+"', '"+time_millis+"');";
-	    	dbConnection.executeUpdate(query);
-		
-		} catch (SQLException e1) {
-		e1.printStackTrace();
-		}
-		
+		String 	query = "INSERT INTO  \"internal_events\" (\"iteration\","+
+						" \"state\", \"value\", \"date\", \"time\", \"time_millis\") VALUES"+
+						"('"+iteration+"','"+stateName+"', '"+status+"', '"+date+"', '"+
+						time+"', '"+time_millis+"');";
+	    this.executeUpdate(query);
+
 	}
 	
 	@Override
 	public void logInternalEvent(String id, String iteration, String stateName, String status,
 			String data, String time) {
-	    try {
 
 			String query = "INSERT INTO \"events_log\" (is_internal, state, value,iteration, date_old, time_old)"
 					+"VALUES( 't','"+stateName+"', "+status+",'"+iteration+"','"+data+"', '"+time+"')";
 			
-			dbConnection.executeUpdate(query);
+			this.executeUpdate(query);
 			
 			query = "DELETE FROM \"internal_events\" where id = "+id;
 			
-			dbConnection.executeUpdate(query);
+			this.executeUpdate(query);
 			
-    	
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 	}
 
 	@Override
 	public ResultSet findLatestInternalEvents() {
-		ResultSet result = null;
-		String 	  query;
-
-	    try {
-	    	//Borrar el where id..
-//			query = "SELECT id,state,value FROM \"internal_events\" WHERE id > '"+lastId+"'";		
-//			result = dbConnection.executeQueryOpenStatement(query);
-			query = "SELECT id,iteration,state,value,date,time FROM \"internal_events\"";//WHERE id > '"+lastId+"'";		
-			result = dbConnection.executeQueryOpenStatement(query);
-		
-		} catch (SQLException e1) {
-		e1.printStackTrace();
-		}
-		
-		return result;
+		String 	query = "SELECT id,iteration,state,value,date,time FROM \"internal_events\"";
+	    return executeQueryOpenStatement(query);
 	}
+
 
 	@Override
 	public void createResultsTable(Vector<String> states) {
@@ -268,12 +209,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		
 		createInsertResultQuery(states);
 		
-		try {
-			dbConnection.executeUpdate(query);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		executeUpdate(query);
 		
 	}
 	
@@ -287,34 +223,19 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 	@Override
 	public void eraseResultsTable() {
-	
-		try {
-			String query = "DELETE FROM \"results\"";
-			dbConnection.executeUpdate(query);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		this.executeUpdate("DELETE FROM \"results\"");
 	}
 	
 	@Override
 	public void dropResultsTable() {
-	
-		try {
-			String query = "DROP TABLE IF EXISTS \"results\"";
-			dbConnection.executeUpdate(query);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		String query = "DROP TABLE IF EXISTS \"results\"";
+		this.executeUpdate(query);
 	}
 
 	@Override
 	public void insertResult(String iteration,String time,Vector<Boolean> status) {
 
 		String statusQuery = resultsQuery;
-		
-	    try {
 		    statusQuery = statusQuery + "'"+iteration+"','"+time+"'";
 	    	
 	    	for(int i=0;i<status.size();i++){
@@ -323,148 +244,89 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	    	}
 
 	    	statusQuery = statusQuery + ");";
-			dbConnection.executeUpdate(statusQuery);
-		
-		} catch (SQLException e1) {
-		e1.printStackTrace();
-		}		
+			this.executeUpdate(statusQuery);
+			
 	}
-	public ResultSet getSensorTableContent() {
-		ResultSet resultSet = null;
-		String query = null;
-
-			try {
-				query = "select * from \"device_mapping\"";
-				resultSet = dbConnection.executeQueryOpenStatement(query);
-		
-	//		} catch (PSQLException e) {
-	//		//	dbConnection.setConnection(-1);
-			} catch (SQLException e) {
-			//	dbConnection.setConnection(-2);
-			}
-		
-		return resultSet;
+	public ResultSet getDeviceMappingTableContent() {
+		return this.executeQueryOpenStatement("select * from \"device_mapping\"");
 	}
 
 	public void newSensorTableRelation(String device,String implementation,String state) {
-		String query = null;
-		try {
-			query = "insert into \"device_mapping\" (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
-			this.dbConnection.executeUpdate(query);
-//		} catch (PSQLException e) {
-//		//	dbConnection.setConnection(-1);
-
-		} catch (SQLException e) {
-			//dbConnection.setConnection(-2);
-		}
+		String 	query = "insert into \"device_mapping\" (device,implementation"+
+						",state) values ('"+device+"','"+implementation+"','"+state+"')";
+		this.executeUpdate(query);
 		
 	}
 
 	public void removeSensorTableRelation(String device,String implementation, String state) {
-		String query = null;
-
-		try {
-			query = "DELETE FROM \"device_mapping\" where device ='"+
-					device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
+		String 	query = "DELETE FROM \"device_mapping\" where device ='"+
+				device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
 			
-			this.dbConnection.executeUpdate(query);
-//		} catch (PSQLException e) {
-		//	dbConnection.setConnection(-1);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		//	dbConnection.setConnection(-2);
-		}
-		
+		this.executeUpdate(query);
+	
 	}
 
 	public ResultSet getEventsTableContent(boolean iteration) {
-		String query = null;
-		ResultSet resultSet = null;
-		try {
-			query = "SELECT iteration, state, value";
-			if(!iteration) query = query + ", date_old, time_old";
-			query = query + " FROM \"events_log\" WHERE \"is_internal\" = 'f' ";
+		String 	query = "SELECT iteration, state, value";
 			
-			resultSet = dbConnection.executeQueryOpenStatement(query);
-//		} catch (PSQLException e) {
-		//	dbConnection.setConnection(-1);
-		} catch (SQLException e) {
-		//	dbConnection.setConnection(-2);
-		}
-		return resultSet;
+		if(!iteration) 
+			query = query + ", date_old, time_old";
+		
+		query = query + " FROM \"events_log\" WHERE \"is_internal\" = 'f' ";
+			
+		return this.executeQueryOpenStatement(query);
+
 	}
 
 	public ResultSet getInternalEventsTableContent(boolean iteration) {
-		String query = null;
-		ResultSet resultSet = null;
-		try {
-			query = "SELECT iteration, state, value";
-			if(!iteration) query = query + ", date_old, time_old";
-			query = query + " FROM \"events_log\" WHERE \"is_internal\" = 't' ";
+		String query = "SELECT iteration, state, value";
+		
+		if(!iteration) 
+			query = query + ", date_old, time_old";
+		query = query + " FROM \"events_log\" WHERE \"is_internal\" = 't' ";
 			
-			resultSet = this.dbConnection.executeQueryOpenStatement(query);
-//		}catch (PSQLException e) {
-		//	dbConnection.setConnection(-1);
-		}  catch (SQLException e) {
-		//	dbConnection.setConnection(-2);
-		}
-		return resultSet;
+		return this.executeQueryOpenStatement(query);
 	}
 	
-	
-
 	public ResultSet getResultsTableContent() {
-		String 	  query     = null;
-		ResultSet resultSet = null;
-		try {
-			query = "select * from \"results\"";
-			
-			resultSet = dbConnection.executeQueryOpenStatement(query);
-//		} catch (PSQLException e) {
-		//	dbConnection.setConnection(-1);
-		} catch (SQLException e) {
-		//	dbConnection.setConnection(-2);
-		}
-		return resultSet;
+		return this.executeQueryOpenStatement("select * from \"results\"");
 	}
 	
 	@Override
-	public void createSensorTable() {
-		createSensorImplementationTable();
-		String query ="";
-
-		 query = "CREATE TABLE IF NOT EXISTS \"device_mapping\" ("+
+	public void createDeviceMappingTable() {
+		createDevicesTable();
+		String query = "CREATE TABLE IF NOT EXISTS \"device_mapping\" ("+
 				  "\"id\" SERIAL PRIMARY KEY,"+	
 				  "\"device\" references \"devices\"(veraId),"+
 		 		  "\"state\" varchar(50) NOT NULL"
 		 		  + ");";
 	 	   
-		try {
-			dbConnection.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		executeUpdate(query);
 	}
 
 	@Override
 	public boolean createDatabase(String dbName) {
-//		String query ="";
-//		if(!databaseExists(dbName)){
-//			 query = "CREATE DATABASE "+dbName.toLowerCase()+"";
-//			 //System.out.println(query);
-//		 	   
-//			try {
-//				dbConnection.executeUpdate(query);
-//				
-//			} catch (SQLException e) {
-//				return false;
-//			}
-//			return true;
-//		}else{
-//			System.out.println("Database does not exist. Creating database");
-//			return createDBIfDoesNotExist(dbName);
-//		}
-		return createDBIfDoesNotExist(dbName);
+		try {
+			Connection postgresDBConnection = DriverManager.getConnection( configs.getConnectionString()+"postgres", configs.getUser(), configs.getPassword());
+			Statement stmt = null;
+			 String query = "CREATE DATABASE "+dbName.toLowerCase()+"";
+			  rs = null;
+			   if(postgresDBConnection != null){
+				   stmt = postgresDBConnection.createStatement();
+				   if(stmt != null){
+					   stmt.executeUpdate(query);
+
+				   }
+			   }
+			 
+			 
+			 stmt.close();
+			 postgresDBConnection.close();
+		 } catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean databaseExists(String dbName){
@@ -496,51 +358,16 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		}
 		return result;
 	}
-	
-	private boolean createDBIfDoesNotExist(String dbName){
-		try {
-			Connection postgresDBConnection = DriverManager.getConnection( configs.getConnectionString()+"postgres", configs.getUser(), configs.getPassword());
-			Statement stmt = null;
-			 String query = "CREATE DATABASE "+dbName.toLowerCase()+"";
-			//String query = "SELECT 1 FROM pg_database WHERE datname = '"+dbName+"'";
-			  rs = null;
-			   if(postgresDBConnection != null){
-				   stmt = postgresDBConnection.createStatement();
-				   if(stmt != null){
-					   stmt.executeUpdate(query);
-
-				   }
-			   }
-			 
-			 
-			 stmt.close();
-			 postgresDBConnection.close();
-		 } catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 
 	private boolean getAtLeastOneValueQuery(String query){
 		//System.out.println(query+"2");
 		ResultSet resultSet;
 		boolean result = false;
-		   // String query  = operation.getAtLeastOneValueQuery(TOp);
-			//	System.out.println(query);		
-			try {
-				resultSet = dbConnection.executeQueryOpenStatement(query);
-				if( (resultSet != null) && (resultSet.next()) ){
-					result = true;
-				}
-				dbConnection.closeStatement();
-				resultSet.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//result = databaseOperations.isAtLeastOneValueDuringWholeInterval( TOp.getName(), ""+TOp.getStatus());
-
+		resultSet = this.executeQueryOpenStatement(query);
+		if( (resultSet != null) && next(resultSet) ){
+			result = true;
+		}
+		close(resultSet);
 
 		return result;
 	}
@@ -563,27 +390,18 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = "SELECT \""+state+"\" FROM \"results\" WHERE iteration >= '"+since+
 	            "' and iteration <= '"+until+"' and \""+
 	            state+"\" = '"+status+"'";
-
-	           
+		
 		return getAtLeastOneValueQuery(query);
 	}
 
 	private boolean getSameValueQuery(String query){
 		boolean sameValue = true;
-		ResultSet result;
-		//System.out.println(query+"2");
-			try {
-				result = dbConnection.executeQueryOpenStatement(query);
-				if(result.next()){
-					sameValue = false;
-				}
-				result.close();
-				dbConnection.closeStatement();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		ResultSet result = this.executeQueryOpenStatement(query);
+		
+		if(next(result)){
+			sameValue = false;
+		}
+		this.close(result);
 
 		return sameValue;
 	}
@@ -604,34 +422,28 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = "SELECT \""+state+"\" FROM \"results\" WHERE system_time_millis >= '"+since+"' and "+
 		   	      "system_time_millis <= '"+until+"' and \""+state+
 		   	      "\" = '"+!Boolean.parseBoolean(status)+"'";
-		//System.out.println(query);
+
 		return getSameValueQuery(query);
 	}
 
 	private boolean getEqualToFirstQuery(String query,String state,String status){
-		ResultSet result;
-		//System.out.println(query);
-		try {
-			result = dbConnection.executeQueryOpenStatement(query);
-			
-			if(result.next()){
-				boolean b = result.getBoolean(state);
-				if(Boolean.parseBoolean(status) == b){
-					return true;
+		ResultSet result = this.executeQueryOpenStatement(query);
+		try {			
+				if(next(result)){
+					boolean b;
+	
+						b = result.getBoolean(state);
+					if(Boolean.parseBoolean(status) == b){
+						return true;
+					}
 				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-//			try {
-//				Thread.sleep(52000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-			result.close();
-			dbConnection.closeStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		this.close(result);
 		
 		return false;
 	}
@@ -650,23 +462,23 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 	@Override
 	public String getDevice(String state) {
-		String query,result = null;
-		ResultSet resultSet;
+		String result = null;
+		String query = "SELECT device FROM \"device_mapping\" WHERE state = '"+state+"'";
+		ResultSet resultSet = this.executeQueryOpenStatement(query);
 		
-		query = "SELECT device FROM \"device_mapping\" WHERE state = '"+state+"'";
 		try {
-			resultSet = dbConnection.executeQueryOpenStatement(query);
-			if(resultSet.next()){
+			if(next(resultSet)){
 				result = resultSet.getString("device");
-				resultSet.close();
-				dbConnection.closeStatement();
-
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(result == null) System.out.println("WARNING: Device related with '"+state+"' in table 'device_mapping' was not found.");
+		this.close(resultSet);
+		
+		if(result == null) 
+			System.out.println("WARNING: Device related with '"+state+"' in table 'device_mapping' was not found.");
+		
 		return result;
 	}
 	
@@ -678,7 +490,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
-			if(resultSet.next()){
+			if(next(resultSet)){
 				result = resultSet.getString("state");
 			}
 			resultSet.close();
@@ -700,7 +512,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
-			if(resultSet.next()){
+			if(next(resultSet)){
 				result = resultSet.getBoolean(state);
 			}
 			resultSet.close();
@@ -713,7 +525,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 
 	@Override
-	public void createSensorImplementationTable() {
+	public void createDevicesTable() {
 			String query = "CREATE TABLE IF NOT EXISTS \"devices\" ("+
 					  "\"veraId\" varchar(50) PRIMARY KEY,"+
 					  "\"dataType\" varchar(50) FOREIGN KEY,"+
@@ -722,32 +534,19 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 					  "\"min_value\" varchar(50),"+
 					  "\"has_boolean_values\" boolean NOT NULL);";
 			
-			try {
-				dbConnection.executeUpdate(query);
-	
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			executeUpdate(query);
 		
 	}
 
 	@Override
-	public void newSensorImplementation(String name, String maxValue,
+	public void newDevicesRelation(String name, String maxValue,
 			String minValue, String isOnOff) {
-		String query;
 		
-	    try {
-
-			query = "INSERT INTO \"devices\" (name, max_value, min_value, has_boolean_values)"
-					+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', '"+isOnOff+"')";
-			
-			dbConnection.executeUpdate(query);
+		String query = "INSERT INTO \"devices\" (name, max_value, min_value, has_boolean_values)"
+				+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', '"+isOnOff+"')";
+		
+		this.executeUpdate(query);
     	
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 	}
 
@@ -759,22 +558,8 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 
 	@Override
-	public ResultSet getSensorImplementationTableContent() {
-		ResultSet resultSet = null;
-		String query = null;
-
-			try {
-				query = "select * from \"devices\"";
-				resultSet = dbConnection.executeQueryOpenStatement(query);
-		
-	//		} catch (PSQLException e) {
-	//		//	dbConnection.setConnection(-1);
-			} catch (SQLException e) {
-			//	dbConnection.setConnection(-2);
-			}
-		
-		return resultSet;
-
+	public ResultSet getDevicesTableContent() {
+		return  this.executeQueryOpenStatement("select * from \"devices\"");
 	}
 
 	@Override
@@ -809,48 +594,119 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 
 	@Override
-	public void eraseSensorTable() {
-		try {
-			String query = "DELETE FROM \"device_mapping\"";
-			dbConnection.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+	public void eraseDeviceMappingTable() {
+		this.executeUpdate("DELETE FROM \"device_mapping\"");
 	}
 
 	@Override
-	public void eraseSensorImplementationTable() {
-		try {
-			String query = "DELETE FROM \"devices\"";
-			dbConnection.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+	public void eraseDevicesTable() {
+		this.executeUpdate("DELETE FROM \"devices\"");
 	}
 
 	@Override
 	public long getIterationFromRealTime(String string) {
-		String query;
-		ResultSet resultSet;
 		long result = 0;
-		query = "SELECT MIN(\"iteration\") FROM results WHERE system_time_millis >= "+string;
-	//	System.out.println(query);
+		String query = "SELECT MIN(\"iteration\") FROM results WHERE system_time_millis >= "+string;
+		ResultSet resultSet = this.executeQueryOpenStatement(query);
+
 		try {
-			resultSet = dbConnection.executeQueryOpenStatement(query);
-			if(resultSet.next()){
+			if(next(resultSet)){
 				result = resultSet.getLong(1);
-				//System.out.println("ITERATION DETECTED: "+result );
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.close(resultSet);
+		
+		return result;
+	}
+
+	@Override
+	public void createDataTypesTable() {
+		String query = "CREATE TABLE IF NOT EXISTS \"data_types\" ("+
+				  "\"id\" SERIAL PRIMARY KEY,"+
+				  "\"name\" varchar(50) FOREIGN KEY);";
+		
+		executeUpdate(query);
+		insertDataTypes();
+	}
+	
+	@Override
+	public void insertDataTypes() {		
+		String query = "";
+		for(String dataType : dataTypes){
+			query = "INSERT INTO \"data_types\" VALUES(DEFAULT, '"+dataType+"');";
+			executeUpdate(query);
+		}
+		
+	}
+
+	@Override
+	public void eraseDataTypesTable() {
+		this.executeUpdate("DELETE FROM \"data_types\"");
+	}
+
+	@Override
+	public String getDataTypeId(String dataType) {
+		String query = "SELECT \"id\" FROM data_types WHERE \"name\" = '"+dataType+"'";
+		int result = 0;
+		ResultSet resultSet = this.executeQueryOpenStatement(query);
+
+		try {
+			if(next(resultSet)){
+				result = resultSet.getInt(0);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.close(resultSet);
+		
+		return Integer.toString(result);
+	}
+	
+	private void executeUpdate(String query) {
+		try {
+			dbConnection.executeUpdate(query);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private ResultSet executeQueryOpenStatement(String query) {
+		ResultSet result = null;
+		try {
+			result = dbConnection.executeQueryOpenStatement(query);
+		
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return result;
+	}
+	
+	private boolean next(ResultSet resultSet) {
+		try {
+			return resultSet.next();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private void close(ResultSet resultSet) {
+		try {
 			resultSet.close();
 			dbConnection.closeStatement();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return result;
 	}
+
 
 
 }

@@ -14,6 +14,7 @@ import edu.casetools.icase.mreasoner.deployment.sensors.Sensor;
 public abstract class DatabaseOperations {
 	
 		protected DBConnection dbConnection;
+		protected String[] dataTypes = {"Boolean","Byte","Char","Short","Integer","Long","Float","Double"};
 		
 		public DatabaseOperations(MDBConfigs configs){
 			this.dbConnection = new DBConnection(configs);
@@ -56,17 +57,22 @@ public abstract class DatabaseOperations {
 		public abstract void insertResult(String iteration, String time, Vector<Boolean> status);
 		public abstract ResultSet getResultsTableContent();
 		
-		public abstract void   	  createSensorTable();
-		public abstract void   	  eraseSensorTable();
+		public abstract void   	  createDeviceMappingTable();
+		public abstract void   	  eraseDeviceMappingTable();
 		public abstract void 	  newSensorTableRelation(String device,String implementation,String state);
 		public abstract void 	  removeSensorTableRelation(String device,String implementation, String state);
-		public abstract ResultSet getSensorTableContent();
+		public abstract ResultSet getDeviceMappingTableContent();
 		
-		public abstract void   	  createSensorImplementationTable();
-		public abstract void   	  eraseSensorImplementationTable();
-		public abstract void 	  newSensorImplementation(String name,String maxValue,String minValue,String isOnOff);
+		public abstract void   	  createDevicesTable();
+		public abstract void   	  eraseDevicesTable();
+		public abstract void 	  newDevicesRelation(String name,String maxValue,String minValue,String isOnOff);
 		public abstract void 	  removeSensorImplementation(String name,String maxValue,String minValue,String isOnOff);
-		public abstract ResultSet getSensorImplementationTableContent();
+		public abstract ResultSet getDevicesTableContent();
+		
+		public abstract void   	  createDataTypesTable();
+		public abstract void   	  eraseDataTypesTable();
+		public abstract void 	  insertDataTypes();
+		public abstract String 	  getDataTypeId(String dataType);
 		
 		public abstract String    getState(String device);
 		public abstract String    getDevice(String state);
@@ -84,7 +90,7 @@ public abstract class DatabaseOperations {
 
 		public void insertSensorImplementations(Vector<Sensor> sensors) {
 			for(Sensor sensor : sensors){
-				this.newSensorImplementation(sensor.getName(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
+				this.newDevicesRelation(sensor.getName(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
 				this.newSensorTableRelation(sensor.getDeviceId(), sensor.getName(), sensor.getState());
 			}
 			
