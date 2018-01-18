@@ -1,9 +1,6 @@
 package edu.casetools.icase.mreasoner.deployment.sensors;
 
-import java.util.Vector;
-
 import edu.casetools.icase.mreasoner.MReasoner;
-import edu.casetools.icase.mreasoner.core.elements.states.State;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
 import edu.casetools.icase.mreasoner.vera.sensors.core.VeraLogDataObserver;
 import edu.casetools.icase.mreasoner.vera.sensors.core.data.VeraData;
@@ -14,45 +11,34 @@ public abstract class SensorObserver extends VeraLogDataObserver {
 
 	protected DatabaseOperations   databaseOperations;
 	protected MReasoner 		   mreasoner;
-	protected String			   deviceId;
-	protected Vector<State> 	   states;
+	protected Sensor 			   sensor;
+	
+	public SensorObserver(){
+		
+	}
 	
 	public SensorObserver(DatabaseOperations databaseOperations, MReasoner mreasoner){
 		this.databaseOperations = databaseOperations;
 		this.mreasoner  		= mreasoner;
-		this.states = new Vector<State>();
-	}
-	
-	public SensorObserver(){
-		this.states = new Vector<State>();
+		
 	}
 	
 	public void initDataManager(DatabaseOperations databaseOperations, MReasoner mreasoner){
 		this.databaseOperations = databaseOperations;
 		this.mreasoner  		= mreasoner;
-		this.states 			= new Vector<State>();
 	}
 	
-	public void setDeviceId(String deviceId){
-		this.deviceId = deviceId;
-	}
-	
-	public void addState(String name){
-		State state = new State();
-		state.setName(name);
-		states.add(state);
-	}
 	
 	@Override
 	protected void handleVeraEvent(VeraData data) {
 		VeraEvent event = data.getEvent();
 	 	String iteration = String.valueOf(mreasoner.getCurrentStatus().getTime().getIteration());
 		 if(event != null){	 
-			 if(event.getDevice() == deviceId){
-				 for(State state : states){
-					 boolean result = applyCustomModellingRules(state.getName(), iteration, Boolean.toString(event.getStatus()));
-					 databaseOperations.insertEvent(state.getName(), Boolean.toString(result), iteration, event.getDate(), event.getTime());
-			     	 printEvent(event, state.getName());
+			 if(event.getDevice() == sensor.getDeviceId()){
+				 for(String stateName : sensor.getStates()){
+					 boolean result = applyCustomModellingRules(stateName, iteration, Boolean.toString(event.getStatus()));
+					 databaseOperations.insertEvent(stateName, Boolean.toString(result), iteration, event.getDate(), event.getTime());
+			     	 printEvent(event, stateName);
 				 }
 			 }
 
@@ -68,11 +54,11 @@ public abstract class SensorObserver extends VeraLogDataObserver {
 		 if(!variable.isEmpty()){	
 			 if(variable.getVariable().contentEquals(VeraVariable.VAR_TRIPPED)||(variable.getVariable().contentEquals(VeraVariable.VAR_STATUS))){
 				 
-				 if(variable.getDeviceId() == deviceId){
-					 for(State state : states){
-						 boolean result = applyCustomModellingRules(state.getName(), iteration, variable.getNewValue());
-						 databaseOperations.insertEvent(state.getName(), Boolean.toString(result), iteration, variable.getDate(), variable.getTime());
-				     	 printVariable(variable, state.getName());
+				 if(variable.getDeviceId() == sensor.getDeviceId()){
+					 for(String stateName : sensor.getStates()){
+						 boolean result = applyCustomModellingRules(stateName, iteration, variable.getNewValue());
+						 databaseOperations.insertEvent(stateName, Boolean.toString(result), iteration, variable.getDate(), variable.getTime());
+				     	 printVariable(variable, stateName);
 					 }
 				 }
 
@@ -83,6 +69,14 @@ public abstract class SensorObserver extends VeraLogDataObserver {
 	
 	
 	protected abstract boolean applyCustomModellingRules(String stateName, String iteration, String value);
+	
+	public Sensor getSensor(){
+		return this.sensor;
+	}
+	
+	public void setSensor(Sensor sensor){
+		this.sensor = sensor;
+	}
 	
 
 	protected void printVariableWarning(VeraVariable variable) {

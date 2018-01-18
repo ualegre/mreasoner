@@ -68,7 +68,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 				  "iteration bigint NOT NULL,"+
 				  "date_old date NOT NULL,"+
 				  "time_old time NOT NULL );";
-		String eventLogTableQuery = "CREATE TABLE IF NOT EXISTS events_log ("
+		String eventLogTableQuery = "CREATE TABLE IF NOT EXISTS execution_events ("
 				 +" id serial PRIMARY KEY,"+
 				 " is_internal boolean NOT NULL,"+
 				  "state varchar(50) NOT NULL,"+
@@ -91,7 +91,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void eraseEventsTable() {
 		try {
 			String incommingEventsTableQuery = "DELETE FROM external_events";
-			String eventLogTableQuery = "DELETE FROM events_log";
+			String eventLogTableQuery = "DELETE FROM execution_events";
 
 			dbConnection.executeUpdate(incommingEventsTableQuery);
 			dbConnection.executeUpdate(eventLogTableQuery);
@@ -140,7 +140,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	public void logExternalEvent(String id, String iteration, String stateName, String status,
 			String data, String time) {
 	    try {
-			String query = "INSERT INTO events_log (is_internal,state, value, iteration,date_old, time_old)"
+			String query = "INSERT INTO execution_events (is_internal,state, value, iteration,date_old, time_old)"
 					+"VALUES(false, '"+stateName+"', '"+status+"','"+iteration+"','"+data+"', '"+time+"')";
 
 			dbConnection.executeUpdate(query);
@@ -213,7 +213,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 			String data, String time) {
 	    try {
 
-			String query = "INSERT INTO events_log (is_internal, state, value,iteration, date_old, time_old)"
+			String query = "INSERT INTO execution_events (is_internal, state, value,iteration, date_old, time_old)"
 					+"VALUES( 't','"+stateName+"', "+status+",'"+iteration+"','"+data+"', '"+time+"')";
 			
 			dbConnection.executeUpdate(query);
@@ -381,8 +381,8 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		try {
 			query = "SELECT iteration, state, value";
 			if(!iteration) query = query + ", date_old, time_old";
-			query = query + " FROM events_log WHERE is_internal = 'f' ";
-			//query = query + " FROM events_log WHERE is_internal = 0 ";
+			query = query + " FROM execution_events WHERE is_internal = 'f' ";
+			//query = query + " FROM execution_events WHERE is_internal = 0 ";
 			
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 //		} catch (PSQLException e) {
@@ -399,7 +399,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		try {
 			query = "SELECT iteration, state, value";
 			if(!iteration) query = query + ", date_old, time_old";
-			query = query + " FROM events_log WHERE is_internal = 't' ";
+			query = query + " FROM execution_events WHERE is_internal = 't' ";
 			
 			resultSet = this.dbConnection.executeQueryOpenStatement(query);
 //		}catch (PSQLException e) {

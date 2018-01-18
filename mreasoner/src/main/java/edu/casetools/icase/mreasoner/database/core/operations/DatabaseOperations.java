@@ -7,6 +7,7 @@ import edu.casetools.icase.mreasoner.configs.data.db.MDBConfigs;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.icase.mreasoner.deployment.sensors.Sensor;
+import edu.casetools.icase.mreasoner.deployment.sensors.SensorObserver;
 
 public abstract class DatabaseOperations {
 	
@@ -83,8 +84,9 @@ public abstract class DatabaseOperations {
 
 		public abstract long getIterationFromRealTime(String string);
 
-		public void insertSensorImplementations(Vector<Sensor> sensors) {
-			for(Sensor sensor : sensors){
+		public void insertSensorImplementations(Vector<SensorObserver> sensorObservers) {
+			for(SensorObserver sensorObserver : sensorObservers){
+				Sensor sensor = sensorObserver.getSensor();
 				this.newDevicesTableRelation(sensor.getDeviceId(),sensor.getName(),sensor.getModel(), sensor.getLocation(), sensor.getDataType(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
 				for(String stateName : sensor.getStates()){
 					this.newDeviceMappingTableRelation(sensor.getDeviceId(), stateName);
