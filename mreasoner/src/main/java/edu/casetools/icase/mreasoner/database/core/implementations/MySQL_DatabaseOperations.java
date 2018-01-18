@@ -822,38 +822,6 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public void createActuatorImplementationTable() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void eraseActuatorImplementationTable() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void newActuatorImplementation(String name, String maxValue,
-			String minValue, String isOnOff) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeActuatorImplementation(String name, String maxValue,
-			String minValue, String isOnOff) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ResultSet getActuatorImplementationTableContent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public long getIterationFromRealTime(String string) {
 		String query;
 		ResultSet resultSet;

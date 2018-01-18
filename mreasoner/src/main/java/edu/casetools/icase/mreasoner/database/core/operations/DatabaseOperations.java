@@ -68,12 +68,6 @@ public abstract class DatabaseOperations {
 		public abstract void 	  removeSensorImplementation(String name,String maxValue,String minValue,String isOnOff);
 		public abstract ResultSet getSensorImplementationTableContent();
 		
-		public abstract void   	  createActuatorImplementationTable();
-		public abstract void   	  eraseActuatorImplementationTable();
-		public abstract void 	  newActuatorImplementation(String name,String maxValue,String minValue,String isOnOff);
-		public abstract void 	  removeActuatorImplementation(String name,String maxValue,String minValue,String isOnOff);
-		public abstract ResultSet getActuatorImplementationTableContent();
-		
 		public abstract String    getState(String device);
 		public abstract String    getDevice(String state);
 		public abstract boolean   getStatus(String state);
