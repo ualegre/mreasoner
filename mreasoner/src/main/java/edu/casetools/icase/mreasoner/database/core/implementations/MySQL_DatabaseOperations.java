@@ -358,12 +358,12 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		
 	}
 
-	public void removeSensorTableRelation(String device,String implementation, String state) {
+	public void removeDeviceMappingTableRelation(String device, String state) {
 		String query = null;
 
 		try {
 			query = "DELETE FROM device_mapping where device ='"+
-					device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
+					device+"'and state ='"+state+"'";
 			
 			this.dbConnection.executeUpdate(query);
 //		} catch (PSQLException e) {

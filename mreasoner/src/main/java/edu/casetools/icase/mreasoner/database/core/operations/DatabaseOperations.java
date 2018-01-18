@@ -56,7 +56,7 @@ public abstract class DatabaseOperations {
 		public abstract void   	  createDeviceMappingTable();
 		public abstract void   	  eraseDeviceMappingTable();
 		public abstract void 	  newDeviceMappingTableRelation(String device, String state);
-		public abstract void 	  removeSensorTableRelation(String device,String implementation, String state);
+		public abstract void 	  removeDeviceMappingTableRelation(String device, String state);
 		public abstract ResultSet getDeviceMappingTableContent();
 		
 		public abstract void   	  createDevicesTable();

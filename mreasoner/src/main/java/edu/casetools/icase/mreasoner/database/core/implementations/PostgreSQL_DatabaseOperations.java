@@ -259,9 +259,9 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		
 	}
 
-	public void removeSensorTableRelation(String device,String implementation, String state) {
+	public void removeDeviceMappingTableRelation(String device, String state) {
 		String 	query = "DELETE FROM \"device_mapping\" where device ='"+
-				device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
+				device+"' and state ='"+state+"'";
 			
 		this.executeUpdate(query);
 	
