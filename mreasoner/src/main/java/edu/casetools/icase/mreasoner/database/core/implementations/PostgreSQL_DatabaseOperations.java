@@ -334,7 +334,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = null;
 
 			try {
-				query = "select * from \"sensor_mapping\"";
+				query = "select * from \"device_mapping\"";
 				resultSet = dbConnection.executeQueryOpenStatement(query);
 		
 	//		} catch (PSQLException e) {
@@ -349,7 +349,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public void newSensorTableRelation(String device,String implementation,String state) {
 		String query = null;
 		try {
-			query = "insert into \"sensor_mapping\" (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
+			query = "insert into \"device_mapping\" (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
 			this.dbConnection.executeUpdate(query);
 //		} catch (PSQLException e) {
 //		//	dbConnection.setConnection(-1);
@@ -364,7 +364,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = null;
 
 		try {
-			query = "DELETE FROM \"sensor_mapping\" where device ='"+
+			query = "DELETE FROM \"device_mapping\" where device ='"+
 					device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
 			
 			this.dbConnection.executeUpdate(query);
@@ -433,7 +433,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		createSensorImplementationTable();
 		String query ="";
 
-		 query = "CREATE TABLE IF NOT EXISTS \"sensor_mapping\" ("+
+		 query = "CREATE TABLE IF NOT EXISTS \"device_mapping\" ("+
 				  "\"id\" varchar(50) PRIMARY KEY,"+	
 				  "\"device\" varchar(50),"+
 				  "\"implementation\" varchar(50) references \"sensors\"(name),"+
@@ -654,7 +654,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query,result = null;
 		ResultSet resultSet;
 		
-		query = "SELECT device FROM \"sensor_mapping\" WHERE state = '"+state+"'";
+		query = "SELECT device FROM \"device_mapping\" WHERE state = '"+state+"'";
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 			if(resultSet.next()){
@@ -667,7 +667,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(result == null) System.out.println("WARNING: Device related with '"+state+"' in table 'sensor_mapping' was not found.");
+		if(result == null) System.out.println("WARNING: Device related with '"+state+"' in table 'device_mapping' was not found.");
 		return result;
 	}
 	
@@ -675,7 +675,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public String getState(String device) {
 		String query,result = null;
 		ResultSet resultSet;
-		query = "SELECT state FROM \"sensor_mapping\" WHERE device = '"+device+"'";
+		query = "SELECT state FROM \"device_mapping\" WHERE device = '"+device+"'";
 	
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
@@ -812,7 +812,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void eraseSensorTable() {
 		try {
-			String query = "DELETE FROM \"sensor_mapping\"";
+			String query = "DELETE FROM \"device_mapping\"";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
