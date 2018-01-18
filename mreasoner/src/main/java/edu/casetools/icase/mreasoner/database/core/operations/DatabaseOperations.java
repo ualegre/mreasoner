@@ -62,12 +62,6 @@ public abstract class DatabaseOperations {
 		public abstract void 	  removeSensorTableRelation(String device,String implementation, String state);
 		public abstract ResultSet getSensorTableContent();
 		
-		public abstract void   	  createActuatorTable();
-		public abstract void   	  eraseActuatorTable();
-		public abstract void 	  newActuatorTableRelation(String device,String implementation,String state);
-		public abstract void 	  removeActuatorTableRelation(String device,String implementation, String state);
-		public abstract ResultSet getActuatorTableContent();
-		
 		public abstract void   	  createSensorImplementationTable();
 		public abstract void   	  eraseSensorImplementationTable();
 		public abstract void 	  newSensorImplementation(String name,String maxValue,String minValue,String isOnOff);
