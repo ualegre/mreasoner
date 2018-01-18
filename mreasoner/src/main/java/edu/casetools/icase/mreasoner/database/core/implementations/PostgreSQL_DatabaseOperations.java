@@ -434,9 +434,8 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query ="";
 
 		 query = "CREATE TABLE IF NOT EXISTS \"device_mapping\" ("+
-				  "\"id\" varchar(50) PRIMARY KEY,"+	
-				  "\"device\" varchar(50),"+
-				  "\"implementation\" varchar(50) references \"devices\"(name),"+
+				  "\"id\" SERIAL PRIMARY KEY,"+	
+				  "\"device\" references \"devices\"(veraId),"+
 		 		  "\"state\" varchar(50) NOT NULL"
 		 		  + ");";
 	 	   
