@@ -10,6 +10,7 @@ import java.util.Vector;
 import org.postgresql.util.PSQLException;
 
 import edu.casetools.icase.mreasoner.configs.data.db.MDBConfigs;
+import edu.casetools.icase.mreasoner.database.core.MDBImplementations;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperations;
@@ -251,9 +252,9 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		return this.executeQueryOpenStatement("select * from \"device_mapping\"");
 	}
 
-	public void newSensorTableRelation(String device,String implementation,String state) {
+	public void newDeviceMappingTableRelation(String device, String state) {
 		String 	query = "insert into \"device_mapping\" (device,implementation"+
-						",state) values ('"+device+"','"+implementation+"','"+state+"')";
+						",state) values (DEFAULT,'"+device+"','"+state+"')";
 		this.executeUpdate(query);
 		
 	}
@@ -297,7 +298,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		createDevicesTable();
 		String query = "CREATE TABLE IF NOT EXISTS \"device_mapping\" ("+
 				  "\"id\" SERIAL PRIMARY KEY,"+	
-				  "\"device\" references \"devices\"(veraId),"+
+				  "\"device\" references \"devices\"(\"vera_id\"),"+
 		 		  "\"state\" varchar(50) NOT NULL"
 		 		  + ");";
 	 	   
@@ -527,9 +528,11 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void createDevicesTable() {
 			String query = "CREATE TABLE IF NOT EXISTS \"devices\" ("+
-					  "\"veraId\" varchar(50) PRIMARY KEY,"+
-					  "\"dataType\" varchar(50) FOREIGN KEY,"+
+					  "\"vera_id\" varchar(50) PRIMARY KEY,"+
 					  "\"name\" varchar(50),"+
+					  "\"model\" varchar(50),"+
+					  "\"location\" varchar(50),"+
+					  "\"data_type\" integer REFERENCES data_types (\"id\"),"+
 					  "\"max_value\" varchar(50),"+
 					  "\"min_value\" varchar(50),"+
 					  "\"has_boolean_values\" boolean NOT NULL);";
@@ -635,7 +638,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void insertDataTypes() {		
 		String query = "";
-		for(String dataType : dataTypes){
+		for(String dataType : MDBImplementations.getDBImplementationNames()){
 			query = "INSERT INTO \"data_types\" VALUES(DEFAULT, '"+dataType+"');";
 			executeUpdate(query);
 		}
@@ -706,7 +709,5 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 			e.printStackTrace();
 		}
 	}
-
-
 
 }

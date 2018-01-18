@@ -344,10 +344,10 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		return resultSet;
 	}
 
-	public void newSensorTableRelation(String device,String implementation,String state) {
+	public void newDeviceMappingTableRelation(String device, String state) {
 		String query = null;
 		try {
-			query = "insert into device_mapping (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
+			query = "insert into device_mapping (device,implementation,state) values (DEFAULT, '"+device+"','"+state+"')";
 			this.dbConnection.executeUpdate(query);
 //		} catch (PSQLException e) {
 //		//	dbConnection.setConnection(-1);

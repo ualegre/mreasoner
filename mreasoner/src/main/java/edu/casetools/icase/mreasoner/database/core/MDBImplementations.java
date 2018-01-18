@@ -12,9 +12,14 @@ public class MDBImplementations {
 	 * 
 	 */
 	public static enum DB_IMPLEMENTATION {POSTGRESQL,MYSQL}; 
+	public static enum DATA_TYPES {BOOLEAN,BYTE,CHAR,SHORT,INTEGER,LONG,FLOAT,DOUBLE}; 
 	
-	public static String[] getNames() {
+	public static String[] getDBImplementationNames() {
 	    return Arrays.toString(DB_IMPLEMENTATION.values()).replaceAll("^.|.$", "").split(", ");
+	}
+	
+	public static String[] getDataTypeNames() {
+	    return Arrays.toString(DATA_TYPES.values()).replaceAll("^.|.$", "").split(", ");
 	}
 	
 }

@@ -8,13 +8,9 @@ import edu.casetools.icase.mreasoner.database.core.connection.DBConnection;
 import edu.casetools.icase.mreasoner.database.core.connection.DBConnection.STATUS;
 import edu.casetools.icase.mreasoner.deployment.sensors.Sensor;
 
-
-
-
 public abstract class DatabaseOperations {
 	
 		protected DBConnection dbConnection;
-		protected String[] dataTypes = {"Boolean","Byte","Char","Short","Integer","Long","Float","Double"};
 		
 		public DatabaseOperations(MDBConfigs configs){
 			this.dbConnection = new DBConnection(configs);
@@ -59,7 +55,7 @@ public abstract class DatabaseOperations {
 		
 		public abstract void   	  createDeviceMappingTable();
 		public abstract void   	  eraseDeviceMappingTable();
-		public abstract void 	  newSensorTableRelation(String device,String implementation,String state);
+		public abstract void 	  newDeviceMappingTableRelation(String device, String state);
 		public abstract void 	  removeSensorTableRelation(String device,String implementation, String state);
 		public abstract ResultSet getDeviceMappingTableContent();
 		
@@ -91,7 +87,10 @@ public abstract class DatabaseOperations {
 		public void insertSensorImplementations(Vector<Sensor> sensors) {
 			for(Sensor sensor : sensors){
 				this.newDevicesRelation(sensor.getName(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
-				this.newSensorTableRelation(sensor.getDeviceId(), sensor.getName(), sensor.getState());
+				for(String stateName : sensor.getStates()){
+					this.newDeviceMappingTableRelation(sensor.getDeviceId(), stateName);
+				}
+					
 			}
 			
 		}
