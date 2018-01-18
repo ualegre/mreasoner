@@ -65,7 +65,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void createEventsTable() {
 		
-		String incommingEventsTableQuery = "CREATE TABLE IF NOT EXISTS \"incoming_events\" ("
+		String incommingEventsTableQuery = "CREATE TABLE IF NOT EXISTS \"external_events\" ("
 				 +" \"id\" serial PRIMARY KEY,"+
 				  "\"state\" varchar(50) NOT NULL,"+
 				  "\"value\" boolean NOT NULL,"+
@@ -94,7 +94,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void eraseEventsTable() {
 		try {
-			String incommingEventsTableQuery = "DELETE FROM \"incoming_events\"";
+			String incommingEventsTableQuery = "DELETE FROM \"external_events\"";
 			String eventLogTableQuery = "DELETE FROM \"events_log\"";
 
 			dbConnection.executeUpdate(incommingEventsTableQuery);
@@ -110,7 +110,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		
 	    try {
 
-			query = "INSERT INTO \"incoming_events\" (state, value,iteration, date_old, time_old)"
+			query = "INSERT INTO \"external_events\" (state, value,iteration, date_old, time_old)"
 					+"VALUES( '"+stateName+"', '"+status+"', '"+iteration+"','"+date+"', '"+time+"')";
 			
 			dbConnection.executeUpdate(query);
@@ -130,7 +130,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query;
 		
 	    try {
-			query = "SELECT id,iteration,state,value,date_old,time_old FROM \"incoming_events\"";
+			query = "SELECT id,iteration,state,value,date_old,time_old FROM \"external_events\"";
 			result =  dbConnection.executeQueryOpenStatement(query);
 	
 		} catch (SQLException e1) {
@@ -148,7 +148,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 			dbConnection.executeUpdate(query);
 			
-			query = "DELETE FROM \"incoming_events\" where id = "+id;
+			query = "DELETE FROM \"external_events\" where id = "+id;
 			
 			dbConnection.executeUpdate(query);
 			
@@ -334,7 +334,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = null;
 
 			try {
-				query = "select * from \"sensors\"";
+				query = "select * from \"sensor_mapping\"";
 				resultSet = dbConnection.executeQueryOpenStatement(query);
 		
 	//		} catch (PSQLException e) {
@@ -349,7 +349,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public void newSensorTableRelation(String device,String implementation,String state) {
 		String query = null;
 		try {
-			query = "insert into \"sensors\" (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
+			query = "insert into \"sensor_mapping\" (device,implementation,state) values ('"+device+"','"+implementation+"','"+state+"')";
 			this.dbConnection.executeUpdate(query);
 //		} catch (PSQLException e) {
 //		//	dbConnection.setConnection(-1);
@@ -364,7 +364,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = null;
 
 		try {
-			query = "DELETE FROM \"sensors\" where device ='"+
+			query = "DELETE FROM \"sensor_mapping\" where device ='"+
 					device+"' and implementation ='"+implementation+"' and state ='"+state+"'";
 			
 			this.dbConnection.executeUpdate(query);
@@ -433,9 +433,10 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		createSensorImplementationTable();
 		String query ="";
 
-		 query = "CREATE TABLE IF NOT EXISTS \"sensors\" ("+
-				  "\"device\" varchar(50) PRIMARY KEY,"+
-				  "\"implementation\" varchar(50) references \"sensor_implementations\"(name),"+
+		 query = "CREATE TABLE IF NOT EXISTS \"sensor_mapping\" ("+
+				  "\"id\" varchar(50) PRIMARY KEY,"+	
+				  "\"device\" varchar(50),"+
+				  "\"implementation\" varchar(50) references \"sensors\"(name),"+
 		 		  "\"state\" varchar(50) NOT NULL"
 		 		  + ");";
 	 	   
@@ -653,7 +654,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query,result = null;
 		ResultSet resultSet;
 		
-		query = "SELECT device FROM \"sensors\" WHERE state = '"+state+"'";
+		query = "SELECT device FROM \"sensor_mapping\" WHERE state = '"+state+"'";
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
 			if(resultSet.next()){
@@ -666,7 +667,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(result == null) System.out.println("WARNING: Device related with '"+state+"' in table 'sensors' was not found.");
+		if(result == null) System.out.println("WARNING: Device related with '"+state+"' in table 'sensor_mapping' was not found.");
 		return result;
 	}
 	
@@ -674,7 +675,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public String getState(String device) {
 		String query,result = null;
 		ResultSet resultSet;
-		query = "SELECT state FROM \"sensors\" WHERE device = '"+device+"'";
+		query = "SELECT state FROM \"sensor_mapping\" WHERE device = '"+device+"'";
 	
 		try {
 			resultSet = dbConnection.executeQueryOpenStatement(query);
@@ -714,8 +715,10 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 
 	@Override
 	public void createSensorImplementationTable() {
-			String query = "CREATE TABLE IF NOT EXISTS \"sensor_implementations\" ("
-					 +"\"name\" varchar(50) PRIMARY KEY,"+
+			String query = "CREATE TABLE IF NOT EXISTS \"sensors\" ("+
+					  "\"veraId\" varchar(50) PRIMARY KEY,"+
+					  "\"dataType\" varchar(50) FOREIGN KEY,"+
+					  "\"name\" varchar(50),"+
 					  "\"max_value\" varchar(50),"+
 					  "\"min_value\" varchar(50),"+
 					  "\"has_boolean_values\" boolean NOT NULL);";
@@ -737,7 +740,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		
 	    try {
 
-			query = "INSERT INTO \"sensor_implementations\" (name, max_value, min_value, has_boolean_values)"
+			query = "INSERT INTO \"sensors\" (name, max_value, min_value, has_boolean_values)"
 					+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', '"+isOnOff+"')";
 			
 			dbConnection.executeUpdate(query);
@@ -762,7 +765,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		String query = null;
 
 			try {
-				query = "select * from \"sensor_implementations\"";
+				query = "select * from \"sensors\"";
 				resultSet = dbConnection.executeQueryOpenStatement(query);
 		
 	//		} catch (PSQLException e) {
@@ -809,7 +812,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void eraseSensorTable() {
 		try {
-			String query = "DELETE FROM \"sensors\"";
+			String query = "DELETE FROM \"sensor_mapping\"";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -820,7 +823,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	@Override
 	public void eraseSensorImplementationTable() {
 		try {
-			String query = "DELETE FROM \"sensor_implementations\"";
+			String query = "DELETE FROM \"sensors\"";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
