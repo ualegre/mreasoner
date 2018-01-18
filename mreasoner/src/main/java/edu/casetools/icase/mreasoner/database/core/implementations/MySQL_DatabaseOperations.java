@@ -435,7 +435,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		 query = "CREATE TABLE IF NOT EXISTS device_mapping ("
 				 			+"id varchar(50) PRIMARY KEY,"
 							+"device varchar(50),"+
-							"implementation varchar(50) references sensors(name),"+
+							"implementation varchar(50) references devices(name),"+
 							"state varchar(50) NOT NULL);";
 		 ///System.out.println(query);
 	 	   
@@ -705,7 +705,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 
 	@Override
 	public void createSensorImplementationTable() {
-			String query = "CREATE TABLE IF NOT EXISTS sensors ("
+			String query = "CREATE TABLE IF NOT EXISTS devices ("
 					 + "name varchar(50) PRIMARY KEY,"+
 					  "max_value varchar(50),"+
 					  "min_value varchar(50),"+
@@ -730,7 +730,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		
 	    try {
 
-			query = "INSERT INTO sensors (name, max_value, min_value, has_boolean_values)"
+			query = "INSERT INTO devices (name, max_value, min_value, has_boolean_values)"
 					+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', "+isOnOff+")";
 			
 			dbConnection.executeUpdate(query);
@@ -755,7 +755,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 		String query = null;
 
 			try {
-				query = "select * from sensors";
+				query = "select * from devices";
 				resultSet = dbConnection.executeQueryOpenStatement(query);
 		
 	//		} catch (PSQLException e) {
@@ -813,7 +813,7 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	@Override
 	public void eraseSensorImplementationTable() {
 		try {
-			String query = "DELETE FROM sensors";
+			String query = "DELETE FROM devices";
 			dbConnection.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
