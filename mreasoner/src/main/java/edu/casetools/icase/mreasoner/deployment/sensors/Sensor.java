@@ -4,29 +4,32 @@ import java.util.Vector;
 
 public class Sensor {
 
-	private String deviceId, name, model, location, minValue, maxValue;
+	private String deviceId, name, model, location, dataType, minValue, maxValue;
 	private Vector<String> states;
 	private boolean isBoolean;
 	
 	public Sensor(){
-		setStates(new Vector<String>());
-		setDeviceId("");
-		setName("");
-		setModel("");
-		setLocation("");
-		setMinValue("");
-		setMaxValue("");
-		setBoolean(true);
+		this.setDeviceId("");
+		this.setName("");
+		this.setModel("");
+		this.setLocation("");
+		this.setDataType("");
+		this.setMinValue("");
+		this.setMaxValue("");
+		this.setBoolean(true);
+		this.setStates(new Vector<String>());
 	}
 	
-	public Sensor(String name, String minValue, String maxValue, boolean isBoolean, String state, String deviceId){
-		setStates(new Vector<String>());
-		this.setDeviceId(deviceId);
+	public Sensor(String id, String name, String model, String location, String dataType, String minValue, String maxValue, boolean isBoolean, Vector<String> states){
+		this.setDeviceId(id);
 		this.setName(name);
-		this.minValue = minValue;
-		this.maxValue = maxValue;
-		this.isBoolean = isBoolean;
-		
+		this.setModel(model);
+		this.setLocation(location);
+		this.setDataType(dataType);
+		this.setMinValue(minValue);
+		this.setMaxValue(maxValue);
+		this.setBoolean(isBoolean);
+		this.setStates(states);
 	}
 
 	public String getName() {
@@ -99,6 +102,14 @@ public class Sensor {
 
 	public void setStates(Vector<String> states) {
 		this.states = states;
+	}
+
+	public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 	
 	

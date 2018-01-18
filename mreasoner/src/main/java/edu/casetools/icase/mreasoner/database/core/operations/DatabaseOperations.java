@@ -61,7 +61,7 @@ public abstract class DatabaseOperations {
 		
 		public abstract void   	  createDevicesTable();
 		public abstract void   	  eraseDevicesTable();
-		public abstract void 	  newDevicesRelation(String name,String maxValue,String minValue,String isOnOff);
+		public abstract void 	  newDevicesTableRelation(String id, String name, String model, String location, String dataType, String maxValue,String minValue,String isBoolean);
 		public abstract void 	  removeSensorImplementation(String name,String maxValue,String minValue,String isOnOff);
 		public abstract ResultSet getDevicesTableContent();
 		
@@ -74,7 +74,6 @@ public abstract class DatabaseOperations {
 		public abstract String    getDevice(String state);
 		public abstract boolean   getStatus(String state);
 		
-//		public abstract ResultSet findLatestInternalEvents(long lastId);
 		public abstract boolean getAtLeastOneValueQueryPresent  ( String since, String until, String state, String status );
 		public abstract boolean getAtLeastOneValueQueryAbsolute ( String since, String until, String state, String status );
 		public abstract boolean getSameValueQueryPresent		( String since, String until, String state, String status );
@@ -86,7 +85,7 @@ public abstract class DatabaseOperations {
 
 		public void insertSensorImplementations(Vector<Sensor> sensors) {
 			for(Sensor sensor : sensors){
-				this.newDevicesRelation(sensor.getName(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
+				this.newDevicesTableRelation(sensor.getDeviceId(),sensor.getName(),sensor.getModel(), sensor.getLocation(), sensor.getDataType(), sensor.getMaxValue(), sensor.getMinValue(), String.valueOf(sensor.isBoolean()));
 				for(String stateName : sensor.getStates()){
 					this.newDeviceMappingTableRelation(sensor.getDeviceId(), stateName);
 				}

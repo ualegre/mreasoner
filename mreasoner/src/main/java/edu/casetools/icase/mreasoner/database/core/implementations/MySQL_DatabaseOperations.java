@@ -723,15 +723,14 @@ public class MySQL_DatabaseOperations extends DatabaseOperations {
 	}
 
 	@Override
-	public void newDevicesRelation(String name, String maxValue,
-			String minValue, String isOnOff) {
+	public void newDevicesTableRelation(String id, String name, String model, String location, String dataType, String maxValue,String minValue,String isBoolean) {
 		
 		String query;
 		
 	    try {
 
-			query = "INSERT INTO devices (name, max_value, min_value, has_boolean_values)"
-					+"VALUES( '"+name+"', "+maxValue+",'"+minValue+"', "+isOnOff+")";
+			query = "INSERT INTO devices (vera_id, name, model, location, data_type, max_value, min_value, has_boolean_values)"
+					+"VALUES( '"+id+"', '"+name+"', '"+model+"', '"+location+"', "+dataType+"', "+maxValue+",'"+minValue+"', '"+isBoolean+"')";
 			
 			dbConnection.executeUpdate(query);
     	
