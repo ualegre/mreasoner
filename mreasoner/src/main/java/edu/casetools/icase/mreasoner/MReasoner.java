@@ -30,7 +30,7 @@ public class  MReasoner extends  AbstractMReasoner  {
         
 		Vector<SensorObserver> sensorObservers = new Vector<>();
 		// Add your own list of sensor observers and its corresponding modelling rules
-		sensorObservers.add(new BatteryObserver());
+		//sensorObservers.add(new BatteryObserver());
 		
 		
         Launcher	 launcher = new Launcher(actuators, sensorObservers);

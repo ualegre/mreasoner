@@ -2,7 +2,6 @@ package edu.casetools.icase.mreasoner.deployment;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.Vector;
 
 import edu.casetools.icase.mreasoner.MReasoner;
 import edu.casetools.icase.mreasoner.configs.MConfigsLoader;
@@ -11,9 +10,9 @@ import edu.casetools.icase.mreasoner.core.MSpecification;
 import edu.casetools.icase.mreasoner.core.elements.time.conf.TimeConfigs.EXECUTION_MODE;
 import edu.casetools.icase.mreasoner.database.core.operations.DatabaseOperationsFactory;
 import edu.casetools.icase.mreasoner.deployment.actuators.MActuatorManager;
+import edu.casetools.icase.mreasoner.deployment.realenvironment.AbstractDeploymentModule;
 import edu.casetools.icase.mreasoner.deployment.sensors.SensorObserver;
 import edu.casetools.icase.mreasoner.deployment.simulation.EventSimulator;
-import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
 import edu.casetools.icase.mreasoner.vera.sensors.VeraSensorManager;
 
 
@@ -25,17 +24,15 @@ public class Launcher extends Thread {
 	MReasoner 		  	  		  mtpl;
 	VeraSensorManager		  	  sensorManager;
 	EventSimulator 	   		      inputSimulator;
-	Vector<SensorObserver>  sensorObservers;
 //	Vector<LibraryThread> 		  externalLibraries;
 	MActuatorManager			  actuatorManager;
-	Vector<Actuator> 			  actuators;  
 	Thread						  mreasonerThread;
+	AbstractDeploymentModule 	  module;
 	
-	public Launcher(Vector<Actuator> actuators, Vector<SensorObserver> sensorObservers){	
+	public Launcher(AbstractDeploymentModule module){	
 		minputLoader 	     	 = new MConfigsLoader();
-		this.sensorObservers		 = sensorObservers;
 //		externalLibraries    	 = new Vector<LibraryThread>();
-		this.actuators 		 	 = actuators;
+
 	}
 	
 	public MConfigs readMSpecification(MConfigs configs) {
@@ -124,7 +121,7 @@ public class Launcher extends Thread {
 //			}
 //		}
 //		sleepWrapper(500);
-		actuatorManager = new MActuatorManager(mConfigs.getDBConfigs(), actuators);
+		actuatorManager = new MActuatorManager(mConfigs.getDBConfigs(), module.getActuators());
 		actuatorManager.start();
 	}
 
@@ -140,7 +137,7 @@ public class Launcher extends Thread {
 	}
 
 	private void initObservers(MConfigs mConfigs) {
-		for(SensorObserver observer : sensorObservers){
+		for(SensorObserver observer : module.getSensorObservers()){
 			observer.initDataManager( DatabaseOperationsFactory.getDatabaseOperations(mConfigs.getDBConfigs()),this.mtpl);
 			sensorManager.registerObserver(observer);
 		}
