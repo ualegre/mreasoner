@@ -1,15 +1,13 @@
 package edu.casetools.icase.mreasoner;
 
-import java.util.Vector;
-
 import edu.casetools.icase.mreasoner.AbstractMReasoner;
 import edu.casetools.icase.mreasoner.configs.data.MConfigs;
 import edu.casetools.icase.mreasoner.core.MSpecification;
 import edu.casetools.icase.mreasoner.database.MDatabase;
-import edu.casetools.icase.mreasoner.deployment.Launcher;
-import edu.casetools.icase.mreasoner.deployment.sensors.SensorObserver;
-
-import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
+//import edu.casetools.icase.mreasoner.deployment.Launcher;
+//import edu.casetools.icase.mreasoner.deployment.sensors.SensorObserver;
+//
+//import edu.casetools.icase.mreasoner.vera.actuators.device.Actuator;
 
 public class  MReasoner extends  AbstractMReasoner  {
 
@@ -20,56 +18,50 @@ public class  MReasoner extends  AbstractMReasoner  {
 	}
 
 	
-	public static void main(String[] args) {
-    	
-        String 	configsFileName = args[0];
-        Vector<Actuator> actuators = new Vector<>();
-        
-        //Add your own actuators here
-        
-        
-		Vector<SensorObserver> sensorObservers = new Vector<>();
-		// Add your own list of sensor observers and its corresponding modelling rules
-		//sensorObservers.add(new BatteryObserver());
-		
-		
-        Launcher	 launcher = new Launcher(actuators, sensorObservers);
-        
-        
-        if(configsFileName == null) {
-        	System.out.println("Please provide the configuration file when executing the command:");
-        	System.out.println("\t java -jar mreasoner.jar path/to/configs/your_configurations.txt");
-        } else {
-
-    			MConfigs configs = launcher.readMConfigs(configsFileName);
-    			if(configs == null) System.out.println("Error reading the configuration file.");
-    			else {
-        			switch(configs.getTimeConfigs().getExecutionMode()){
-	        			case SIMULATION_ITERATION:
-	        			case SIMULATION_REAL_TIME:
-	        	    		try {
-		            			launcher.readMSpecification(configs);
-		            			launcher.start();
-		            			launcher.join();
-	        	    		} catch (InterruptedException e) {
-	        	    			// TODO Auto-generated catch block
-	        	    			e.printStackTrace();
-	        	    		}
-	        			break;
-	        			case REAL_ENVIRONMENT:
-	        				System.out.println("The real environment execution is not yet allowed for the command line.");
-	        			break;
-	        			default:
-	        				System.out.println("Error reading the execution mode of the configuration file.");
-	        			break;	
-        			}
-
-    			}
-
-
-        }
-
-
-}
+//	public static void main(String[] args) {
+//    	
+//        String 	configsFileName = args[0];
+//        Vector<Actuator> actuators = new Vector<>();
+//        
+//
+//		
+//        Launcher	 launcher = new Launcher(actuators, sensorObservers);
+//        
+//        
+//        if(configsFileName == null) {
+//        	System.out.println("Please provide the configuration file when executing the command:");
+//        	System.out.println("\t java -jar mreasoner.jar path/to/configs/your_configurations.txt");
+//        } else {
+//
+//    			MConfigs configs = launcher.readMConfigs(configsFileName);
+//    			if(configs == null) System.out.println("Error reading the configuration file.");
+//    			else {
+//        			switch(configs.getTimeConfigs().getExecutionMode()){
+//	        			case SIMULATION_ITERATION:
+//	        			case SIMULATION_REAL_TIME:
+//	        	    		try {
+//		            			launcher.readMSpecification(configs);
+//		            			launcher.start();
+//		            			launcher.join();
+//	        	    		} catch (InterruptedException e) {
+//	        	    			// TODO Auto-generated catch block
+//	        	    			e.printStackTrace();
+//	        	    		}
+//	        			break;
+//	        			case REAL_ENVIRONMENT:
+//	        				System.out.println("The real environment execution is not yet allowed for the command line.");
+//	        			break;
+//	        			default:
+//	        				System.out.println("Error reading the execution mode of the configuration file.");
+//	        			break;	
+//        			}
+//
+//    			}
+//
+//
+//        }
+//
+//
+//}
 
 }
