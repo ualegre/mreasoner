@@ -546,7 +546,8 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 		dataType =  getDataTypeId(dataType);
 		
 		String query = "INSERT INTO \"devices\" (vera_id, name, model, location, data_type, max_value, min_value, has_boolean_values)"
-				+"VALUES( '"+id+"', '"+name+"', '"+model+"', '"+location+"', '"+dataType+"', '"+maxValue+"','"+minValue+"', '"+isBoolean+"')";
+				+"VALUES( '"+id+"', '"+name+"', '"+model+"', '"+location+"', '"+dataType+"', '"+maxValue+"','"+minValue+"', '"+isBoolean+"')"+
+				"ON CONFLICT DO NOTHING";
 		
 		this.executeUpdate(query);
     	
@@ -629,7 +630,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public void createDataTypesTable() {
 		String query = "CREATE TABLE IF NOT EXISTS \"data_types\" ("+
 				  "\"id\" SERIAL PRIMARY KEY,"+
-				  "\"name\" varchar(50) );";
+				  "\"name\" varchar(50) UNIQUE );";
 		
 		executeUpdate(query);
 		insertDataTypes();
@@ -639,7 +640,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	public void insertDataTypes() {		
 		String query = "";
 		for(String dataType : MDBImplementations.getDataTypeNames()){
-			query = "INSERT INTO \"data_types\" VALUES(DEFAULT, '"+dataType+"');";
+			query = "INSERT INTO \"data_types\" VALUES(DEFAULT, '"+dataType+"') ON CONFLICT DO NOTHING;";
 			executeUpdate(query);
 		}
 		
