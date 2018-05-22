@@ -7,7 +7,7 @@ public class LFPUBSTranslatorWrapper {
 	LFPUBS2MTranslator translator;
 	
 	public LFPUBSTranslatorWrapper(){
-		new LFPUBS2MTranslator(true);
+		translator = new LFPUBS2MTranslator(true);
 	}
 	
 	public String translate(String filename, boolean debug){
