@@ -1,6 +1,6 @@
 package edu.casetools.icase.mreasoner.learning;
 
-import edu.casetools.lfpubs2m.core.LFPUBS2MTranslator;
+import edu.casetools.mreasoner.lfpubs2m.core.LFPUBS2MTranslator;
 
 public class LFPUBSTranslatorWrapper {
 
