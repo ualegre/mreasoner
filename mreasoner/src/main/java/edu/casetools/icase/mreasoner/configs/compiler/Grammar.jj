@@ -210,7 +210,9 @@ MConfigs readConfigs(): {MConfigs configs = new MConfigs();String aux = "";}
   
   < FIXED_ITERATION_TIME >
   {
-    configs.getTimeConfigs().setTimeUnit(Long.parseLong(readString()));
+    String timeUnit = readString();
+    if(timeUnit.isEmpty()) timeUnit = "0";
+    configs.getTimeConfigs().setTimeUnit(Long.parseLong(timeUnit));
   }
   <FIXED_ITERATION_TIME_END >
   

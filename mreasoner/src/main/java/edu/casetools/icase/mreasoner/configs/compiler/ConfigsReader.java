@@ -40,7 +40,9 @@ ConfigsReader parser = new ConfigsReader (new FileReader("C:/Interface/configs.t
         configs.getTimeConfigs().setUseFixedIterationTime(false);
     jj_consume_token(USE_FIXED_ITERATION_TIME_END);
     jj_consume_token(FIXED_ITERATION_TIME);
-    configs.getTimeConfigs().setTimeUnit(Long.parseLong(readString()));
+    String timeUnit = readString();
+    if(timeUnit.isEmpty()) timeUnit = "0";
+    configs.getTimeConfigs().setTimeUnit(Long.parseLong(timeUnit));
     jj_consume_token(FIXED_ITERATION_TIME_END);
     jj_consume_token(EXECUTION_TIME);
     configs.getTimeConfigs().setExecutionTime(Long.parseLong(readString()));

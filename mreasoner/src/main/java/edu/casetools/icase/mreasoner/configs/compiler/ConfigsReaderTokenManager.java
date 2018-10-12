@@ -3,7 +3,6 @@ package edu.casetools.icase.mreasoner.configs.compiler;
 
 
 /** Token Manager. */
-@SuppressWarnings("all")
 public class ConfigsReaderTokenManager implements ConfigsReaderConstants
 {
 
@@ -1529,8 +1528,6 @@ private int jjMoveNfa_3(int startState, int curPos)
       }
       else
       {
-         int i2 = (curChar & 0xff) >> 6;
-         long l2 = 1L << (curChar & 077);
          do
          {
             switch(jjstateSet[--i])
@@ -1552,18 +1549,8 @@ private int jjMoveNfa_3(int startState, int curPos)
       catch(java.io.IOException e) { return curPos; }
    }
 }
-private final int jjStopStringLiteralDfa_2(int pos, long active0)
-{
-   switch (pos)
-   {
-      default :
-         return -1;
-   }
-}
-private final int jjStartNfa_2(int pos, long active0)
-{
-   return jjMoveNfa_2(jjStopStringLiteralDfa_2(pos, active0), pos + 1);
-}
+
+
 private int jjMoveStringLiteralDfa0_2()
 {
    switch(curChar)
