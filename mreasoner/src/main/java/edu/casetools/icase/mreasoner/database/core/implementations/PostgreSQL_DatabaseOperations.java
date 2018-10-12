@@ -253,7 +253,7 @@ public class PostgreSQL_DatabaseOperations extends DatabaseOperations{
 	}
 
 	public void newDeviceMappingTableRelation(String device, String state) {
-		String 	query = "insert into \"device_mapping\" (device"+
+		String 	query = "insert into \"device_mapping\" (id,device"+
 						",state) values (DEFAULT,'"+device+"','"+state+"')";
 		this.executeUpdate(query);
 		
